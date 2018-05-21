@@ -3,7 +3,7 @@
   <div class="task-detail">
     <div class="quote-title">工单详情  {{ detailData.sendee }}</div>
     <!--基本信息-->
-    <el-form :inline="true" ref="form1" :rules="rules" :model="form1" label-width="100px">
+    <!-- <el-form :inline="true" ref="form1" :rules="rules" :model="form1" label-width="100px">
      <el-card class="box-card box-card-bot">
       <div slot="header" class="clearfix">
         <span>基本信息</span>
@@ -84,6 +84,235 @@
               </p>
           </el-form-item>
       </el-row>
+    </el-card> -->
+    <el-form :inline="true" ref="form1" :rules="rules" :model="form1" label-width="100px">
+     <el-card class="box-card box-card-bot">
+      <div slot="header" class="clearfix">
+        <span>基本信息</span>
+        <el-button v-show="detailData.personUpdate == true && detailData.status == 0 || detailData.personUpdate == true && detailData.status == 2 " style="float: right; padding: 3px 0" type="text" @click="eidtFun($route.params.id)">编辑</el-button>
+      </div>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="工单名称">
+          {{ detailData.name }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="工单类别">
+          {{ detailData.projectName }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="合同编号">
+             {{ msgData.contractNo }}
+          </el-form-item>
+        </el-col>
+         <el-col :span="8">
+          <el-form-item label="门店地址">
+            {{ msgData.storeAddress }}
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="联系人">
+            {{ msgData.contractName }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="联系电话">
+            {{ msgData.contractTel }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="筹建主管">
+            {{ msgData.preparationManager }}
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+    </el-card>
+    <!--工单信息-->
+    <el-card class="box-card box-card-bot">
+      <div slot="header" class="clearfix">
+        <span>工单信息 </span>
+      </div>
+      <el-row>
+        <el-col :span="8">
+           <el-form-item label="工单状态">
+             {{ detailData.status == 1 ? '进行中' : detailData.status == 2 ? '拒绝' : detailData.status == 3 ? '完成' : detailData.status == 5 ? '已关闭' : '待处理' }}
+          </el-form-item>
+        </el-col>
+       
+        <el-col :span="8">
+          <el-form-item label="创建时间">
+            {{ detailData.createTime | format(true)}}
+          </el-form-item>
+        </el-col>
+
+         <el-col :span="8">
+          <el-form-item label="期望开始时间">
+           {{ detailData.expectTimeStart | format}}
+          </el-form-item>
+        </el-col>
+         <el-col :span="8">
+          <el-form-item label="期望完成时间">
+           {{ detailData.expectTime | format}}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="实际完成时间">
+            {{ detailData.completeTime | format(true)}} 
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="8">
+          <el-form-item label="工单发起人">
+          {{ detailData.userName }}
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="8">
+           <el-form-item label="工单接收人">
+          {{ detailData.receptionName }}
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row  :gutter="20" >
+          <el-col :span="2" style="width:100px;text-align: right;color: #99a9bf;font-size: 14px; padding-right:0">工单描述</el-col>
+          <el-col :span="20"><div class="desText" style="font-size: 14px;" v-html="detailData.describeContext "></div></el-col>
+        </el-row>
+    </el-card>
+   
+    <!-- 处理进展 -->
+    <el-card class="box-card box-card-bot">
+      <div slot="header" class="clearfix">
+        <span>处理进展 </span> <span style="float:right;" v-show="detailData.lastOperTime && detailData.ascriptionProId == 21">上传时间:
+          <em>{{ detailData.lastOperTime | format(true) }}</em>
+          </span>
+          <span style="float:right;" v-show="detailData.completeTime && detailData.ascriptionProId != 21">上传时间:
+            <em>{{ detailData.completeTime | format(true) }}</em>
+          </span>
+      </div>
+      <div class="progress-box">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="工单操作" v-show="detailData.status == 0 && detailData.personOper == true" style="text-align:ce">
+              <el-button type="success" plain size="small" icon="el-icon-success" @click="apllyAct" v-if="apllyFlag">接受</el-button>
+              <el-button type="info" plain size="small" icon="el-icon-error" @click="rejectAct" v-if="rejectFlag">拒绝</el-button>
+              <el-button type="warning" plain size="small" icon="el-icon-refresh"  @click="handRound" v-if="handFlag">转给同事</el-button>
+              <span  v-if="apllyTxtFlag" class="successTxt">{{ operationEvent.text }}</span>
+            </el-form-item>
+            <el-form-item label="工单操作" v-show=" detailData.personOper == false " class="leftText">
+              {{ detailData.status == 1 ? '进行中' : detailData.status == 2 ? '拒绝' : detailData.status == 3 ? '完成' : '待处理' }}
+            </el-form-item>
+             <el-form-item label="工单操作" v-show="detailData.personOper == true &&  detailData.status != 0">
+                <span class="successTxt">{{  detailData.status == 1 ? '已接受' : detailData.status == 2 ? '已拒绝' : detailData.status == 3 ? '已完成': '待处理'}}</span>
+             </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="遗留问题及其它事项记录" v-show="(detailData.ascriptionProId == 20 || detailData.ascriptionProId == 145) && (detailData.status == 1 || detailData.status == 3)">
+              <div v-show=" detailData.personOper == false && detailData.status != 3 && detailData.status != 2" style="width:500px;min-height:130px;">
+                 <el-input
+                  type="textarea"
+                  :rows="6"
+                  placeholder="对方完成工单并编辑后, 方可在此显示"
+                  v-model="textarea"
+                  :disabled="true">
+                </el-input>
+              </div>
+              <div v-show="detailData.personOper == true && detailData.status == 1 || detailData.status == 3" style="width:500px;min-height:130px;">
+                 <el-input
+                  type="textarea"
+                  :rows="6"
+                  placeholder="请输入内容(最多可输入200个字符)"
+                  v-model="missionCompleteDescribe"
+                  :disabled='flagText'
+                  :maxlength="200"
+                  >
+                </el-input>
+              </div>
+            </el-form-item>
+          </el-col>
+          <!-- {{detailData.ascriptionProId}}
+          {{detailData.status}} -->
+          <!-- <el-col :span="24" v-show="detailData.ascriptionProId == 20 && detailData.status == 1 || detailData.ascriptionProId == 20 && detailData.status == 2"> 
+            <div style="text-align: center;"><el-button type="primary" plain @click="saveAndNext">保存并下一步</el-button></div>
+          </el-col> -->
+          <!-- waterElecheckFlag是水电验收，如果是水电验收，上传文件只有点击保存下一步才会显示； -->
+          <el-col :span="24" v-show="detailData.ascriptionProId != 21 && detailData.status != 2">  <!--  21 安装id -->
+            <el-form-item :label="'施工' + newText + '存档视频、照片'" v-show="detailData.personOper == true && detailData.status == 1"
+            >
+              <el-upload 
+                class="upload-demo"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :on-remove="handleRemove"
+                :on-change="upLoadPro"
+                :multiple="false"
+                :limit="5"
+                :file-list="fileArrList"
+                :auto-upload='false'
+                :on-exceed="handleExceed">
+                <el-button size="small" type="primary">上传文件</el-button>
+                <div slot="tip" class="el-upload__tip">图片仅支持上传JPG、PNG,视频文件仅支持上传ogg、mp4、webm、mov、flv文件，最多可上传5个文件</div>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="'施工' + newText + '存档视频、照片'" v-show=" detailData.personOper == false && detailData.status == 1">
+              <el-input
+                type="textarea"
+                :rows="6"
+                placeholder="师傅上传后在此显示"
+                :disabled="true"
+                >
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" v-show="detailData.ascriptionProId != 21">
+             <el-form-item :label="'施工' + newText + '存档视频、照片'" v-show="detailData.personOper == false && listData.length == 0 && detailData.status == 3 || detailData.personOper == true && listData.length == 0 && detailData.status == 3">
+                未上传
+             </el-form-item> 
+     
+            <el-form-item :label="'施工' + newText + '存档视频、照片'" v-show="listData.length > 0" >
+              
+                <p v-for="(list, fileIndex) in listData" :key="fileIndex" class="down-btn">
+                  <span v-show="list.indexOf('png') >=0 || list.indexOf('jpg') >=0">
+                      <a v-bind:href="list" target="_blank"><img v-bind:src="list" @click="imgFn(list)"></a><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span> 
+                   <span v-show="list.indexOf('ogg') >=0 || list.indexOf('mp4') >=0 || list.indexOf('webm') >=0">
+                    <!-- <video src="http://ylbb-business.oss-cn-beijing.aliyuncs.com/aa.mp4" controls="controls"></video> -->
+                    <video :src="list" controls="controls"></video>
+                    
+                  </span> 
+
+                  <!-- <span>
+                    <a v-bind:href="list" target="_blank"></a><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span> -->
+                </p>
+            </el-form-item>
+          </el-col>
+            <!-- 设备安装确认单 -->
+           <el-col :span="24" v-show="detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 1 || detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 3">
+            <el-form-item label="设备安装确认单(加盟商签字)"  v-show=" confirmData.length > 0">
+              <p v-for="(list, fileIndex) in confirmData" :key="fileIndex" class="down-btn">
+                  <span >
+                      <a v-bind:href="list" target="_blank"><img v-bind:src="list" @click="imgFn(list)"></a><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span> 
+                </p>
+            </el-form-item>
+             <el-form-item label="设备安装确认单(加盟商签字)" v-show=" confirmData.length == 0">
+              <el-input
+                type="textarea"
+                :rows="6"
+                placeholder="师傅上传后在此显示"
+                :disabled="true"
+                >
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
     </el-card>
 
 
@@ -1405,6 +1634,11 @@ export default {
       content:{},
       imgVisible:false,
       imgshowsrc:'',
+
+
+      msgData:{},
+      newText: "验收",
+      confirmData: [],
     };
   },
   methods: {
@@ -2448,6 +2682,28 @@ export default {
              this.rejectFlag = false
           }
           this.orderRecipient();
+
+          /* -------------------- phuhoang 新增 -------------------- */
+            if (this.detailData.ascriptionProId == 21) {
+              this.newText = "交底";
+            } else {
+              this.newText = "验收";
+            }
+            if (res.data.result.satisfaction != null) {
+              this.evaluateForm.radio = res.data.result.satisfaction;
+              this.evaluate.radio = res.data.result.satisfaction;
+            }
+            /*基本信息*/
+            this.msgData = JSON.parse(res.data.result.baseInfo);
+
+            //设备安装确认单
+            if (
+              res.data.result.confirmSheet &&
+              res.data.result.confirmSheet != null
+            ) {
+              this.confirmData = res.data.result.confirmSheet.split(",");
+            }
+          /* -------------------- phuhoang end -------------------- */
           
           
           
