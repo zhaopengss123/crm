@@ -74,7 +74,7 @@
             <el-button type="primary" @click="saveTaskInfor('form')">提交</el-button>
             <el-button class="blockButton" @click="$router.push({ path:'/home/tasklist', query:{'pageSize': 10, 'pageNo': 1} })">
               <!-- <router-link to="/home/tasklist" class="linkSame">返回</router-link> -->
-              返回
+                                                    
             </el-button>
           </el-form-item>
         </el-col>
@@ -299,11 +299,11 @@ export default {
         let d = date.getDate();
         m = m<10?'0'+m:m;
         d = d<10?'0'+d:d;
-        let time = y+m+d;
-        this.form.expectTimeStart = "";
+        let time = y+'-'+m+'-'+d;
+        this.form.expectTimeStart = time;
       }
-      console.log(new Date(this.form.expectTimeStart));
-      return false;
+      console.log(this.form.expectTimeStart);
+
      // 拒绝状态 编辑, 再次保存  让状态变为待处理
      if(this.form.status == 2){
        this.form.status = '0';   
