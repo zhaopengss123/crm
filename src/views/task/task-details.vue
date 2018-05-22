@@ -969,6 +969,7 @@
                       :value="items.value">
                     </el-option>
                   </el-select>
+                 
                   <el-input  v-model="Equipmentmodel_value" placeholder="请输入设备型号" v-if="item.childrenList.length<1"></el-input>
                   </span>
                   </span>
@@ -1736,9 +1737,9 @@ export default {
         let data = "";
         let allListarray=[];
        if(this.detailData.status == 3){
-         allListarray=this.data_sb.result.contentJson.examine;
+         allListarray=JSON.parse(JSON.stringify(this.data_sb.result.contentJson.examine));
        }else{
-         allListarray=this.data_sb.result.templateMap.customTempleArray;
+         allListarray=JSON.parse(JSON.stringify(this.data_sb.result.templateMap.customTempleArray));
        }
         allListarray.map(item=>{
           item.list.map(items=>{
@@ -1746,25 +1747,28 @@ export default {
               if(!items.text){
                   items.text = "空";
               }
-            if(!item.deviceName){
-              item.deviceName ="空";
+
+            if(!items.deviceName){
+              items.deviceName ="空";
             }  
-             if(!item.airEnergy){
-              item.airEnergy ="空";
+             if(!items.airEnergy){
+              items.airEnergy = "空";
             }
-           if(!item.projectName){
-              item.projectName ="空";
+            
+           if(!items.projectName){
+              items.projectName = "空";
             } 
-           if(!item.waterWay){
-              item.waterWay ="空";
-            }              
-            data = data+"(区域:"+item.deviceName+',空气能供热标准:'+items.airEnergy+" ,项目名称:"+items.projectName+' ,水路标准:'+items.waterWay+' ,拒绝理由:'+items.text+')';
+           if(!items.waterWay){
+              items.waterWay = "空";
+            }
+
+
+            data = data+"(区域:"+item.deviceName+" ,项目名称:"+items.projectName+' ,水路标准:'+items.waterWay+',空气能供热标准:'+items.airEnergy+' ,拒绝理由:'+items.text+')';
             }
           })
         });
 
         this.selectsdList = data;
-        console.log(this.selectsdList);
         setTimeout(function(){
           document.getElementById("textselect").focus();
         document.getElementById("textselect").select();
@@ -1800,15 +1804,24 @@ export default {
    addList(){
      let that = this;
      let jsons = {};
+    let y = 0;
     for(var i=0; i<that.data_sb.result.templateMap.customTemplateArray.length; i++){
       if(that.Equipmenttype_value==that.data_sb.result.templateMap.customTemplateArray[i].value){
            jsons.type = that.data_sb.result.templateMap.customTemplateArray[i].name;
       }
+      
       for(var x = 0; x<that.data_sb.result.templateMap.customTemplateArray[i].childrenList.length; x++){
-        if(that.Equipmentmodel_value==that.data_sb.result.templateMap.customTemplateArray[i].childrenList[x].value)
+        if(that.Equipmentmodel_value==that.data_sb.result.templateMap.customTemplateArray[i].childrenList[x].value){
          jsons.model = that.data_sb.result.templateMap.customTemplateArray[i].childrenList[x].name;
+         y = 1;
+        }
       }
     }
+    console.log(y);
+    if(y==0){
+      jsons.model = that.Equipmentmodel_value;
+    }
+  console.log(jsons)    
      jsons.inside_color = that.inside_color;
      jsons.outside_color = that.outside_color;
     
