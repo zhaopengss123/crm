@@ -1735,7 +1735,7 @@ export default {
         this.selectsdList = '';
         let data = "";
         let allListarray=[];
-       if(detailData.status == 3){
+       if(this.detailData.status == 3){
          allListarray=this.data_sb.result.contentJson.examine;
        }else{
          allListarray=this.data_sb.result.templateMap.customTempleArray;
