@@ -3,189 +3,193 @@
   <div class="task-detail">
     <div class="quote-title">工单详情  {{ detailData.sendee }}</div>
     <!--基本信息-->
-    <!-- <el-form :inline="true" ref="form1" :rules="rules" :model="form1" label-width="100px">
-     <el-card class="box-card box-card-bot">
-      <div slot="header" class="clearfix">
-        <span>基本信息</span>
-        <el-button v-show="detailData.personUpdate == true && detailData.status == 0 || detailData.personUpdate == true && detailData.status == 2 " style="float: right; padding: 3px 0" type="text" @click="eidtFun($route.params.id)">编辑</el-button>
-      </div>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="工单名称">
-          {{ detailData.name }}
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="工单类别">
-          <router-link :to="'/home/projectdetails/0'">{{ detailData.projectName }}</router-link>
-          </el-form-item>
-        </el-col>
-         <el-col :span="8">
-          <el-form-item label="工单状态">
-             {{ detailData.status == 1 ? '进行中' : detailData.status == 2 ? '拒绝' : detailData.status == 3 ? '完成' : detailData.status == 5 ? '已关闭' : '待处理' }}
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="工单接收人">
-          {{ detailData.receptionName }}
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="工单发起人">
-          {{ detailData.userName }}
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="创建时间">
-            {{ detailData.createTime | format}}
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="期望完成时间">
-           {{detailData.expectTimeStart | format}} {{detailData.expectTimeStart?'——':''}} {{ detailData.expectTime | format}}  
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="实际完成时间">
-            {{ detailData.completeTime | format}} 
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row  :gutter="20" >
-        <el-col :span="2" style="width:100px;text-align: right;color: #99a9bf;font-size: 14px; padding-right:0">工单描述</el-col>
-        <el-col :span="20"><div class="desText" style="font-size: 14px;" v-html="detailData.describeContext "></div></el-col>
-      </el-row>
-       <el-row :span="24" >
-          <el-form-item label="附件" >
-              <p v-for="(list, fileIndex) in uploadFileUrl" :key="fileIndex" class="down-btn">
-                <span v-show="list.indexOf('png') >=0 || list.indexOf('jpg') >=0">
-                    <a v-bind:href="list" target="_blank"><img v-bind:src="list" @click="imgFn(list)"></a><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
-                </span> 
-                <span v-show="list.lastIndexOf('pptx') >=0 ">
-                    <img src="../../../static/images/ppt.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
-                </span> 
-                <span v-show="list.lastIndexOf('rar') >=0 ">
-                    <img src="../../../static/images/zip.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
-                </span> 
-                <span v-show="list.lastIndexOf('xlsx') >=0 ">
-                    <img src="../../../static/images/excel.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
-                </span>
-                <span v-show="list.lastIndexOf('docx') >=0 ">
-                    <img src="../../../static/images/word.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
-                </span>
-                <span v-show="list.lastIndexOf('pdf') >=0 ">
-                    <img src="../../../static/images/pdf.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
-                </span> 
-              
-              </p>
-          </el-form-item>
-      </el-row>
-    </el-card> -->
-    <el-form :inline="true" ref="form1" :rules="rules" :model="form1" label-width="100px">
-     <el-card class="box-card box-card-bot">
-      <div slot="header" class="clearfix">
-        <span>基本信息</span>
-        <el-button v-show="detailData.personUpdate == true && detailData.status == 0 || detailData.personUpdate == true && detailData.status == 2 " style="float: right; padding: 3px 0" type="text" @click="eidtFun($route.params.id)">编辑</el-button>
-      </div>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="工单名称">
-          {{ detailData.name }}
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="工单类别">
-          {{ detailData.projectName }}
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="合同编号">
-             {{ msgData.contractNo }}
-          </el-form-item>
-        </el-col>
-         <el-col :span="8">
-          <el-form-item label="门店地址">
-            {{ msgData.storeAddress }}
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="联系人">
-            {{ msgData.contractName }}
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="联系电话">
-            {{ msgData.contractTel }}
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="筹建主管">
-            {{ msgData.preparationManager }}
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-    </el-card>
-    <!--工单信息-->
-    <el-card class="box-card box-card-bot">
-      <div slot="header" class="clearfix">
-        <span>工单信息 </span>
-      </div>
-      <el-row>
-        <el-col :span="8">
-           <el-form-item label="工单状态">
-             {{ detailData.status == 1 ? '进行中' : detailData.status == 2 ? '拒绝' : detailData.status == 3 ? '完成' : detailData.status == 5 ? '已关闭' : '待处理' }}
-          </el-form-item>
-        </el-col>
-       
-        <el-col :span="8">
-          <el-form-item label="创建时间">
-            {{ detailData.createTime | format(true)}}
-          </el-form-item>
-        </el-col>
-
-         <el-col :span="8">
-          <el-form-item label="期望开始时间">
-           {{ detailData.expectTimeStart | format}}
-          </el-form-item>
-        </el-col>
-         <el-col :span="8">
-          <el-form-item label="期望完成时间">
-           {{ detailData.expectTime | format}}
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="实际完成时间">
-            {{ detailData.completeTime | format(true)}} 
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="8">
-          <el-form-item label="工单发起人">
-          {{ detailData.userName }}
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="8">
-           <el-form-item label="工单接收人">
-          {{ detailData.receptionName }}
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row  :gutter="20" >
+    
+    <el-form :inline="true" ref="form1" :rules="rules" v-if="!detailData.typeCode" :model="form1" label-width="100px">
+      <el-card class="box-card box-card-bot">
+        <div slot="header" class="clearfix">
+          <span>基本信息</span>
+          <el-button v-show="detailData.personUpdate == true && detailData.status == 0 || detailData.personUpdate == true && detailData.status == 2 " style="float: right; padding: 3px 0" type="text" @click="eidtFun($route.params.id)">编辑</el-button>
+        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="工单名称">
+            {{ detailData.name }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="工单类别">
+            <router-link :to="'/home/projectdetails/0'">{{ detailData.projectName }}</router-link>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="工单状态">
+              {{ detailData.status == 1 ? '进行中' : detailData.status == 2 ? '拒绝' : detailData.status == 3 ? '完成' : detailData.status == 5 ? '已关闭' : '待处理' }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="工单接收人">
+            {{ detailData.receptionName }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="工单发起人">
+            {{ detailData.userName }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="创建时间">
+              {{ detailData.createTime | format}}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="期望完成时间">
+            {{detailData.expectTimeStart | format}} {{detailData.expectTimeStart?'——':''}} {{ detailData.expectTime | format}}  
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="实际完成时间">
+              {{ detailData.completeTime | format}} 
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row  :gutter="20" >
           <el-col :span="2" style="width:100px;text-align: right;color: #99a9bf;font-size: 14px; padding-right:0">工单描述</el-col>
           <el-col :span="20"><div class="desText" style="font-size: 14px;" v-html="detailData.describeContext "></div></el-col>
         </el-row>
-    </el-card>
+        <el-row :span="24" >
+            <el-form-item label="附件" >
+                <p v-for="(list, fileIndex) in uploadFileUrl" :key="fileIndex" class="down-btn">
+                  <span v-show="list.indexOf('png') >=0 || list.indexOf('jpg') >=0">
+                      <a v-bind:href="list" target="_blank"><img v-bind:src="list" @click="imgFn(list)"></a><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span> 
+                  <span v-show="list.lastIndexOf('pptx') >=0 ">
+                      <img src="../../../static/images/ppt.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span> 
+                  <span v-show="list.lastIndexOf('rar') >=0 ">
+                      <img src="../../../static/images/zip.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span> 
+                  <span v-show="list.lastIndexOf('xlsx') >=0 ">
+                      <img src="../../../static/images/excel.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span>
+                  <span v-show="list.lastIndexOf('docx') >=0 || list.lastIndexOf('doc') >=0">
+                      <img src="../../../static/images/word.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span>
+                  <span v-show="list.lastIndexOf('pdf') >=0 ">
+                      <img src="../../../static/images/pdf.png"><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span> 
+                
+                </p>
+            </el-form-item>
+        </el-row>
+      </el-card>
+    </el-form>
+
+
+    <el-form :inline="true" ref="form1" :rules="rules" :model="form1" label-width="100px">
+      <el-card class="box-card box-card-bot" v-if="detailData.typeCode">
+        <div slot="header" class="clearfix">
+          <span>基本信息</span>
+          <el-button v-show="detailData.personUpdate == true && detailData.status == 0 || detailData.personUpdate == true && detailData.status == 2 " style="float: right; padding: 3px 0" type="text" @click="eidtFun($route.params.id)">编辑</el-button>
+        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="工单名称">
+            {{ detailData.name }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="工单类别">
+            {{ detailData.projectName }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="合同编号">
+              {{ msgData.contractNo }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="门店地址">
+              {{ msgData.storeAddress }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="联系人">
+              {{ msgData.contractName }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系电话">
+              {{ msgData.contractTel }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="筹建主管">
+              {{ msgData.preparationManager }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+      </el-card>
+      <!--工单信息-->
+      <el-card class="box-card box-card-bot" v-if="detailData.typeCode">
+        <div slot="header" class="clearfix">
+          <span>工单信息 </span>
+        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="工单状态">
+              {{ detailData.status == 1 ? '进行中' : detailData.status == 2 ? '拒绝' : detailData.status == 3 ? '完成' : detailData.status == 5 ? '已关闭' : '待处理' }}
+            </el-form-item>
+          </el-col>
+        
+          <el-col :span="8">
+            <el-form-item label="创建时间">
+              {{ detailData.createTime | format(true)}}
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="期望开始时间">
+            {{ detailData.expectTimeStart | format}}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="期望完成时间">
+            {{ detailData.expectTime | format}}
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="实际完成时间">
+              {{ detailData.completeTime | format(true)}} 
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="工单发起人">
+            {{ detailData.userName }}
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="工单接收人">
+            {{ detailData.receptionName }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row  :gutter="20" >
+            <el-col :span="2" style="width:100px;text-align: right;color: #99a9bf;font-size: 14px; padding-right:0">工单描述</el-col>
+            <el-col :span="20"><div class="desText" style="font-size: 14px;" v-html="detailData.describeContext "></div></el-col>
+          </el-row>
+      </el-card>
    
     <!-- 处理进展 -->
-    <el-card class="box-card box-card-bot">
+    <el-card class="box-card box-card-bot" v-if="detailData.typeCode && detailData.typeCode == 'EQUIPMENT_INSTALL'">
       <div slot="header" class="clearfix">
         <span>处理进展 </span> <span style="float:right;" v-show="detailData.lastOperTime && detailData.ascriptionProId == 21">上传时间:
           <em>{{ detailData.lastOperTime | format(true) }}</em>
@@ -292,8 +296,8 @@
                 </p>
             </el-form-item>
           </el-col>
-            <!-- 设备安装确认单 -->
-           <el-col :span="24" v-show="detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 1 || detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 3">
+          <!-- 设备安装确认单 -->
+          <el-col :span="24" v-show="detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 1 || detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 3">
             <el-form-item label="设备安装确认单(加盟商签字)"  v-show=" confirmData.length > 0">
               <p v-for="(list, fileIndex) in confirmData" :key="fileIndex" class="down-btn">
                   <span >
@@ -311,16 +315,102 @@
               </el-input>
             </el-form-item>
           </el-col>
+
+          <!-- 设备操作说明（锅炉，阀门） -->
+          <el-col :span="24"  v-show="detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 1 || detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 3">
+            <el-form-item label="设备操作说明(锅炉，阀门)" v-show=" byoData.length > 0">
+              <p v-for="(list, fileIndex) in byoData" :key="fileIndex" class="down-btn">
+                  <span >
+                      <a v-bind:href="list" target="_blank"><img v-bind:src="list" @click="imgFn(list)"></a><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span> 
+                </p>
+            </el-form-item>
+            <el-form-item label="设备操作说明(锅炉，阀门)" v-show=" byoData.length == 0">
+              <el-input
+                type="textarea"
+                :rows="6"
+                placeholder="师傅上传后在此显示"
+                :disabled="true"
+                >
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <!-- 设备自带使用说明书 -->
+           <el-col :span="24"  v-show="detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 1 || detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 3">
+            <el-form-item label="设备自带使用说明书" v-show=" useData.length > 0">
+              <p v-for="(list, fileIndex) in useData" :key="fileIndex" class="down-btn">
+                  <span>
+                      <a v-bind:href="list" target="_blank"><img v-bind:src="list" @click="imgFn(list)"></a><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span> 
+                </p>
+            </el-form-item>
+            <el-form-item label="设备自带使用说明书" v-show=" useData.length == 0">
+              <el-input
+                type="textarea"
+                :rows="6"
+                placeholder="师傅上传后在此显示"
+                :disabled="true"
+                >
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <!-- 泳池操作视频 -->
+          <el-col :span="24"  v-show="detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 1 || detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 3">
+            <el-form-item label="泳池操作视频" v-show="swimData.length > 0">
+              <!-- {{swimData}} -->
+              <p v-for="(list, fileIndex) in swimData" :key="fileIndex" class="down-btn">
+                  <span>
+                      <!-- {{list.split(';')[1]}} -->
+                      <!-- <a v-bind:href="list" target="_blank"><img v-bind:src="list" @click="imgFn(list)"></a><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a> -->
+                      
+                      <a v-bind:href="list.split(';')[1]" target="_blank"><img v-bind:src="list.split(';')[0]" @click="imgFn(list)"></a><em>{{list.split(';')[1]}}</em><a class="downIcon" v-bind:href="list.split(';')[1]" v-bind:download="list">下载 </a>
+                  </span> 
+                </p>
+            </el-form-item>
+            <el-form-item label="泳池操作视频" v-show=" swimData.length == 0">
+              <el-input
+                type="textarea"
+                :rows="6"
+                placeholder="师傅上传后在此显示"
+                :disabled="true"
+                >
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <!-- 锅炉操作视频 -->
+          <el-col :span="24" v-show="detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 1 || detailData.ascriptionProId == 21 && detailData.personOper == false && detailData.status == 3">
+            <el-form-item label="锅炉操作视频" v-show="boilerData.length > 0">
+              <p v-for="(list, fileIndex) in boilerData" :key="fileIndex" class="down-btn">
+                  <!-- <span v-show="list.indexOf('mp4') >=0 || list.indexOf('ogg') >=0 || list.indexOf('webm') >=0">
+                      <a v-bind:href="list" target="_blank"><img v-bind:src="list" @click="imgFn(list)"></a><em>{{ list.substring(list.lastIndexOf('\/')+1, list.lastIndexOf('.')) }}</em><em>{{ list.substring(list.lastIndexOf('.')) }}</em><a class="downIcon" v-bind:href="list" v-bind:download="list">下载 </a>
+                  </span>  -->
+                  
+                   <span v-show="list.indexOf('mp4') >=0 || list.indexOf('ogg') >=0 || list.indexOf('webm') >=0">
+                      <a v-bind:href="list.split(';')[1]" target="_blank"><img v-bind:src="list.split(';')[0]" @click="imgFn(list)"></a><em>{{list.split(';')[1]}}</em><a class="downIcon" v-bind:href="list.split(';')[1]" v-bind:download="list">下载 </a>
+                  </span> 
+                </p>
+            </el-form-item>
+
+            <el-form-item label="锅炉操作视频" v-show="boilerData.length == 0">
+              <el-input
+                type="textarea"
+                :rows="6"
+                placeholder="师傅上传后在此显示"
+                :disabled="true"
+                >
+              </el-input>
+            </el-form-item>
+
+          </el-col>
         </el-row>
       </div>
     </el-card>
 
 
     <!--操作-->
-    <el-card class="box-card box-card-bot">
+    <el-card class="box-card box-card-bot" v-if="detailData.typeCode != 'EQUIPMENT_INSTALL'">
       <div slot="header" class="clearfix">
         <span>操作</span>
-
       </div>
       <el-row>
         <el-col :span="24">
@@ -338,161 +428,162 @@
            </el-form-item>
         </el-col>
         
+        <el-dialog
+          title=""
+          :visible.sync="customLists"
+          width="40%">
+            <textarea id="textselect" onclick="this.focus();this.select()" style="width:100%; height:500px;outline: none; border:none;" v-model="selectsdList"></textarea>
+        </el-dialog>  
+
         <el-col v-if="data_sb.result.typeCode&&detailData.status==3&&data_sb.result.typeCode!='EQUIPMENT_INSTALL'">
-              <el-col v-for="(item,indexmm) in data_sb.result.contentJson.tableData" :key="indexmm" >
-                                     <!-- <el-form-item v-if="item.fieldType!=4||item.fieldType!=9||item.fieldType!=10||item.fieldType!=11||item.fieldType!=12||item.fieldType!=5||item.fieldType!=13||item.fieldType!=14||item.fieldType!=15||item.fieldType!=16
-                     ||item.fieldType!=6||item.fieldType!=17||item.fieldType!=18||item.fieldType!=19||item.fieldType!=20" :label="item.chineseName" style="width:100%;"> -->
-                     <el-form-item v-if="item.fieldType==1||item.fieldType==2||item.fieldType==3||item.fieldType==7||item.fieldType==8" :label="item.chineseName" style="width:100%;">
-                        <div>
-                            {{item.value}}
-                        </div>
-                    </el-form-item> 
-              </el-col> 
-              <!-- 图片弹框 -->
-           <el-dialog
+          <el-col v-for="(item,indexmm) in data_sb.result.contentJson.tableData" :key="indexmm" >
+            <el-form-item v-if="item.fieldType==1||item.fieldType==2||item.fieldType==3||item.fieldType==7||item.fieldType==8" :label="item.chineseName" style="width:100%;">
+              <div>{{item.value}}</div>
+            </el-form-item> 
+          </el-col> 
+          <!-- 图片弹框 -->
+          <el-dialog
             title=""
             :visible.sync="imgVisible"
             width="40%">
             <img :src="imgshowsrc" alt="" style="width:100%; height:auto;">
           </el-dialog>   
-     <el-col v-for="(item,indexb) in data_sb.result.contentJson.tableData" :key="indexb" >
-     
-            <!-- 上传图片1 -->
-              
+          <el-col v-for="(item,indexb) in data_sb.result.contentJson.tableData" :key="indexb" >
+      
+              <!-- 上传图片1 -->
               <el-form-item :label="item.chineseName" v-if="item.fieldType==4"  style="width:100%;">
               <div class="addimg" id="fileimg">
-                     <span style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr" :key="indexd">
-                        <img @click="imgshow(items)" style="width:100px; height:100px; float:left;" :src="items">
-                    </span> 
+                <span style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr" :key="indexd">
+                  <img @click="imgshow(items)" style="width:100px; height:100px; float:left;" :src="items">
+                </span> 
               </div>
-           </el-form-item>
-            <!-- 上传图片2 -->
-              <el-form-item :label="item.chineseName" v-if="item.fieldType==9"  style="width:100%;">
-                <div class="addimg" id="fileimg">
-                     <span style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr2" :key="indexd">
-                        <img @click="imgshow(items)" style="width:100px; height:100px; float:left;" :src="items">
-                    </span> 
-              </div>
-           </el-form-item>
-            <!-- 上传图片3 -->
-              <el-form-item :label="item.chineseName" v-if="item.fieldType==10"  style="width:100%;">
-                <div class="addimg" id="fileimg">
-                     <span style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr3" :key="indexd">
-                        <img  @click="imgshow(items)"  style="width:100px; height:100px; float:left;" :src="items">
-                    </span> 
-              </div>
-           </el-form-item>
-            <!-- 上传图片4 -->
-              <el-form-item :label="item.chineseName" v-if="item.fieldType==11"  style="width:100%;">
-              <div class="addimg" id="fileimg">
-                     <span style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr4" :key="indexd">
-                        <img  @click="imgshow(items)"  style="width:100px; height:100px; float:left;" :src="items">
-                    </span> 
-              </div>
-           </el-form-item>
-            <!-- 上传图片5 -->
-              <el-form-item :label="item.chineseName" v-if="item.fieldType==12"  style="width:100%;">
-                <div class="addimg" id="fileimg">
-                     <span  @click="imgshow(items)"  style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr5" :key="indexd">
-                        <img style="width:100px; height:100px; float:left;" :src="items">
-                    </span> 
-              </div>
-           </el-form-item>                                            
-            <!-- 上传视频 -->
-           <el-form-item v-if="item.fieldType==5" :label="item.chineseName" style="width:100%;" > 
-                  <span  v-for="(items,indexa) in data_sb.result.contentJson.videoListarr" :key="indexa" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
-          </el-form-item>
-            <!-- 上传视频2 -->
-           <el-form-item v-if="item.fieldType==13" :label="item.chineseName" style="width:100%;" > 
-                  <span  v-for="(items,indexb) in data_sb.result.contentJson.videoListarr2" :key="indexb" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
-          </el-form-item>          
-            <!-- 上传视频3 -->
-           <el-form-item v-if="item.fieldType==14" :label="item.chineseName" style="width:100%;" > 
-                  <span  v-for="(items,indexc) in data_sb.result.contentJson.videoListarr3" :key="indexc" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
-          </el-form-item>
-            <!-- 上传视频4 -->
-           <el-form-item v-if="item.fieldType==15" :label="item.chineseName" style="width:100%;" > 
-                  <span  v-for="(items,indexd) in data_sb.result.contentJson.videoListarr4" :key="indexd" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
-          </el-form-item>
-            <!-- 上传视频5 -->
-           <el-form-item v-if="item.fieldType==16" :label="item.chineseName" style="width:100%;" > 
-                  <span  v-for="(items,indexe) in data_sb.result.contentJson.videoListarr5" :key="indexe" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
-          </el-form-item>
-            <!-- 上传视频 -->
-       
-            <!-- 上传附件 -->
-            <el-form-item v-if="item.fieldType==6" :label="item.chineseName" style="width:100%;" > 
-                   <span  v-for="(items,indexf) in data_sb.result.contentJson.fileListarr" :key="indexf" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
-            </el-form-item>     
-      <!-- 上传附件 -->
-            <el-form-item v-if="item.fieldType==17" :label="item.chineseName" style="width:100%;" > 
-                   <span  v-for="(items,indexg) in data_sb.result.contentJson.fileListarr2" :key="indexg" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
-            </el-form-item>                  
-      <!-- 上传附件 -->
-            <el-form-item v-if="item.fieldType==18" :label="item.chineseName" style="width:100%;" > 
-                   <span  v-for="(items,indexh) in data_sb.result.contentJson.fileListarr3" :key="indexh" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
             </el-form-item>
-      <!-- 上传附件 -->
-            <el-form-item v-if="item.fieldType==19" :label="item.chineseName" style="width:100%;" > 
-                   <span  v-for="(items,indexi) in data_sb.result.contentJson.fileListarr4" :key="indexi" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
+              <!-- 上传图片2 -->
+                <el-form-item :label="item.chineseName" v-if="item.fieldType==9"  style="width:100%;">
+                  <div class="addimg" id="fileimg">
+                      <span style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr2" :key="indexd">
+                          <img @click="imgshow(items)" style="width:100px; height:100px; float:left;" :src="items">
+                      </span> 
+                </div>
             </el-form-item>
-      <!-- 上传附件 -->
-            <el-form-item v-if="item.fieldType==20" :label="item.chineseName" style="width:100%;" > 
-                   <span  v-for="(items,indexj) in data_sb.result.contentJson.fileListarr5" :key="indexj" style="color:blue; display:block;" >
-                      <a :href="items" target="_blank">{{items}}</a>
-                  </span>
-            </el-form-item>                        
-        </el-col> 
+              <!-- 上传图片3 -->
+                <el-form-item :label="item.chineseName" v-if="item.fieldType==10"  style="width:100%;">
+                  <div class="addimg" id="fileimg">
+                      <span style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr3" :key="indexd">
+                          <img  @click="imgshow(items)"  style="width:100px; height:100px; float:left;" :src="items">
+                      </span> 
+                </div>
+            </el-form-item>
+              <!-- 上传图片4 -->
+                <el-form-item :label="item.chineseName" v-if="item.fieldType==11"  style="width:100%;">
+                <div class="addimg" id="fileimg">
+                      <span style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr4" :key="indexd">
+                          <img  @click="imgshow(items)"  style="width:100px; height:100px; float:left;" :src="items">
+                      </span> 
+                </div>
+            </el-form-item>
+              <!-- 上传图片5 -->
+                <el-form-item :label="item.chineseName" v-if="item.fieldType==12"  style="width:100%;">
+                  <div class="addimg" id="fileimg">
+                      <span  @click="imgshow(items)"  style="width:100px; height:100px; float:left; margin-right:5px;  cursor: pointer" v-for="(items,indexd) in data_sb.result.contentJson.imgListarr5" :key="indexd">
+                          <img style="width:100px; height:100px; float:left;" :src="items">
+                      </span> 
+                </div>
+            </el-form-item>                                            
+              <!-- 上传视频 -->
+            <el-form-item v-if="item.fieldType==5" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexa) in data_sb.result.contentJson.videoListarr" :key="indexa" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+            </el-form-item>
+              <!-- 上传视频2 -->
+            <el-form-item v-if="item.fieldType==13" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexb) in data_sb.result.contentJson.videoListarr2" :key="indexb" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+            </el-form-item>          
+              <!-- 上传视频3 -->
+            <el-form-item v-if="item.fieldType==14" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexc) in data_sb.result.contentJson.videoListarr3" :key="indexc" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+            </el-form-item>
+              <!-- 上传视频4 -->
+            <el-form-item v-if="item.fieldType==15" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexd) in data_sb.result.contentJson.videoListarr4" :key="indexd" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+            </el-form-item>
+              <!-- 上传视频5 -->
+            <el-form-item v-if="item.fieldType==16" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexe) in data_sb.result.contentJson.videoListarr5" :key="indexe" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+            </el-form-item>
+              <!-- 上传视频 -->
+        
+              <!-- 上传附件 -->
+              <el-form-item v-if="item.fieldType==6" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexf) in data_sb.result.contentJson.fileListarr" :key="indexf" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+              </el-form-item>     
+              <!-- 上传附件 -->
+              <el-form-item v-if="item.fieldType==17" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexg) in data_sb.result.contentJson.fileListarr2" :key="indexg" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+              </el-form-item>                  
+              <!-- 上传附件 -->
+              <el-form-item v-if="item.fieldType==18" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexh) in data_sb.result.contentJson.fileListarr3" :key="indexh" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+              </el-form-item>
+              <!-- 上传附件 -->
+              <el-form-item v-if="item.fieldType==19" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexi) in data_sb.result.contentJson.fileListarr4" :key="indexi" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+              </el-form-item>
+              <!-- 上传附件 -->
+              <el-form-item v-if="item.fieldType==20" :label="item.chineseName" style="width:100%;" > 
+                    <span  v-for="(items,indexj) in data_sb.result.contentJson.fileListarr5" :key="indexj" style="color:blue; display:block;" >
+                        <a :href="items" target="_blank">{{items}}</a>
+                    </span>
+              </el-form-item>                        
+          </el-col> 
 
 
-               <!-- 设备详情 -->
-             
-               <el-col v-if="data_sb.result.typeCode =='DESIGN'" style="width:100%;color:#99a9bf; font-size:16px;">
-                  <span style="width:100%; text-align:center; display:block; padding:10px 0;">设备详情</span>
+          <!-- 设备详情 -->
+          <el-col v-if="data_sb.result.typeCode =='DESIGN'" style="width:100%;color:#99a9bf; font-size:16px;">
+            <span style="width:100%; text-align:center; display:block; padding:10px 0;">设备详情</span>
+                
+
+            <el-col style="width:100%; margin-bottom:22px;">
+              <el-table
+                  :data="data_sb.result.contentJson.data_Detail"
+                  style="width: 100%">
+                  <el-table-column prop="type" label="设备名称"></el-table-column>
+                  <el-table-column prop="inside_color" label="内色"></el-table-column>
+                  <el-table-column prop="outside_color" label="外色"></el-table-column>
+                  <el-table-column prop="model" label="设备类型"></el-table-column>
+                  <el-table-column prop="moneys" label="单价"></el-table-column>
+                  <el-table-column prop="numbers" label="数量"></el-table-column>
+                  <el-table-column prop="price" label="总价"></el-table-column>
+                  <el-table-column prop="remarks" label="备注"></el-table-column>   
               
-
-        <el-col style="width:100%; margin-bottom:22px;">
-               <el-table
-                :data="data_sb.result.contentJson.data_Detail"
-                style="width: 100%">
-                <el-table-column prop="type" label="设备名称"></el-table-column>
-                <el-table-column prop="inside_color" label="内色"></el-table-column>
-                <el-table-column prop="outside_color" label="外色"></el-table-column>
-                <el-table-column prop="model" label="设备类型"></el-table-column>
-                <el-table-column prop="moneys" label="单价"></el-table-column>
-                <el-table-column prop="numbers" label="数量"></el-table-column>
-                <el-table-column prop="price" label="总价"></el-table-column>
-                <el-table-column prop="remarks" label="备注"></el-table-column>   
-             
-    </el-table>
-        </el-col>
- </el-col>
+              </el-table>
+            </el-col>
+          </el-col>
 
 
 
 
 
-              <!-- //examine -->
-             <el-col>
-             <el-form-item label="验收清单" class="billList" style="width:100%;" v-if="data_sb.result.typeCode == 'WATER_ELECTRICITY'"  >
+            <!-- //examine -->
+          <el-col>
+            <el-form-item label="验收清单" class="billList" style="width:100%;" v-if="data_sb.result.typeCode == 'WATER_ELECTRICITY'"  >
               <div class="listys" >
                   <div class="header_list">
                       <ul>
@@ -506,12 +597,12 @@
                   <div class="left_list">
                     <ul>
                       <!-- <li v-for="(item,Indexs) in data_sb.result.templateMap.customTemplateArray" :key="Indexs" v-bind:style="{height:42*item.list.length+20+'px',lineHeight:42*item.list.length+20+'px'}">{{item.list[0].deviceName}}</li> -->
-                       <li v-for="(item,Indexs) in data_sb.result.contentJson.examine" :key="Indexs" v-bind:style="{height:42*item.list.length+20+'px',lineHeight:42*item.list.length+20+'px'}">{{item.deviceName}}</li> 
+                      <li v-for="(item,Indexs) in data_sb.result.contentJson.examine" :key="Indexs" v-bind:style="{height:42*item.list.length+20+'px',lineHeight:42*item.list.length+20+'px'}">{{item.deviceName}}</li> 
                     </ul>
                   </div>
                   <div class="main_list">
-                   <div style="width:100%; "  v-for="(item,Indexs) in data_sb.result.contentJson.examine" :key="Indexs">
-                     <ul v-for="(items,Indexy) in data_sb.result.contentJson.examine[Indexs].list" :key="Indexy">
+                  <div style="width:100%; "  v-for="(item,Indexs) in data_sb.result.contentJson.examine" :key="Indexs">
+                    <ul v-for="(items,Indexy) in data_sb.result.contentJson.examine[Indexs].list" :key="Indexy">
                       <li>{{items.projectName}}</li>
                       <li>{{items.waterWay||items.commonNorm}}</li>
                       <li>{{items.airEnergy}}</li>
@@ -524,12 +615,9 @@
                     </div> 
                   </div>                  
               </div>
-           </el-form-item>  
+            </el-form-item>  
           </el-col>
-
-      
-
-
+                      <el-button type="primary" v-if="data_sb.result.typeCode == 'WATER_ELECTRICITY'"  @click="copylist" >复制未通过项目</el-button>
 
         </el-col>
       <el-col v-if="data_sb.result.typeCode&&detailData.status==1&&data_sb.result.typeCode!='EQUIPMENT_INSTALL'"> 
@@ -752,8 +840,8 @@
             </el-upload>
           </el-form-item>
 
-            <!-- 上传附件 -->
-            <el-form-item v-if="item.fieldType==6" :label="item.chineseName" style="width:100%;" > 
+          <!-- 上传附件 -->
+          <el-form-item v-if="item.fieldType==6" :label="item.chineseName" style="width:100%;" > 
             <el-upload 
               class="upload-demo"
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -769,8 +857,8 @@
               <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
             </el-upload>
           </el-form-item>     
-        <!-- 上传附件2 -->
-            <el-form-item v-if="item.fieldType==17" :label="item.chineseName" style="width:100%;" > 
+          <!-- 上传附件2 -->
+          <el-form-item v-if="item.fieldType==17" :label="item.chineseName" style="width:100%;" > 
             <el-upload 
               class="upload-demo"
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -786,8 +874,8 @@
               <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
             </el-upload>
           </el-form-item>  
-        <!-- 上传附件 3-->
-            <el-form-item v-if="item.fieldType==18" :label="item.chineseName" style="width:100%;" > 
+          <!-- 上传附件 3-->
+          <el-form-item v-if="item.fieldType==18" :label="item.chineseName" style="width:100%;" > 
             <el-upload 
               class="upload-demo"
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -803,8 +891,8 @@
               <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
             </el-upload>
           </el-form-item>            
-        <!-- 上传附件4 -->
-            <el-form-item v-if="item.fieldType==19" :label="item.chineseName" style="width:100%;" > 
+          <!-- 上传附件4 -->
+          <el-form-item v-if="item.fieldType==19" :label="item.chineseName" style="width:100%;" > 
             <el-upload 
               class="upload-demo"
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -820,8 +908,8 @@
               <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
             </el-upload>
           </el-form-item>  
-        <!-- 上传附件 5-->
-            <el-form-item v-if="item.fieldType==20" :label="item.chineseName" style="width:100%;" > 
+          <!-- 上传附件 5-->
+          <el-form-item v-if="item.fieldType==20" :label="item.chineseName" style="width:100%;" > 
             <el-upload 
               class="upload-demo"
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -838,7 +926,7 @@
             </el-upload>
           </el-form-item>  
             <!-- 日期控件 -->
-            <el-form-item :label="item.chineseName" v-if="item.fieldType==7" style="width:100%;">
+          <el-form-item :label="item.chineseName" v-if="item.fieldType==7" style="width:100%;">
               <div >
                   <el-date-picker
                   type="date"
@@ -849,7 +937,7 @@
               </div>
            </el-form-item>
            <!-- 上传接口 -->
-            <el-form-item :label="item.chineseName" v-if="item.fieldType==8" style="width:100%;">
+          <el-form-item :label="item.chineseName" v-if="item.fieldType==8" style="width:100%;">
               <div >
                   <el-input :maxlength="item.limit?item.limit:10000" v-model="item['value']"  placeholder="请输入内容"></el-input>
               </div>
@@ -948,15 +1036,11 @@
               </div>
            </el-form-item>  
           </el-col>
-             <el-dialog
-            title=""
-            :visible.sync="customLists"
-            width="40%">
-              <textarea id="textselect" onclick="this.focus();this.select()" style="width:100%; height:500px;outline: none; border:none;" v-model="selectsdList"></textarea>
-          </el-dialog>   
+ 
 
 
-            <div style="text-align: center;" ><el-button type="primary" plain @click="submitistypecode" >完成工单</el-button><el-button type="primary" v-if="data_sb.result.typeCode == 'WATER_ELECTRICITY'"  @click="copylist" >复制未通过项目</el-button></div>
+            <div style="text-align: center;" ><el-button type="primary" plain @click="submitistypecode" >完成工单</el-button>
+            <el-button type="primary" v-if="data_sb.result.typeCode == 'WATER_ELECTRICITY'"  @click="copylist" >复制未通过项目</el-button></div>
           </el-col>
       </el-row>
                       
@@ -1102,7 +1186,7 @@
       </ul>
     </el-card>
         <!--相关工单-->
-    <el-card class="box-card box-card-bot">
+    <el-card class="box-card box-card-bot" v-if="detailData.typeCode">
       <div slot="header" class="clearfix">
         <span>其他相关工单</span>
       </div>
@@ -1639,6 +1723,10 @@ export default {
       msgData:{},
       newText: "验收",
       confirmData: [],
+      byoData: [],
+      boilerData: [],
+      swimData: [],
+      useData: [],
     };
   },
   methods: {
@@ -2702,6 +2790,35 @@ export default {
               res.data.result.confirmSheet != null
             ) {
               this.confirmData = res.data.result.confirmSheet.split(",");
+            }
+
+            //锅炉视频
+            if (
+              res.data.result.boilerOper &&
+              res.data.result.boilerOper != null
+            ) {
+              this.boilerData = res.data.result.boilerOper.split(",");
+            }
+            //泳池视频
+            if (
+              res.data.result.swimmingOper &&
+              res.data.result.swimmingOper != null
+            ) {
+              this.swimData = res.data.result.swimmingOper.split(",");
+            }
+            //使用说明
+            if (
+              res.data.result.useInstruction &&
+              res.data.result.useInstruction != null
+            ) {
+              this.useData = res.data.result.useInstruction.split(",");
+            }
+            //操作说明
+            if (
+              res.data.result.operInstruction &&
+              res.data.result.operInstruction != null
+            ) {
+              this.byoData = res.data.result.operInstruction.split(",");
             }
           /* -------------------- phuhoang end -------------------- */
           

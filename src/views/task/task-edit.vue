@@ -73,7 +73,7 @@
           <el-form-item>
             <el-button type="primary" @click="saveTaskInfor('form')">提交</el-button>
             <el-button class="blockButton" @click="$router.push({ path:'/home/tasklist', query:{'pageSize': 10, 'pageNo': 1} })">
-              <!-- <router-link to="/home/tasklist" class="linkSame">返回</router-link> -->
+              <router-link to="/home/tasklist" class="linkSame">返回</router-link>
                                                     
             </el-button>
           </el-form-item>
@@ -212,7 +212,7 @@ export default {
       this.files = file.raw;
       this.fileName = file.name.substring(file.name.lastIndexOf('.')+1);
       
-      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf' || this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'RAR'){
+      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf' || this.fileName == 'docx'  || this.fileName == 'doc' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'RAR'){
         this.flag = true;
         this.fileArrList = fileList;
         this.upLoadKey(file.uid, file.name);
@@ -221,15 +221,14 @@ export default {
         this.fileArrList =  fileList.slice(0, fileList.length-1);
         this.$message.warning(`当前文件格式不正确`); 
       }
-      console.log(this.fileArrList)
+      console.log('fileArrList:', this.fileArrList)
     },
     upLoadFile(fileId, fileListName){
-      console.log(this.files)
        let key = this.files.name;
         this.client.multipartUpload(key, this.files, {}).then(res => {
           this.fileUrl = res.url ? res.url : 'http://'+ res.bucket + '.oss-cn-beijing.aliyuncs.com/' + res.name;
           this.fileArr.push(this.fileUrl)
-          console.log(this.fileArr)
+          console.log('fileArr:', this.fileArr)
         }, error => {
           this.prompt('上传文件失败','warning');
         })
@@ -288,7 +287,6 @@ export default {
     },
     //保存表格信息
     saveTaskInfor(formName) {
-      console.log(this.fileArr.join(','))
       if(this.form.expectTime == null){
         delete this.form.expectTime;
       }
@@ -302,7 +300,6 @@ export default {
         let time = y+'-'+m+'-'+d;
         this.form.expectTimeStart = time;
       }
-      console.log(this.form.expectTimeStart);
 
      // 拒绝状态 编辑, 再次保存  让状态变为待处理
      if(this.form.status == 2){
@@ -316,7 +313,6 @@ export default {
           let newForm = this.form;
           newForm.uploadFileUrl = this.fileArr.join(',');
           newForm.expectTime = formatDate(this.form.expectTime); 
-              console.log(newForm)
           this.axios.post(url, {
              paramJson: JSON.stringify(newForm)
           }).then(res => {
@@ -391,20 +387,31 @@ export default {
   
     //编辑任务回显
     if(paramsId != 0){
- 
       //回显数据
       this.axios.post('/mission/missionDetail', {id:paramsId}).then(res => {
-       let projectidArray = res.data.result.projectidLogic.split(",");
+        let projectidArray = res.data.result.projectidLogic.split(",");
 
         let array = [];
-        projectidArray.map(listItem=>{
-            array.push(parseInt(listItem));
-            
-        })
+        if (projectidArray) {
+          projectidArray.map(listItem=>{
+              array.push(parseInt(listItem));
+          });
+        }
+        if (res.data.result.uploadFileUrl) {
+          this.fileArr = res.data.result.uploadFileUrl.split(',');
+          res.data.result.uploadFileUrl.split(',').map((file, idx) => {
+            this.fileArrList.push({
+              name: file.split('http://ylbb-business.oss-cn-beijing.aliyuncs.com/')[1],
+              uid: idx
+            })
+          });
+        }
+
       
-        //console.log(projectidArray);
         res.data.result.projectID = array;  
-        this.form =  res.data.result;
+        this.form = res.data.result;
+
+        console.log(this.form)
         if(res.data.result.expectTime){
           this.form.expectTime = new Date(res.data.result.expectTime);
         }
