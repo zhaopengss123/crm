@@ -1061,7 +1061,7 @@
                <el-input
                 type="textarea"
                 :rows="6"
-                placeholder="对方完成工单并编辑后, 方可在此显示"
+                placeholder="对方完成工单并编辑后, 方可在此显示" 
                 v-model="textarea"
                 :disabled="true">
               </el-input>
@@ -1734,7 +1734,13 @@ export default {
         this.customLists = true;
         this.selectsdList = '';
         let data = "";
-        this.data_sb.result.templateMap.customTempleArray.map(item=>{
+        let allListarray=[];
+       if(detailData.status == 3){
+         allListarray=this.data_sb.result.contentJson.examine;
+       }else{
+         allListarray=this.data_sb.result.templateMap.customTempleArray;
+       }
+        allListarray.map(item=>{
           item.list.map(items=>{
             if(items.model==2){
               if(!items.text){
@@ -1756,6 +1762,7 @@ export default {
             }
           })
         });
+
         this.selectsdList = data;
         console.log(this.selectsdList);
         setTimeout(function(){
