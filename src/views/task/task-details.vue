@@ -1757,7 +1757,7 @@ export default {
             } 
            if(!item.waterWay){
               item.waterWay ="空";
-            }             
+            }              
             data = data+"(区域:"+item.deviceName+',空气能供热标准:'+items.airEnergy+" ,项目名称:"+items.projectName+' ,水路标准:'+items.waterWay+' ,拒绝理由:'+items.text+')';
             }
           })
