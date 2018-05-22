@@ -7,7 +7,7 @@
     <el-form :inline="true" ref="form1" :rules="rules" v-if="!detailData.typeCode" :model="form1" label-width="100px">
       <el-card class="box-card box-card-bot">
         <div slot="header" class="clearfix">
-          <span>基本信息</span>
+          <span> </span>
           <el-button v-show="detailData.personUpdate == true && detailData.status == 0 || detailData.personUpdate == true && detailData.status == 2 " style="float: right; padding: 3px 0" type="text" @click="eidtFun($route.params.id)">编辑</el-button>
         </div>
         <el-row>
@@ -620,7 +620,7 @@
                       <el-button type="primary" v-if="data_sb.result.typeCode == 'WATER_ELECTRICITY'"  @click="copylist" >复制未通过项目</el-button>
 
         </el-col>
-      <el-col v-if="data_sb.result.typeCode&&detailData.status==1&&data_sb.result.typeCode!='EQUIPMENT_INSTALL'"> 
+      <el-col v-if="data_sb.result.typeCode&&detailData.status==1&&data_sb.result.typeCode!='EQUIPMENT_INSTALL'&&detailData.personOper == true"> 
   
           <el-col v-for="(item,indexmm) in data_sb.result.templateMap.commonArray" :key="indexmm" >
            
