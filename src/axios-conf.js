@@ -22,9 +22,9 @@ export default (Vue, ElementUI, Store) => {
     axios.interceptors.response.use(res => {
         if (res.data.code && res.data.code == 1003) {
             // router.push('/login');
-            window.location.href = 'http://192.168.1.205:8800/';
+            // window.location.href = 'http://192.168.1.205:8800/';
             //window.location.href = 'http://tusercenter.beibeiyue.cn/c/';
-            //window.location.href = 'http://usercenter.beibeiyue.com/c/';
+            window.location.href = 'http://usercenter.beibeiyue.com/c/';
         }
         return res;
     }, err => {
