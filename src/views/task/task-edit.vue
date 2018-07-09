@@ -313,6 +313,12 @@ export default {
           let newForm = this.form;
           newForm.uploadFileUrl = this.fileArr.join(',');
           newForm.expectTime = formatDate(this.form.expectTime); 
+          if(JSON.parse(window.location.userInfo).storeId){
+            newForm.storeId = JSON.parse(window.location.userInfo).storeId;
+          }
+          if(JSON.parse(window.location.userInfo).typeCode){
+            newForm.typeCode = JSON.parse(window.location.userInfo).typeCode;
+          }        
           this.axios.post(url, {
              paramJson: JSON.stringify(newForm)
           }).then(res => {
