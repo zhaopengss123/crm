@@ -1264,7 +1264,7 @@
       width="30%"
       center>
       <el-form :model="returnForm" :rules="returnRule" ref="returnForm">
-        <el-form-item label="工单接收人" prop="ascriptionProId" :label-width="formLabelWidth">
+        <!-- <el-form-item label="工单接收人" prop="ascriptionProId" :label-width="formLabelWidth">
           <el-select v-model="returnForm.ascriptionProId" placeholder="请选择" clearable @change="handleChangePro">
             <el-option
               v-for="item in optionsRecipient"
@@ -1275,7 +1275,30 @@
               >
             </el-option>
           </el-select>
+        </el-form-item> -->
+        <el-form-item label="工单类别" prop="projectID">
+            <div style="width:350px" class="inputLen">
+              <el-cascader
+                placeholder="请选择"
+                v-model="projectID"
+                change-on-select
+                :options="proOptions"
+                :props="{value:'value', label:'label', children: 'children'}" 
+                @change="proOptionFn"
+              ></el-cascader>
+            </div>
         </el-form-item>
+        <el-form-item label="工单接收人" prop="receptionId">
+            <el-select v-model="returnForm.ascriptionProId" placeholder="请选择" clearable @change="handleChangePro">
+              <el-option
+                v-for="item in optionsRecipient"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId">
+              </el-option>
+            </el-select>  
+        </el-form-item>
+
         <el-form-item label="备注" :label-width="formLabelWidth" prop="textarea">
           <el-input
             type="textarea"
@@ -1596,6 +1619,8 @@ export default {
    
       radio:{
       },
+      classId:'',
+      proOptions:[],
       selectsdList:'',
       customLists:false,
       radioInput:{},
@@ -1650,6 +1675,7 @@ export default {
       refuseForm: {
         textarea: ""
       },
+      projectID:'',
       returnForm: {
         textarea: "",
       },
@@ -2533,30 +2559,7 @@ export default {
         this.mdShow = true;
       }
     },
-    //接收人改变  
-    handleChangePro(value) {
-      this.optionsRecipient.map(item => {
-        if(this.detailData.receptionId == value){
-          item.disabled = true;
-        }
-        if(item.userId == value){
-         this.paramsData.receptionName = item.userName;
-         this.paramsData.receptionId = value;
-         
-        }
-      })
-    },
-    // 工单接收人
-     orderRecipient(){
-      this.axios.post('/project/listTransfer', {classId: this.detailData.ascriptionProId }).then(res => {
-        this.optionsRecipient = res.data.result;
-        this.optionsRecipient.map(item => {
-        if(item.userId == this.detailData.receptionId){
-            item.disabled = true
-          }
-        })
-      }) 
-    }, 
+
     //接收人邮箱
     emailFn(emailID, emailData){
        this.axios.post('http://hrs.beibeiyue.com/personage/personageDetail', {id: emailID }).then(res => {
@@ -2642,6 +2645,7 @@ export default {
           this.detailData.status = '0';
           this.detailData.receptionName = this.paramsData.receptionName;
           this.paramsData.remark = this.returnForm.textarea; 
+          this.paramsData.ascriptionProId = this.returnForm.ascriptionProId; 
           this.recipient();
           this.operation();
           this.operationEvent.text = '已转给同事';
@@ -2758,6 +2762,95 @@ export default {
           this.prompt('网络连接失败,请稍后再试','warning');
       })
     },
+
+
+    parentProjectList() {
+    let paramsId = this.$route.params.id;
+    //工单类别
+    this.axios.post('/project/parentProjectList', {}).then(res => {
+      let projectList = res.data.result;
+        for(let i =0; i<projectList.length; i++){
+            if(projectList[i].children.length<1){
+              delete projectList[i].children;
+            }else{
+                    for(let ii=0; ii<projectList[i].children.length; ii++){
+                        if(projectList[i].children[ii].children.length<1){
+                          delete projectList[i].children[ii].children;
+                        }else{
+                              for(let iii = 0; iii<projectList[i].children[ii].children.length; iii++){
+                                  if(projectList[i].children[ii].children[iii].children.length<1){
+                                        delete projectList[i].children[ii].children[iii].children;
+                                  }else{
+                                      for(let iiii = 0; iiii<projectList[i].children[ii].children[iii].children.length; iiii++){
+                                        if(projectList[i].children[ii].children[iii].children[iiii].children.length<1){
+                                          delete projectList[i].children[ii].children[iii].children[iiii].children;
+                                        }
+                                      }
+                                  }
+                              }
+                        }
+                    }
+            }
+           }
+            this.proOptions = projectList; 
+    }).catch(error => { //捕获失败
+    })
+
+    
+  },
+        //接收人改变  
+    handleChangePro(value) {
+      this.optionsRecipient.map(item => {
+        if(item.userId == value){
+         this.paramsData.receptionName = item.userName;
+         this.paramsData.receptionId = value;
+         // this.emailFn(item.userId);
+        }
+      })
+    },
+    // 工单接收人
+    orderRecipient(){
+      this.axios.post('/project/listPersonByClassId', {classId: this.classId }).then(res => {
+        this.optionsRecipient = res.data.result;
+      }) 
+    },
+
+    // 工单类别改变事件
+    proOptionFn(val){
+      this.classId =  val[val.length-1];  //获取类别id
+      this.orderRecipient();  //请求接收人列表
+      this.form.projectidLogic = val.join(',');
+      let lengthData = this.form.projectID;
+      if(this.$route.params.id != 0 || this.form.receptionId ){
+        this.form.receptionId = '';
+      }
+      this.form.ascriptionProId = lengthData[lengthData.length - 1];
+    },
+
+    // //接收人改变  
+    // handleChangePro(value) {
+    //   this.optionsRecipient.map(item => {
+
+    //     if(item.userId == value){
+    //      this.paramsData.receptionName = item.userName;
+    //      this.paramsData.receptionId = value;
+         
+    //     }
+    //   })
+    // },
+    // // 工单接收人
+    //  orderRecipient(){
+    //   this.axios.post('/project/listTransfer', {classId: this.detailData.ascriptionProId }).then(res => {
+    //     this.optionsRecipient = res.data.result;
+    //     this.optionsRecipient.map(item => {
+    //     if(item.userId == this.detailData.receptionId){
+    //         item.disabled = true
+    //       }
+    //     })
+    //   }) 
+    // }, 
+
+
 
     //任务回显
     getData(){
@@ -2876,7 +2969,7 @@ export default {
 
   mounted(){
     this.getData(); 
-
+    this.parentProjectList();
   },
   //路由监听
   watch:{
