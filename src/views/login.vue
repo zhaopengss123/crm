@@ -38,6 +38,8 @@ export default {
             this.$router.push("/home/launchWork/11");
         }else if(userStore.menueSource==5){
             this.$router.push("/home/receiveWork/11");
+        }else if(userStore.menueSource==6){
+            this.$router.push("/home/newtaskedit/0");
         }else if(userStore.typeCode){
 
             this.$router.push(`/home/taskdetais/${userStore.id}`);

@@ -300,24 +300,26 @@ export default {
         let time = y+'-'+m+'-'+d;
         this.form.expectTimeStart = time;
       }
-
+        
      // 拒绝状态 编辑, 再次保存  让状态变为待处理
      if(this.form.status == 2){
        this.form.status = '0';   
      }
       this.$refs[formName].validate(valid => {
+        
         let paramsId = this.$route.params.id;
         let id = this.$route.query.id;
         if (valid) {
           let url = paramsId != 0 ? '/mission/missionEdit' : '/mission/add'; 
           let newForm = this.form;
           newForm.uploadFileUrl = this.fileArr.join(',');
-          newForm.expectTime = formatDate(this.form.expectTime); 
-          if(JSON.parse(window.location.userInfo).storeId){
-            newForm.storeId = JSON.parse(window.location.userInfo).storeId;
+          newForm.expectTime = formatDate(this.form.expectTime);
+           
+          if(JSON.parse(window.localStorage.userInfo).storeId){
+            newForm.storeId = JSON.parse(window.localStorage.userInfo).storeId;
           }
-          if(JSON.parse(window.location.userInfo).typeCode){
-            newForm.typeCode = JSON.parse(window.location.userInfo).typeCode;
+          if(JSON.parse(window.localStorage.userInfo).typeCode){
+            newForm.typeCode = JSON.parse(window.localStorage.userInfo).typeCode;
           }        
           this.axios.post(url, {
              paramJson: JSON.stringify(newForm)

@@ -1132,7 +1132,7 @@
           </el-form-item>
         </el-col>
   
-        <el-col :span="24" v-show="detailData.personOper == true && detailData.status != 3 && detailData.status != 2"> 
+        <el-col :span="24" v-if="detailData.personOper == true && detailData.status != 3 && detailData.status != 2"> 
           <div style="text-align: center;" v-if="!data_sb.result.typeCode||data_sb.result.typeCode=='EQUIPMENT_INSTALL'"><el-button type="primary" plain @click="confirmUpload">完成工单</el-button></div>
 
         </el-col>
@@ -1299,7 +1299,7 @@
             </el-select>  
         </el-form-item>
 
-        <el-form-item label="备注" :label-width="formLabelWidth" prop="textarea">
+        <el-form-item label="备注" style="text-align:left" label-width="82px" prop="textarea">
           <el-input
             type="textarea"
             :rows="4"
@@ -2667,7 +2667,8 @@ export default {
     },
     //转给同事
     handRound() {
-      this.returnShow = true;
+       this.returnShow = true;
+
     },
     //返回列表
     returnFun(){
@@ -2819,12 +2820,12 @@ export default {
     proOptionFn(val){
       this.classId =  val[val.length-1];  //获取类别id
       this.orderRecipient();  //请求接收人列表
-      this.form.projectidLogic = val.join(',');
-      let lengthData = this.form.projectID;
-      if(this.$route.params.id != 0 || this.form.receptionId ){
-        this.form.receptionId = '';
-      }
-      this.form.ascriptionProId = lengthData[lengthData.length - 1];
+      // this.form.projectidLogic = val.join(',');
+      // let lengthData = this.form.projectID;
+      // if(this.$route.params.id != 0 || this.form.receptionId ){
+      //   this.form.receptionId = '';
+      // }
+      // this.form.ascriptionProId = lengthData[lengthData.length - 1];
     },
 
     // //接收人改变  
