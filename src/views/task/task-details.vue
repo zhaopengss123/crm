@@ -2855,6 +2855,7 @@ export default {
 
     //任务回显
     getData(){
+      let that = this;
       let id = this.$route.params.id;
       let paramsId = this.$route.params.id;
       if(paramsId != 0){
@@ -2866,8 +2867,9 @@ export default {
           //接收人id
           //发起人id
           
-          this.detailData = res.data.result;
+          that.detailData = res.data.result;
           this.data_sb = res.data;
+
           this.form1.textarea =  res.data.result.appraiseContext;
           let sendee = this.detailData.personUpdate == true ? '发起人' : '';
           this.detailData.sendee = sendee;
@@ -2908,8 +2910,9 @@ export default {
               this.evaluate.radio = res.data.result.satisfaction;
             }
             /*基本信息*/
+            if(res.data.result.baseInfo){
             this.msgData = JSON.parse(res.data.result.baseInfo);
-
+            }
             //设备安装确认单
             if (
               res.data.result.confirmSheet &&

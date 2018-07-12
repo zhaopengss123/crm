@@ -18,7 +18,7 @@
         <el-form-item label="工单名称" class="inputBox" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item v-if="form.expectTimeStart" label="期望开始时间" prop="expectTime">
+        <el-form-item v-if="form.expectTimeStart||adminNato" label="期望开始时间" prop="expectTime">
              <el-date-picker
               v-model="form.expectTimeStart"
               type="date"
@@ -129,9 +129,11 @@ export default {
   },
   data() {
     return {
+      adminNato:false,
       content:'',
       form: {
         expectTime:"",
+        expectTimeStart:'',
       },
       datePick:{
         disabledDate(time){
@@ -145,6 +147,7 @@ export default {
       proOptions:[],
       //测试接收人
       optionsRecipient: [],
+    
       rules: {
         projectID:[
           {
@@ -164,7 +167,7 @@ export default {
         ],
         name: [
           { required: true, message: "请输入工单名称", trigger: "blur" },
-          { min: 3, max: 20, message: "长度在 3 到 20 个字符", trigger: "blur" }
+          { min: 3, max: 50, message: "长度在 3 到 50 个字符", trigger: "blur" }
         ],
         expectTime: [
             { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
@@ -290,7 +293,7 @@ export default {
       if(this.form.expectTime == null){
         delete this.form.expectTime;
       }
-      if(this.form.expectTimeStart){
+      if(this.form.expectTimeStart&&this.adminNato){
         let date = new Date(this.form.expectTimeStart);
         let y = 1900+date.getYear();
         let m = date.getMonth()+1;
@@ -320,13 +323,15 @@ export default {
           }
           if(JSON.parse(window.localStorage.userInfo).typeCode){
             newForm.typeCode = JSON.parse(window.localStorage.userInfo).typeCode;
-          }        
+          } 
+     
           this.axios.post(url, {
              paramJson: JSON.stringify(newForm)
           }).then(res => {
             
-            this.$message.success('保存成功');
+            
             if(res.data.info == '操作成功'){
+              this.$message.success('保存成功');
                 setTimeout(time => {
                 this.$router.push({ path: "../tasklist", });
               }, 1000);
@@ -363,6 +368,11 @@ export default {
   },
   mounted() {
     let paramsId = this.$route.params.id;
+    if(JSON.parse(window.localStorage.userInfo).typeCode){
+        this.adminNato = true;
+    }
+   
+
     //工单类别
     this.axios.post('/project/parentProjectList', {}).then(res => {
       let projectList = res.data.result;
@@ -405,6 +415,7 @@ export default {
               array.push(parseInt(listItem));
           });
         }
+        
         if (res.data.result.uploadFileUrl) {
           this.fileArr = res.data.result.uploadFileUrl.split(',');
           res.data.result.uploadFileUrl.split(',').map((file, idx) => {
@@ -416,10 +427,9 @@ export default {
         }
 
       
-        res.data.result.projectID = array;  
+        res.data.result.projectID = array; 
+   
         this.form = res.data.result;
-
-        console.log(this.form)
         if(res.data.result.expectTime){
           this.form.expectTime = new Date(res.data.result.expectTime);
         }
