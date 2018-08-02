@@ -18,7 +18,7 @@
         <el-form-item label="工单名称" class="inputBox" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item v-if="form.expectTimeStart||adminNato" label="期望开始时间" prop="expectTime">
+        <el-form-item v-if="form.expectTimeStart||adminNato" label="期望开始时间"  >
              <el-date-picker
               v-model="form.expectTimeStart"
               type="date"
@@ -171,7 +171,8 @@ export default {
         ],
         expectTime: [
             { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-          ]
+          ],
+     
       },
       fileName:'',
       fileArr:[],
@@ -293,6 +294,9 @@ export default {
       if(this.form.expectTime == null){
         delete this.form.expectTime;
       }
+      if(!this.form.expectTimeStart){
+        delete this.form.expectTimeStart;
+      }
       if(this.form.expectTimeStart&&this.adminNato){
         let date = new Date(this.form.expectTimeStart);
         let y = 1900+date.getYear();
@@ -317,7 +321,7 @@ export default {
           let newForm = this.form;
           newForm.uploadFileUrl = this.fileArr.join(',');
           newForm.expectTime = formatDate(this.form.expectTime);
-           
+     
           if(JSON.parse(window.localStorage.userInfo).storeId){
             newForm.storeId = JSON.parse(window.localStorage.userInfo).storeId;
           }
@@ -371,8 +375,7 @@ export default {
     if(JSON.parse(window.localStorage.userInfo).typeCode){
         this.adminNato = true;
     }
-   
-
+    console.log(1234);
     //工单类别
     this.axios.post('/project/parentProjectList', {}).then(res => {
       let projectList = res.data.result;

@@ -1289,7 +1289,7 @@
             </div>
         </el-form-item>
         <el-form-item label="工单接收人" prop="receptionId">
-            <el-select v-model="returnForm.ascriptionProId" placeholder="请选择" clearable @change="handleChangePro">
+            <el-select v-model="returnForm.receptionId" placeholder="请选择" clearable @change="handleChangePro">
               <el-option
                 v-for="item in optionsRecipient"
                 :key="item.userId"
@@ -2519,7 +2519,9 @@ export default {
 
         this.detailData.personOper = true;
         this.axios.post('/mission/missionOperation', {
-            paramJson:paramJson
+            paramJson:paramJson,
+            status:3,
+            id:parseInt(this.$route.params.id)
           }).then(res => {
                   this.$message.success('操作成功');
                             setTimeout(time => {
@@ -2578,7 +2580,13 @@ export default {
     },
     //操作保存
     operationEmail(paramsData){
-       this.axios.post('/mission/missionOperation', { paramJson: JSON.stringify(paramsData) }).then(res => {
+       let id = paramsData.missionId;
+       let status = paramsData.status;
+       this.axios.post('/mission/missionOperation', { 
+         paramJson: JSON.stringify(paramsData),
+         id:id,
+         status:status
+          }).then(res => {
         console.log(res.data)
         if(res.data.code == 1000){
           this.$message.success('保存成功');
@@ -2638,7 +2646,10 @@ export default {
     },
     //确定转给同事
     returnClick(formName){
+        this.returnForm.ascriptionProId  = this.projectID[this.projectID.length-1];
+        console.log(this.projectID);
         this.$refs[formName].validate((valid) => {
+         
         if (valid) {
           //操作状态
           this.paramsData.status = '0';
