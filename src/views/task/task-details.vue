@@ -255,12 +255,12 @@
                 :on-remove="handleRemove"
                 :on-change="upLoadPro"
                 :multiple="false"
-                :limit="5"
+                :limit="10"
                 :file-list="fileArrList"
                 :auto-upload='false'
                 :on-exceed="handleExceed">
                 <el-button size="small" type="primary">上传文件</el-button>
-                <div slot="tip" class="el-upload__tip">图片仅支持上传JPG、PNG,视频文件仅支持上传ogg、mp4、webm、mov、flv文件，最多可上传5个文件</div>
+                <div slot="tip" class="el-upload__tip">图片仅支持上传JPG、PNG,视频文件仅支持上传ogg、mp4、webm、mov、flv文件，最多可上传10个文件</div>
               </el-upload>
             </el-form-item>
             <el-form-item :label="'施工' + newText + '存档视频、照片'" v-show=" detailData.personOper == false && detailData.status == 1">
@@ -854,7 +854,7 @@
               :auto-upload='false'
               :on-exceed="handleExceed">
               <el-button size="small" type="primary" >上传</el-button>
-              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
+              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR、ZIP、7Z文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
             </el-upload>
           </el-form-item>     
           <!-- 上传附件2 -->
@@ -871,7 +871,7 @@
               :auto-upload='false'
               :on-exceed="handleExceed">
               <el-button size="small" type="primary" >上传</el-button>
-              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
+              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR、ZIP、7Z文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
             </el-upload>
           </el-form-item>  
           <!-- 上传附件 3-->
@@ -888,7 +888,7 @@
               :auto-upload='false'
               :on-exceed="handleExceed">
               <el-button size="small" type="primary" >上传</el-button>
-              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
+              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR、ZIP、7Z文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
             </el-upload>
           </el-form-item>            
           <!-- 上传附件4 -->
@@ -905,7 +905,7 @@
               :auto-upload='false'
               :on-exceed="handleExceed">
               <el-button size="small" type="primary" >上传</el-button>
-              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
+              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR、ZIP、7Z文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
             </el-upload>
           </el-form-item>  
           <!-- 上传附件 5-->
@@ -922,7 +922,7 @@
               :auto-upload='false'
               :on-exceed="handleExceed">
               <el-button size="small" type="primary" >上传</el-button>
-              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
+              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR、ZIP、7Z文件，且不超过20M, 最多可上传{{Number(item.limit?item.limit:10)}}个文件</div>
             </el-upload>
           </el-form-item>  
             <!-- 日期控件 -->
@@ -1090,12 +1090,12 @@
               :on-remove="handleRemove"
               :on-change="upLoadPro"
               :multiple="false"
-              :limit="5"
+              :limit="10"
               :file-list="fileArrList"
               :auto-upload='false'
               :on-exceed="handleExceed">
               <el-button size="small" type="primary">上传文件</el-button>
-              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR文件，且不超过20M, 最多可上传5个文件</div>
+              <div slot="tip" class="el-upload__tip">仅支持上传JPG、PNG、PDF、Word、Excel、PPT、RAR、ZIP、7Z文件，且不超过20M, 最多可上传10个文件</div>
             </el-upload>
           </el-form-item>
         </el-col>
@@ -1878,7 +1878,7 @@ export default {
       this.files = file.raw;
       this.fileName = file.name.substring(file.name.lastIndexOf('.')+1);
       
-      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf' || this.fileName == 'doc'|| this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'word'){        this.flag = true;
+      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf' || this.fileName == 'doc'|| this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'zip'|| this.fileName == '7z'|| this.fileName == 'word'){        this.flag = true;
         this.fileArrList = fileList;
         this.upLoadKey1(file.uid, file.name);
       }else{
@@ -2314,7 +2314,7 @@ export default {
       let isLt20M = file.size / 1024 / 1024 < 20;
       this.files = file.raw;
       this.fileName = file.name.substring(file.name.lastIndexOf('.')+1);
-      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf'|| this.fileName == 'doc' || this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'word'){
+      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf'|| this.fileName == 'doc' || this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'zip'|| this.fileName == '7z'|| this.fileName == 'zip'|| this.fileName == '7z'|| this.fileName == 'word'){
         if(isLt20M){
         this.flag = true;
         this.fileListfile = fileList;
@@ -2336,7 +2336,7 @@ export default {
       let isLt20M = file.size / 1024 / 1024 < 20;
       this.files = file.raw;
       this.fileName = file.name.substring(file.name.lastIndexOf('.')+1);
-      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf'|| this.fileName == 'doc' || this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'word'){
+      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf'|| this.fileName == 'doc' || this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'zip'|| this.fileName == '7z'|| this.fileName == 'word'){
         if(isLt20M){
         this.flag = true;
         this.fileListfile2 = fileList;
@@ -2358,7 +2358,7 @@ export default {
       let isLt20M = file.size / 1024 / 1024 < 20;
       this.files = file.raw;
       this.fileName = file.name.substring(file.name.lastIndexOf('.')+1);
-      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf'|| this.fileName == 'doc' || this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'word'){
+      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf'|| this.fileName == 'doc' || this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'zip'|| this.fileName == '7z'|| this.fileName == 'word'){
         if(isLt20M){
         this.flag = true;
         this.fileListfile3 = fileList;
@@ -2380,7 +2380,7 @@ export default {
       let isLt20M = file.size / 1024 / 1024 < 20;
       this.files = file.raw;
       this.fileName = file.name.substring(file.name.lastIndexOf('.')+1);
-      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf'|| this.fileName == 'doc' || this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'word'){
+      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf'|| this.fileName == 'doc' || this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'zip'|| this.fileName == '7z'|| this.fileName == 'word'){
         if(isLt20M){
         this.flag = true;
         this.fileListfile4 = fileList;
@@ -2402,7 +2402,7 @@ export default {
       let isLt20M = file.size / 1024 / 1024 < 20;
       this.files = file.raw;
       this.fileName = file.name.substring(file.name.lastIndexOf('.')+1);
-      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf' || this.fileName == 'doc'|| this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'word'){
+      if(this.fileName =='jpg' || this.fileName == 'png' || this.fileName == 'pdf' || this.fileName == 'doc'|| this.fileName == 'docx' || this.fileName == 'xlsx' || this.fileName =='pptx' || this.fileName == 'rar'|| this.fileName == 'zip'|| this.fileName == '7z'|| this.fileName == 'word'){
         if(isLt20M){
         this.flag = true;
         this.fileListfile5 = fileList;

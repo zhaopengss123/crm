@@ -33,7 +33,6 @@ export default {
         this.$router.push(`/home/buildDetail/${userStore.id}`);
       } else {        
         this.$store.commit("setUserInfo", userStore);
-        console.log(userStore);
         if(userStore.menueSource==1){
             this.$router.push("/home/launchWork/11");
         }else if(userStore.menueSource==5){
@@ -51,8 +50,8 @@ export default {
 
       }
     } else {
-      window.location.href = "http://192.168.1.159:8080/";
-      //window.location.href = "http://tusercenter.beibeiyue.cn/c/";
+      //window.location.href = "http://192.168.1.159:8080/";
+      window.location.href = "http://tusercenter.beibeiyue.cn/c/";
       //window.location.href = "http://usercenter.beibeiyue.com/c/";
     }
   }

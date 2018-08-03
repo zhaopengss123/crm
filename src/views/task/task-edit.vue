@@ -18,7 +18,8 @@
         <el-form-item label="工单名称" class="inputBox" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item v-if="form.expectTimeStart||adminNato" label="期望开始时间"  >
+        <!-- <el-form-item v-if="form.expectTimeStart||adminNato" label="期望开始时间"  > -->
+        <el-form-item  label="期望开始时间"  >
              <el-date-picker
               v-model="form.expectTimeStart"
               type="date"
