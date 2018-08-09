@@ -51,8 +51,8 @@ export default {
       }
     } else {
       //window.location.href = "http://192.168.1.159:8080/";
-      window.location.href = "http://tusercenter.beibeiyue.cn/c/";
-      //window.location.href = "http://usercenter.beibeiyue.com/c/";
+      //window.location.href = "http://tusercenter.beibeiyue.cn/c/";
+      window.location.href = "http://usercenter.beibeiyue.com/c/";
     }
   }
 };
