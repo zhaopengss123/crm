@@ -16,7 +16,25 @@
             </div>
         </el-form-item>
         <el-form-item label="工单名称" class="inputBox" prop="name">
-          <el-input v-model="form.name"></el-input>
+          <el-autocomplete
+              popper-class="my-autocomplete"
+              v-model="form.name"
+              :fetch-suggestions="querySearch"
+              placeholder="请输入内容"
+              @select="handleSelect"
+               v-focus = "focusState"
+              :trigger-on-focus="false"
+              >
+            <i
+              class="el-icon-edit el-input__icon"
+              slot="suffix"
+              @click="handleIconClick">
+            </i>
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.shop_name }}</div>
+            </template>
+          
+          </el-autocomplete>
         </el-form-item>
         <el-form-item v-if="form.expectTimeStart||adminNato" label="期望开始时间"  > 
              <el-date-picker
@@ -147,7 +165,7 @@ export default {
       proOptions:[],
       //测试接收人
       optionsRecipient: [],
-    
+      focusState:false,
       rules: {
         projectID:[
           {
@@ -166,8 +184,6 @@ export default {
           }
         ],
         name: [
-          { required: true, message: "请输入工单名称", trigger: "blur" },
-          { min: 3, max: 50, message: "长度在 3 到 50 个字符", trigger: "blur" }
         ],
         expectTime: [
             { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
@@ -182,8 +198,16 @@ export default {
       listData:[],
       localFile:{},
       localFileList:[],
-      
     };
+  },
+  directives: {
+    focus: {
+      update: function (el, {value}) {
+        if (value) {
+          el.focus()
+        }
+      }
+    }
   },
   computed: {  
     editor() {  
@@ -194,6 +218,31 @@ export default {
     }  
   }, 
   methods: {
+ querySearch(queryString, cb) {
+
+
+    
+     this.axios.post('/mission/mistinesShopName', {storeName: this.form.name }).then(res => {
+            var restaurants = res.data.result.value;
+            // console.log(res.data.result.value);
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            //调用 callback 返回建议列表的数据
+            cb(results);
+      }) 
+
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.shop_name.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      handleSelect(item) {
+        this.form.name = item.shop_name;
+        this.focusState = true
+      },
+      handleIconClick(ev) {
+        console.log(ev);
+      },
     /*文件*/
      //删除文件列表
     handleRemove(file, fileList) {
@@ -375,7 +424,14 @@ export default {
     if(JSON.parse(window.localStorage.userInfo).typeCode){
         this.adminNato = true;
     }
-    console.log(1234);
+    if(JSON.parse(window.localStorage.userInfo).shopName){
+        this.form.name = JSON.parse(window.localStorage.userInfo).shopName;
+        let userInfo = JSON.parse(window.localStorage.userInfo);
+        userInfo.shopName = "";
+        userInfo.typeCode = '';
+        localStorage.userInfo = JSON.stringify(userInfo);
+
+    }
     //工单类别
     this.axios.post('/project/parentProjectList', {}).then(res => {
       let projectList = res.data.result;
@@ -462,7 +518,7 @@ export default {
       })
     }
   }
-};
+}
 </script>
 
 
