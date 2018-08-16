@@ -15,7 +15,7 @@
               ></el-cascader>
             </div>
         </el-form-item>
-        <el-form-item label="工单名称" class="inputBox" prop="name">
+        <!-- <el-form-item label="工单名称" class="inputBox" prop="name">
           <el-autocomplete
               popper-class="my-autocomplete"
               v-model="form.name"
@@ -35,7 +35,11 @@
             </template>
           
           </el-autocomplete>
+        </el-form-item> -->
+         <el-form-item label="工单名称" class="inputBox" prop="name"> 
+              <el-input v-model="form.name" placeholder="请输入内容"></el-input>
         </el-form-item>
+
         <el-form-item v-if="form.expectTimeStart||adminNato" label="期望开始时间"  > 
              <el-date-picker
               v-model="form.expectTimeStart"
@@ -225,7 +229,8 @@ export default {
      this.axios.post('/mission/mistinesShopName', {storeName: this.form.name }).then(res => {
             var restaurants = res.data.result.value;
             // console.log(res.data.result.value);
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            //var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            var results = restaurants;
             //调用 callback 返回建议列表的数据
             cb(results);
       }) 
@@ -428,7 +433,6 @@ export default {
         this.form.name = JSON.parse(window.localStorage.userInfo).shopName;
         let userInfo = JSON.parse(window.localStorage.userInfo);
         userInfo.shopName = "";
-        userInfo.typeCode = '';
         localStorage.userInfo = JSON.stringify(userInfo);
 
     }
@@ -516,6 +520,14 @@ export default {
       }).catch(error => { //捕获失败
           
       })
+    }
+  },
+  destroyed: function () {
+      if(JSON.parse(window.localStorage.userInfo).typeCode){
+        let userInfo = JSON.parse(window.localStorage.userInfo);
+        userInfo.typeCode = '';
+        localStorage.userInfo = JSON.stringify(userInfo);
+
     }
   }
 }
