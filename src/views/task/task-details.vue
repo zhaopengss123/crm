@@ -2564,19 +2564,20 @@ export default {
 
     //接收人邮箱
     emailFn(emailID, emailData){
-       this.axios.post('http://hrs.beibeiyue.com/personage/personageDetail', {id: emailID }).then(res => {
-        console.log(res.data)
-        emailData.receptionEmail = res.data.result.companyEmail;
-        if(emailData == this.paramsData){
+      //  this.axios.post('http://hrs.beibeiyue.com/personage/personageDetail', {id: emailID }).then(res => {
+      //   console.log(res.data)
+      //   emailData.receptionEmail = res.data.result.companyEmail;
+   
+      // }).catch(error => {
+      //   console.log('失败')
+      // }) 
+      if(emailData == this.paramsData){
           console.log('操作',emailData )
           this.operationEmail(emailData);
         }else{
            console.log('评价',emailData )
            this.appraiseEmail(emailData);
         }
-      }).catch(error => {
-        console.log('失败')
-      }) 
     },
     //操作保存
     operationEmail(paramsData){
