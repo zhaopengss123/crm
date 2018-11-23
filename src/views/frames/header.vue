@@ -38,13 +38,13 @@
 export default {
   name: "Header",
   mounted() {
-    this.axios
-      .post("/project/msgCenter", { pageNo: 1, pageSize: 999 })
-      .then(res => {
-        if (res.data.code == 1000 && res.data.result.list) {
-          this.result = res.data.result;
-        }
-      });
+    // this.axios
+    //   .post("/project/msgCenter", { pageNo: 1, pageSize: 999 })
+    //   .then(res => {
+    //     if (res.data.code == 1000 && res.data.result.list) {
+    //       this.result = res.data.result;
+    //     }
+    //   });
     // setInterval(() => {
     //   this.axios
     //     .post("/project/msgCenter", { pageNo: 1, pageSize: 999 })

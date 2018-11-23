@@ -14,24 +14,31 @@
       </el-menu-item> -->
       <el-menu-item index="/home/tasklist">
         <i class="el-icon-cus-category"></i>
-        <span slot="title">全部工单</span>
+        <span slot="title">门店管理</span>
       </el-menu-item>
+     <el-menu-item index="/home/LaunchWork">
+        <i class="el-icon-cus-survey"></i>
+        <span slot="title">客户管理</span>
+      </el-menu-item>      
       <el-submenu index="/home/launchWork" >
-        <template slot="title"><i class="el-icon-cus-survey"></i><span slot="title">我发起的工单</span></template>
-        <el-menu-item index="/home/launchWork/11">工单列表</el-menu-item>
-        <el-menu-item index="/home/launchWork/0">待处理</el-menu-item>
-        <el-menu-item index="/home/launchWork/1">进行中</el-menu-item>
-        <el-menu-item index="/home/launchWork/3">已完成</el-menu-item>
+        <template slot="title"><i class="el-icon-cus-survey"></i><span slot="title">短信营销</span></template>
+        <el-menu-item index="/home/sendMessage/0">短信发送</el-menu-item>
+        <el-menu-item index="/home/modeEditor">模板编辑</el-menu-item>
+        <el-menu-item index="/home/sendMessage/1">push推送</el-menu-item>
       </el-submenu>
-      <el-submenu index="/home/receiveWork">
+      
+       <el-menu-item index="/home/tagEditor">
+        <i class="el-icon-cus-survey"></i>
+        <span slot="title">标签管理</span>
+      </el-menu-item>   
+      <!-- <el-submenu index="/home/receiveWork">
         <template slot="title"><i class="el-icon-cus-inquirytemplate"></i><span slot="title">我接收的工单</span></template>
           <el-menu-item index="/home/receiveWork/11">工单列表</el-menu-item>
         <el-menu-item index="/home/receiveWork/0">待处理</el-menu-item>
         <el-menu-item index="/home/receiveWork/1">进行中</el-menu-item>
         <el-menu-item index="/home/receiveWork/3">已完成</el-menu-item>
-        <!-- <el-menu-item index="/home/taskdetais/1">编辑</el-menu-item>
-        <el-menu-item index="/home/Settings">工单设置</el-menu-item> -->
-      </el-submenu>
+ 
+      </el-submenu> -->
     </el-menu>
   </div>
 </template>

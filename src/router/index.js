@@ -19,9 +19,13 @@ import EditorComponent from '@views/project/editor';
 import CompleteWorkComponent from '@views/task/complete-work';
 import ReceiveWorkComponent from '@views/receive/receive-list';
 import LaunchWorkComponent from '@views/launch/launch-list';
+import LaunchDetailComponent from '@views/launch/launch-detail';
 import BuildComponent from '@views/build/build-detail';
 import BuildEditComponent from '@views/build/build-edit';
 import SettingsComponent from '@views/task/task-setting';
+import SendMessageComponent from '@views/sms/send-message';
+import modeEditorComponent from '@views/sms/modeEditor';
+import tagEditorComponent from '@views/label/tagEditor';
 Vue.use(Router)
 
 export default new Router({
@@ -103,10 +107,31 @@ export default new Router({
                 },
                 //发起的工单
                 {
-                    path: 'launchWork/:id',
+                    path: 'launchWork',
                     name: 'LaunchWork',
                     component: LaunchWorkComponent,
                 },
+                {
+                    path: 'launchDetail/:id',
+                    name: 'LaunchDetail',
+                    component: LaunchDetailComponent,
+                },
+                {
+                    path: 'sendMessage/:id',
+                    name: 'sendMessage',
+                    component: SendMessageComponent,
+                },
+                {
+                    path: 'modeEditor',
+                    name: 'modeEditor',
+                    component: modeEditorComponent,
+                },
+                {
+                    path: 'tagEditor',
+                    name: 'tagEditor',
+                    component: tagEditorComponent,
+                },
+
                 //接收的工单
                 {
                     path: 'receiveWork/:id',

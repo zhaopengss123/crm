@@ -3,14 +3,13 @@
     <!-- <app-tip>任务列表</app-tip> -->
     <div class="formQuery clear">
       <el-form :inline="true" ref="form" :model="form" label-width="80px">
-          <el-form-item label="工单名称">
-            <el-input v-model="form.missionName" @keyup.enter.native="doLogin"></el-input>
+          <el-form-item label="门店名称">
+            <el-input v-model="form.missionName" placeholder="请输入门店名称" ></el-input>
           </el-form-item>
          <!--  <el-form-item label="工单类别">
             <el-input v-model="form.projectName" @keyup.enter.native="doLogin"></el-input>
           </el-form-item> -->
-           <el-form-item label="工单类别">
-              <div style="width:350px" >
+           <el-form-item label="所属状态">
                 <el-cascader
                   placeholder="请选择"
                   v-model="form.projectID"
@@ -21,120 +20,127 @@
                   @change="proOptionFn"
                   clearable
                 ></el-cascader>
-              </div>
           </el-form-item>
-
-          <el-form-item label="接收人">
-            <el-input v-model="form.receptionName" @keyup.enter.native="doLogin"></el-input>
+           <el-form-item label="所属品牌">
+                <el-cascader
+                  placeholder="请选择"
+                  v-model="form.projectID"
+                  :options="proOptions"
+                  :show-all-levels="false"
+                  change-on-select
+                  :props="{value:'value', label:'label', children: 'children'}" 
+                  @change="proOptionFn"
+                  clearable
+                ></el-cascader>
           </el-form-item>
-          <el-form-item label="发起人">
-            <el-input v-model="form.userName" @keyup.enter.native="doLogin"></el-input>
+           <el-form-item label="所属省份">
+                <el-cascader
+                  placeholder="请选择"
+                  v-model="form.projectID"
+                  :options="proOptions"
+                  :show-all-levels="false"
+                  change-on-select
+                  :props="{value:'value', label:'label', children: 'children'}" 
+                  @change="proOptionFn"
+                  clearable
+                ></el-cascader>
           </el-form-item>
-          <el-form-item label="工单状态">
-            <el-select v-model="form.missionStatus" placeholder="请选择工单状态" :clearable="true" @change="statudFn">
-              <el-option label="待处理" value="0"></el-option>
-              <el-option label="进行中" value="1"></el-option>
-              <el-option label="已拒绝" value="2"></el-option>
-              <el-option label="已完成" value="3"></el-option>
-            </el-select>
-    
-          </el-form-item>
-          <el-form-item label="创建时间">
-            <el-date-picker
-              v-model="time1" value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item label="实际完成" width="150">
-            <el-date-picker
-              v-model="time2" value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item label="期望完成" width="150">
-            <el-date-picker
-              v-model="time3" value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item label="评价">
-            <el-select v-model="form.satisfaction" placeholder="请选择评价" :clearable="true">
-              <el-option label="满意" :value="1"></el-option>
-              <el-option label="一般" :value="2"></el-option>
-              <el-option label="不满意" :value="3"></el-option>
-            </el-select>
-          </el-form-item>
+           <el-form-item label="所属城市">
+                <el-cascader
+                  placeholder="请选择"
+                  v-model="form.projectID"
+                  :options="proOptions"
+                  :show-all-levels="false"
+                  change-on-select
+                  :props="{value:'value', label:'label', children: 'children'}" 
+                  @change="proOptionFn"
+                  clearable
+                ></el-cascader>
+          </el-form-item>                    
+           <el-form-item label="所属区域">
+                <el-cascader
+                  placeholder="请选择"
+                  v-model="form.projectID"
+                  :options="proOptions"
+                  :show-all-levels="false"
+                  change-on-select
+                  :props="{value:'value', label:'label', children: 'children'}" 
+                  @change="proOptionFn"
+                  clearable
+                ></el-cascader>
+          </el-form-item>    
       </el-form>
       <div class="operateBox">
-          <el-button  @click="getData(1)" >查询</el-button>
-          <el-button type="primary" @click="onNewAdd">新建</el-button>
+          <el-button size="medium" type="primary">标签</el-button>
+          <el-button size="medium">清空筛选条件</el-button>
+          <el-button size="medium" >加标签</el-button>
       </div>
     </div>
     <div class="table-wrap">
-      <el-table
-        :data="tableData"
-        stripe
-        >
-        <el-table-column
-          prop="date"
-          label="关注"
-          >
-          <!-- <template slot-scope="scope" ><i :class="{'el-icon-star-off':scope.row.favorite == 0, 'el-icon-star-on': scope.row.favorite == 1}" @click="classToggle(scope.row, scope.row.id)" style="font-size:18px;"  ></i></template> -->
-          <template slot-scope="scope" ><i class="font-size-18 curHand" 
-            :class="[scope.row.loading ? 'el-icon-loading' : scope.row.favorite ? 'el-icon-cus-collection-active color-red' : 'el-icon-cus-collection']" 
-              @click="classToggle(scope.row, scope.row.id)"></i></template>
-        </el-table-column>
-        <el-table-column
-          label="工单名称" prop="mName">
-          <template slot-scope="scope"><a class="scopeName" @click="jumpFn(scope.row.id, scope.row.prepareSheet)"> {{  scope.row.mName }}</a></template>
-        </el-table-column>
-        <el-table-column
-          prop="pName"
-          label="工单类别">
-        </el-table-column>
-        <el-table-column
-          prop="receptionName"
-          label="接收人" >
-        </el-table-column>
-        <el-table-column
-          prop="userName"   
-          label="发起人">
-        </el-table-column>
-        <el-table-column
-          label="创建时间">
-          <template slot-scope="scope">{{scope.row.createTime | format}}</template>
-        </el-table-column>
-        <el-table-column
-          prop="expectTime"
-          label="期望完成"><template slot-scope="scope">{{scope.row.expectTime | format}}</template>
-        </el-table-column>
-        <el-table-column
-          prop="completeTime"
-          label="实际完成"><template slot-scope="scope">{{scope.row.status == 1 ? '' : scope.row.completeTime | format}}</template>
-        </el-table-column>
-        <el-table-column
-          label="状态">
-          <template slot-scope="scope">
-            <el-button plain :type="scope.row.status == 1 ? 'success'  : scope.row.status == 2 ? 'warning' : scope.row.status == 3 ? 'success':'danger'" @click="jumpFn(scope.row.id, scope.row.prepareSheet)">{{ scope.row.status == 1 ? '进行中' : scope.row.status == 2 ? '拒绝' : scope.row.status == 3 ? '完成' : scope.row.status == 5 ? '已关闭' :  '待处理' }}</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="评价">
-          <template slot-scope="scope">
-           {{scope.row.satisfaction == 1 ? "满意" : scope.row.satisfaction == 2 ? "一般" : scope.row.satisfaction == 3 ? '不满意' : '-'}}
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table
+            ref="multipleTable"
+            :data="tableData3"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+              type="selection"
+              width="55">
+            </el-table-column>
+            <el-table-column
+              label="门店名称">
+              <template slot-scope="scope">{{ scope.row.date }}</template>
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="品牌名称">
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="所在城市">
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="所在区域">
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="门店状态">
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="门店类型">
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="会员总数">
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="有效会员数">
+            </el-table-column>  
+            <el-table-column
+              prop="address"
+              label="通卡会员数">
+            </el-table-column>  
+            <el-table-column
+              prop="address"
+              label="有效会员数">
+            </el-table-column>  
+            <el-table-column
+              prop="address"
+              label="APP安装量">
+            </el-table-column>  
+            <el-table-column
+              fixed="right"
+              label="操作"
+              width="150">
+              <template slot-scope="scope">
+                <el-button type="text" size="small">加标签</el-button>
+                <el-button type="text" size="small" @click="jumpFn(scope.row.id)">查看</el-button>
+              </template>
+            </el-table-column>                                                                                                          
+          </el-table>
     </div>
   <!-- 分页 -->
   <app-pagination requestUrl="/mission/missionList" @response="getData" :query="form" ref="pagination"></app-pagination>
@@ -168,7 +174,6 @@
     }
   }
   .operateBox {
-    text-align: center;
     float: none;
     margin-bottom: 40px;
   }
@@ -220,21 +225,65 @@ export default {
       tableData: [],
       pageSize: null,
       pageNo: null,
-      proOptions: []
+      proOptions: [],
+        tableData3: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          id:1
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          id:1
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          id:1
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          id:1
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          id:1
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          id:1
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          id:1
+        }],
+        multipleSelection: []      
     };
   },
   methods: {
-    //回车事件
-    doLogin(ev) {
-      this.getData();
-    },
+    toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+
+
     //状态跳转
-    jumpFn(id, category) {
-      if (category == true) {
-        this.$router.push({ path: "/home/buildDetail/" + id });
-      } else {
+    jumpFn(id) {
+       
         this.$router.push({ path: "/home/taskdetais/" + id });
-      }
     },
     //新增
     onNewAdd() {
@@ -329,38 +378,8 @@ export default {
     //  回车查询
   },
   mounted() {
-    this.getData();
-    //工单类别
-    this.axios
-      .post("/project/parentProjectList", {})
-      .then(res => {
-        let projectList = res.data.result;
-        for(let i =0; i<projectList.length; i++){
-            if(projectList[i].children.length<1){
-              delete projectList[i].children;
-            }else{
-                    for(let ii=0; ii<projectList[i].children.length; ii++){
-                        if(projectList[i].children[ii].children.length<1){
-                          delete projectList[i].children[ii].children;
-                        }else{
-                              for(let iii = 0; iii<projectList[i].children[ii].children.length; iii++){
-                                  if(projectList[i].children[ii].children[iii].children.length<1){
-                                        delete projectList[i].children[ii].children[iii].children;
-                                  }else{
-                                      for(let iiii = 0; iiii<projectList[i].children[ii].children[iii].children.length; iiii++){
-                                        if(projectList[i].children[ii].children[iii].children[iiii].children.length<1){
-                                          delete projectList[i].children[ii].children[iii].children[iiii].children;
-                                        }
-                                      }
-                                  }
-                              }
-                        }
-                    }
-            }
-           }
-        this.proOptions = projectList;
-      })
-      .catch(error => {});
+ 
+  
   }
 };
 </script>
