@@ -2,7 +2,7 @@
   <div class="mode-editor">
       <div class="mode_hearder">
             <el-button type="primary" size="medium" @click="SMSbouncedShow()">新建标签</el-button>
-            <el-button  size="medium" @click="SMSbouncedShow()">导出标签</el-button>
+            <el-button  size="medium" >导出标签</el-button>
       </div>
       <div class="mode_main">
             <template>
@@ -69,7 +69,9 @@
   .mode_hearder {
     overflow: hidden;
   } 
-
+  .mode_hearder .el-button{
+    float: left;
+  }
   .mode_main{
     clear: both;
     margin-top: 20px;

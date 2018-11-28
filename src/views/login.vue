@@ -15,7 +15,8 @@ export default {
     };
   },
   mounted() {
-    const userInfo = this.$route.query.userInfo;
+    // const userInfo = this.$route.query.userInfo;
+    const userInfo = "{ userName:'aaaaaa',roleState:1,token:'dsadsadsadsads' }";
     const infoString = userInfo.replace(/\\/g, "");
     let userStore;
     console.log(infoString);

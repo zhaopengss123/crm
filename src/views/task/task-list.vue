@@ -9,84 +9,61 @@
          <!--  <el-form-item label="工单类别">
             <el-input v-model="form.projectName" @keyup.enter.native="doLogin"></el-input>
           </el-form-item> -->
-           <el-form-item label="所属状态">
-                <el-cascader
-                  placeholder="请选择"
-                  v-model="form.projectID"
-                  :options="proOptions"
-                  :show-all-levels="false"
-                  change-on-select
-                  :props="{value:'value', label:'label', children: 'children'}" 
-                  @change="proOptionFn"
-                  clearable
-                ></el-cascader>
-          </el-form-item>
+
            <el-form-item label="所属品牌">
                 <el-cascader
                   placeholder="请选择"
-                  v-model="form.projectID"
-                  :options="proOptions"
+                  v-model="form.brandId"
+                  :options="brandIdList"
                   :show-all-levels="false"
                   change-on-select
-                  :props="{value:'value', label:'label', children: 'children'}" 
-                  @change="proOptionFn"
+                  :props="{value:'value', label:'label'}" 
+            
                   clearable
                 ></el-cascader>
           </el-form-item>
            <el-form-item label="所属省份">
-                <el-cascader
-                  placeholder="请选择"
-                  v-model="form.projectID"
-                  :options="proOptions"
-                  :show-all-levels="false"
-                  change-on-select
-                  :props="{value:'value', label:'label', children: 'children'}" 
-                  @change="proOptionFn"
-                  clearable
-                ></el-cascader>
+             <el-select v-model="form.province" placeholder="请选择" @change="selectProvince()">
+              <el-option
+                v-for="item in provinceList"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>     
           </el-form-item>
            <el-form-item label="所属城市">
-                <el-cascader
-                  placeholder="请选择"
-                  v-model="form.projectID"
-                  :options="proOptions"
-                  :show-all-levels="false"
-                  change-on-select
-                  :props="{value:'value', label:'label', children: 'children'}" 
-                  @change="proOptionFn"
-                  clearable
-                ></el-cascader>
+              <el-select v-model="form.city" @change="selectcity()" placeholder="请选择">
+              <el-option
+                v-for="item in cityList"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select> 
           </el-form-item>                    
-           <el-form-item label="所属区域">
-                <el-cascader
-                  placeholder="请选择"
-                  v-model="form.projectID"
-                  :options="proOptions"
-                  :show-all-levels="false"
-                  change-on-select
-                  :props="{value:'value', label:'label', children: 'children'}" 
-                  @change="proOptionFn"
-                  clearable
-                ></el-cascader>
-          </el-form-item>    
+         <el-form-item label="所属区域">
+             <el-select v-model="form.area" placeholder="请选择">
+              <el-option
+                v-for="item in areaList"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select> 
+          </el-form-item> 
       </el-form>
       <div class="operateBox">
-          <el-button size="medium" type="primary">标签</el-button>
+          <el-button size="medium" type="primary">查询</el-button>
           <el-button size="medium">清空筛选条件</el-button>
-          <el-button size="medium" >加标签</el-button>
       </div>
     </div>
     <div class="table-wrap">
           <el-table
             ref="multipleTable"
-            :data="tableData3"
+            :data="queryTable"
             tooltip-effect="dark"
-            style="width: 100%"
-            @selection-change="handleSelectionChange">
-            <el-table-column
-              type="selection"
-              width="55">
-            </el-table-column>
+            style="width: 100%">
             <el-table-column
               label="门店名称">
               <template slot-scope="scope">{{ scope.row.date }}</template>
@@ -136,14 +113,13 @@
               label="操作"
               width="150">
               <template slot-scope="scope">
-                <el-button type="text" size="small">加标签</el-button>
                 <el-button type="text" size="small" @click="jumpFn(scope.row.id)">查看</el-button>
               </template>
             </el-table-column>                                                                                                          
           </el-table>
     </div>
   <!-- 分页 -->
-  <app-pagination requestUrl="/mission/missionList" @response="getData" :query="form" ref="pagination"></app-pagination>
+  <!-- <app-pagination requestUrl="/mission/missionList" @response="getData" :query="form" ref="pagination"></app-pagination> -->
   </div>
 </template>
 <style lang="less" scoped>
@@ -219,167 +195,70 @@ export default {
       form: {
         missionStatus: ""
       },
-      time1: [],
-      time2: [],
-      time3: [],
-      tableData: [],
       pageSize: null,
-      pageNo: null,
-      proOptions: [],
-        tableData3: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }],
+      pageNum: null,
+      queryTable: [],
+      provinceList: [],
+      cityList: [],
+      areaList: [],
+      brandIdList: [{
+        value:'12',
+        label:'鱼乐贝贝'
+      },{
+        value:'1',
+        label:'贝贝约'
+      },{
+        value:'17',
+        label:'泡泡塘'
+      },{
+          value:'18',
+          label:'鱼儿亲子'         
+      }],
         multipleSelection: []      
     };
   },
   methods: {
-    toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
+    proProvince(){
 
+    },
+    proCity(){
 
+    },
+    getProvince(){
+      this.axios.post('http://tusercenter.beibeiyue.cn/c/area/getAllProvince', {}).then(res => {
+        this.provinceList = res.data.result;
+      }).catch(error => { //捕获失败
+      })
+    },
+    selectProvince(){
+        let provinceCode = this.form.province;
+          this.axios.post('http://tusercenter.beibeiyue.cn/c/area/getCityByProvince', { provinceCode }).then(res => {
+            this.cityList = res.data.result;
+            this.form.city = this.cityList[0].code;
+            this.selectcity();
+          }).catch(error => { //捕获失败
+          })
+    },
+    selectcity(){
+        let cityCode = this.form.city;
+          this.axios.post('http://tusercenter.beibeiyue.cn/c/area/getAreaByCity', { cityCode }).then(res => {
+            this.areaList = res.data.result;
+            this.form.area = this.areaList[0].code;
+          }).catch(error => { //捕获失败
+          })
+    },
     //状态跳转
     jumpFn(id) {
        
         this.$router.push({ path: "/home/taskdetais/" + id });
     },
-    //新增
-    onNewAdd() {
-      this.$router.push({ path: "/home/newtaskedit/0" });
-    },
-    // 工单类别改变事件
-    proOptionFn(val) {
-      console.log(val);
-      if (val.length != 0) {
-        this.form.ascriptionProId = val[val.length - 1];
-      } else {
-        this.form.ascriptionProId = "";
-      }
-      console.log(this.form.ascriptionProId);
-    },
-    //状态改变
-    statudFn() {
-      /*  if(this.form.statusString && this.form.statusString != null){
-      
-      }else{
-        this.form.missionStatus = ''
-      } */
-    },
-    async getData(current) {
-      this.loading = true;
 
-      if (this.time1 && this.time1 != null) {
-        this.form.createStart = this.time1[0];
-        this.form.createEnd = this.time1[1];
-      } else {
-        delete this.form.createStart;
-        delete this.form.createEnd;
-      }
-      if (this.time2 && this.time2 != null) {
-        this.form.completeStart = this.time2[0];
-        this.form.completeEnd = this.time2[1];
-      } else {
-        delete this.form.completeStart;
-        delete this.form.completeEnd;
-      }
-      //期望完成时间
-      if (this.time3 && this.time3 != null) {
-        this.form.expectStart = this.time3[0];
-        this.form.expectEnd = this.time3[1];
-      } else {
-        delete this.form.expectStart;
-        delete this.form.expectEnd;
-      }
-      let res = await this.$refs.pagination.request(current);
-      let newArrayleft = [];
-      let newArrayList = [];
-      //关注排序
-      if (res.result.list && res.result.list.length > 0) {
-        res.result.list.map(val => {
-          if (val.favorite == 1) {
-            newArrayleft.push(val);
-          } else {
-            newArrayList.push(val);
-          }
-        });
-        let data = newArrayleft.concat(newArrayList);
-        this.tableData = data;
-      } else {
-        this.tableData = res.result.list;
-      }
-      this.loading = false;
-    },
-    //警告类 提示
-    prompt(text) {
-      this.$message({
-        message: text,
-        type: "warning"
-      });
-    },
-    classToggle(row, id) {
-      //是否关注
-      row.favorite = !row.favorite;
-      let url =
-        row.favorite == 1
-          ? "/mission/noticeMission"
-          : "/mission/cancelNoticeMission";
-      this.axios
-        .post(url, {
-          id: id
-        })
-        .then(res => {})
-        .catch(error => {
-          //捕获失败
-          this.prompt("网络连接失败,请稍后再试");
-        });
-    }
-    //  回车查询
+
   },
   mounted() {
- 
-  
+   
+    this.getProvince();
+    
   }
 };
 </script>

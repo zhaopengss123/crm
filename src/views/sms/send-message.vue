@@ -29,14 +29,14 @@
         </el-dialog>
         <el-card class="box-card" style="margin-top:10px;">
           <div slot="header" class="clearfix">
-            <span>选择范围</span>
+            <span>选择联系人</span>
             
           </div>
      
           <div class="scope">
             <el-row>
               <el-col>
-                    <span>客户端选择：</span>
+                    <span>标签一：</span>
                      <el-select v-model="client" placeholder="请选择">
                       <el-option
                         v-for="item in clientList"
@@ -47,7 +47,7 @@
                     </el-select>
               </el-col>
               <el-col>
-                    <span>地区选择：</span>
+                    <span>标签二：</span>
                      <el-select v-model="client" placeholder="请选择">
                       <el-option
                         v-for="item in clientList"
@@ -58,6 +58,9 @@
                     </el-select>
               </el-col>
               <el-col>
+                <el-button   type="primary" :loading="loading">添加收件人</el-button>
+              </el-col>
+              <!-- <el-col>
                     <span>用户类型：</span>
                      <el-select v-model="memberType" placeholder="请选择">
                       <el-option
@@ -78,41 +81,31 @@
                         :value="item.value">
                       </el-option>
                     </el-select>
-              </el-col>                    
+              </el-col>                     -->
             </el-row>
           </div> 
         </el-card>
 
         <el-card class="box-card" style="margin-top:10px;">
           <div slot="header" class="clearfix">
-            <span>选择收件人：</span>
+            <span>添加收件人：</span>
             <el-button style="float: right; padding: 3px 0" type="text" @click="dialogVisible = true">使用说明</el-button>
           </div>
-          <el-row style="padding:20px 0;">
-            <el-switch
-              style="display: block"
-              v-model="switchValue"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              active-text="逐个添加"
-              inactive-text="手动添加/修改删除">
-            </el-switch>
-          </el-row>
+    
           <div class="main">
-            <div class="operation" v-if="switchValue">
+            <!-- <div class="operation" v-if="switchValue">
               <span>添加联系人： </span>
               <el-input v-model="memberPhone" placeholder="请输入手机号" ></el-input>
               <el-button type="primary" round size="medium" @click="addphoneList">添加</el-button>
-            </div> 
+            </div>  -->
             
-             <el-row style="padding-top:20px; ">
+             <el-row >
                   联系人列表
              </el-row>
-             <el-row style="color:red; font-size:12px" v-if="!switchValue">群发短信时，以,间隔每个客户，如15888886666,15999996666( 注：注意是英文逗号哦~ )</el-row>
+             <el-row style="color:red; font-size:12px" >群发短信时，以,间隔每个客户，如15888886666,15999996666( 注：注意是英文逗号哦~ )</el-row>
              <el-row style="margin-top:10px;">
                 <el-input
                     type="textarea"
-                    :readonly="switchValue"
                     :autosize="{ minRows: 4, maxRows: 100}"
                     :placeholder="!switchValue? '请输入用户手机号': '' "
                     v-model="PhoneList">
@@ -121,7 +114,7 @@
              <el-row style="font-size:12px; color:#999; padding-top:15px;">共{{numberPhone}}个手机号 </el-row>
           </div> 
         </el-card>
-        <el-card class="box-card">
+        <el-card class="box-card" style="margin-top:10px;">
           <div slot="header" class="clearfix">
             <span>设置短信模板：</span> 
               <el-select v-model="modeValue" @change="selectMode" placeholder="请选择模板">
@@ -210,6 +203,7 @@ export default {
         smsNumber:0,
         modeText:'',
         modeLength:60,
+        form:{},
         options: [{
           value: '选项1',
           label: '黄金糕',

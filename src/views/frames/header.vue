@@ -1,4 +1,5 @@
 <template>
+           
   <div class="header">
     <div class="logo" :class="[menuState]"><img src="../../assets/logo.png" alt="logo"></div>
     <div class="menu-bar" @click="menuActive"><i class="el-icon-cus-liebiao"></i></div>
@@ -7,7 +8,8 @@
       <div class="ui-user-cell">
         <a href="javascript: void(0);">
           <img src="../../../static/images/default-boy.png" alt="用户头像">
-          <span>{{userName.length ? userName : '管理员'}}</span><i class="el-icon-arrow-down"></i>
+          <!-- <span>{{userName.length ? userName : '管理员'}}</span><i class="el-icon-arrow-down"></i> -->
+          <span>管理员</span><i class="el-icon-arrow-down"></i>
           <div class="sign-out"  @click="signOut">
             <a href="javascript: void(0);">退出</a>
           </div>

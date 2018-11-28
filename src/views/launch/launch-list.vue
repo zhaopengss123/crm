@@ -68,7 +68,7 @@
           </el-form-item>    
       </el-form>
       <div class="operateBox">
-          <el-button size="medium" type="primary">标签</el-button>
+          <el-button size="medium" type="primary">筛选</el-button>
           <el-button size="medium">清空筛选条件</el-button>
           <el-button size="medium" >加标签</el-button>
       </div>
@@ -128,7 +128,6 @@
               <template slot-scope="scope">
                 <el-button type="text" size="small">发push</el-button>
                 <el-button type="text" size="small">发短信</el-button> 
-                <el-button type="text" size="small">加标签</el-button>
                 <el-button type="text" size="small" @click="jumpFn(scope.row.id)">查看</el-button>
               </template>
             </el-table-column>                                                                                                          
