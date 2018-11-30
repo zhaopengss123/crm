@@ -4,27 +4,15 @@
     <div class="quote-title">客户详情  {{ detailData.sendee }}</div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>基本信息</span>
+        <span>家长信息</span>
       </div>
       <div class="main">
        <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">家长姓名：北京石妞妞</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">手机号：15911112222</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">姓名：未知</div></el-col>
-      </el-row>
-       <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">昵称：北京石妞妞</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">生日：2018-03-10</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">来源渠道：北京石妞妞</div></el-col>
-      </el-row>     
-       <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">宝宝数量：1</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">收货地址：北京市朝阳区乾玉缘28号大飒飒大师多中心</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">关系：父子</div></el-col>
-      </el-row>     
-      <el-row>
-        备注：大大撒大萨达撒大所大撒大就撒旷达科技萨科技科技大萨达撒多撒多撒多撒多撒大所
+        <el-col :span="8"><div class="grid-content bg-purple">姓名：{{userDetail.parentName}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">手机号：{{userDetail.mobilePhone}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">宝宝数量：{{userDetail.babyNumber}}</div></el-col>
       </el-row>    
+ 
       </div>
     </el-card>
 
@@ -35,29 +23,27 @@
       <div class="main">
           <div>
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple">宝宝姓名：北京石妞妞</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple">性别：男</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple">昵称：大萨达</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">宝宝姓名：{{userDetail.name}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">性别：{{userDetail.sex}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">昵称：{{userDetail.nick}}</div></el-col>
               </el-row>
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple">生日：2018-13-25</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple">身高：170cm</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple">体重：180kg</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">生日：{{userDetail.birthday}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">身高：{{userDetail.height?userDetail.height+'cm':''}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">体重：{{userDetail.weight?userDetail.weight+'kg':''}}</div></el-col>
               </el-row>
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>门店归属：</b>密集恐惧哦</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>所属社区：</b>密集恐惧哦</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡类型：</b>密集恐惧哦</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>门店归属：</b>{{userDetail.shopName}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>所属社区：</b>{{userDetail.communityName}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡类型：</b>{{userDetail.cardTypeName}}</div></el-col>
               </el-row>
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡状态：</b>密集恐惧哦</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>办卡时间：</b>密集恐惧哦</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>失效时间：</b>密集恐惧哦</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡状态：</b>{{userDetail.recordStatus?(userDetail.recordStatus==0?'未使用':(userDetail.recordStatus==1?'使用中':userDetail.recordStatus==2?'即将过期':(userDetail.recordStatus==3?'已过期':''))):''}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>办卡时间：</b>{{userDetail.createDate}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>失效时间：</b>{{userDetail.expireDate}}</div></el-col>
               </el-row>     
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡状态：</b>密集恐惧哦</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>办卡时间：</b>密集恐惧哦</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>有效期剩余</b>12个月</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>有效期剩余：</b>{{userDetail.differenceMonth}}</div></el-col>
               </el-row>                         
           </div>
       </div>
@@ -80,10 +66,40 @@
       <div slot="header" class="clearfix">
         <span>行为记录</span>
       </div>
-      <div class="main">
-          <el-row>2018-09-21 11:00    兴隆家园店   金卡    3000元 </el-row>
-          <el-row>2018-09-21 11:00    兴隆家园店   金卡    3000元 </el-row>
-      </div>
+      <!-- @tab-click="handleClick" -->
+      <el-tabs v-model="behaviorTab" type="card" >
+        <el-tab-pane label="商品购买记录" name="0">
+            <div class="main">
+                <el-row v-for="(item,index) in commodityToken" :key="index">{{ item.orderShopName	}}   {{item.orderProductName}}   {{item.activityPrice}}元 </el-row>
+                <el-row v-if="!commodityToken.length" style="color:#ccc; text-align:center;">暂无数据 </el-row>
+            </div>
+        </el-tab-pane>
+        <el-tab-pane label="福利兑换记录" name="1">
+             <div class="main">
+                <el-row v-for="(item,index) in welfareTakenExchange" :key="index">{{item.reserveTime}}  {{ item.welfareShopName	}}   {{item.welfareProductName}}   {{item.productPrice}}元 </el-row>
+                <el-row v-if="!welfareTakenExchange.length" style="color:#ccc; text-align:center;">暂无数据 </el-row>
+            </div>
+        </el-tab-pane>
+        <el-tab-pane label="福利购买记录" name="2">
+             <div class="main">
+                <el-row v-for="(item,index) in welfareTakenBuy" :key="index">{{item.reserveTime}}  {{ item.welfareShopName	}}   {{item.welfareProductName}}   {{item.productPrice}}元 </el-row>
+                <el-row v-if="!welfareTakenBuy.length" style="color:#ccc; text-align:center;">暂无数据 </el-row>
+            </div>
+        </el-tab-pane>
+        <el-tab-pane label="消费记录" name="3">
+             <div class="main">
+              <el-row v-for="(item,index) in consumptionTaken" :key="index">{{item.consumeDate}}  {{ item.shopName	}}  {{item.consumption}}元 </el-row>
+                <el-row v-if="!consumptionTaken.length" style="color:#ccc; text-align:center;">暂无数据 </el-row>
+            </div>
+        </el-tab-pane>
+        <el-tab-pane label="预约记录" name="4">
+            <div class="main">
+                <el-row v-for="(item,index) in reserveTaken" :key="index">{{item.reserveDate}}  {{ item.reserveShopName	}}</el-row>
+                <el-row v-if="!reserveTaken.length" style="color:#ccc; text-align:center;">暂无数据 </el-row>
+            </div>
+        </el-tab-pane>
+      </el-tabs>
+ 
     </el-card>
 
   </div>
@@ -134,6 +150,7 @@ export default {
   data() {
     return {
         detailData:{},
+        divideParam: '1',
          tableData: [{
             date: '2016-05-02',
             name: '王小虎',
@@ -150,7 +167,14 @@ export default {
             date: '2016-05-03',
             name: '王小虎',
             address: '上海市普陀区金沙江路 1516 弄'
-          }]
+          }],
+          userDetail:{},
+          behaviorTab:0,
+          commodityToken: [],
+          welfareTakenExchange: [],
+          welfareTakenBuy: [],
+          consumptionTaken: [],
+          reserveTaken: []
     };
   },
   methods: {
@@ -158,8 +182,43 @@ export default {
     getData(){
       let id = this.$route.params.id;
       console.log(id);
+      
+      this.axios.post('/store/memberDetails', { memberId: id }).then(res => {
+          this.userDetail = res.data.result.member;
+          this.divideParam = res.data.result.member.divideParam;
+      }).catch(error => { //捕获失败
+      });
+       //商品购买记录
+       this.axios.post('/store/commodityToken', { memberId: id }).then(res => {
+          this.commodityToken = res.data.result.commodityToken;
+      }).catch(error => { //捕获失败
+      })
+       //福利兑换记录
+       this.axios.post('/store/welfareTaken', { memberId: id,status: 0 }).then(res => {
+          this.welfareTakenExchange = res.data.result.welfareTaken;
+      }).catch(error => { //捕获失败
+      })
+       //福利购买记录
+       this.axios.post('/store/welfareTaken', { memberId: id,status: 0 }).then(res => {
+          this.welfareTakenBuy = res.data.result.welfareTaken;
+      }).catch(error => { //捕获失败
+      })
+      //消费记录
+       this.axios.post('/store/consumptionTaken', { memberId: id , divideParam: this.divideParam }).then(res => {
+          this.consumptionTaken = res.data.result.consumptionTaken;
+      }).catch(error => { //捕获失败
+      })
+      //预约记录
+       this.axios.post('/store/reserveTaken', { memberId: id }).then(res => {
+          this.reserveTaken = res.data.result.reserveTaken;
+      }).catch(error => { //捕获失败
+      })      
+    },
+    getRecordList(){
  
     }
+
+
 
   },
 

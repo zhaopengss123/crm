@@ -11,16 +11,14 @@
           </el-form-item> -->
 
            <el-form-item label="所属品牌">
-                <el-cascader
-                  placeholder="请选择"
-                  v-model="form.brandId"
-                  :options="brandIdList"
-                  :show-all-levels="false"
-                  change-on-select
-                  :props="{value:'value', label:'label'}" 
-            
-                  clearable
-                ></el-cascader>
+              <el-select v-model="form.brandId" placeholder="请选择" >
+              <el-option
+                v-for="item in brandIdList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select> 
           </el-form-item>
            <el-form-item label="所属省份">
              <el-select v-model="form.province" placeholder="请选择" @change="selectProvince()">
@@ -54,8 +52,8 @@
           </el-form-item> 
       </el-form>
       <div class="operateBox">
-          <el-button size="medium" type="primary">查询</el-button>
-          <el-button size="medium">清空筛选条件</el-button>
+          <el-button size="medium" type="primary" @click="query()">查询</el-button>
+          <el-button size="medium" @click="emptyQuery()">清空筛选条件</el-button>
       </div>
     </div>
     <div class="table-wrap">
@@ -65,47 +63,44 @@
             tooltip-effect="dark"
             style="width: 100%">
             <el-table-column
+              prop="shopName"
+               width="200"
               label="门店名称">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
             </el-table-column>
             <el-table-column
-              prop="name"
+              prop="shopBrand"
               label="品牌名称">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="city"
               label="所在城市">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="area"
               label="所在区域">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="contractStatus"
               label="门店状态">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="tong"
               label="门店类型">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="membership"
               label="会员总数">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="effectiveMembership"
               label="有效会员数">
             </el-table-column>  
             <el-table-column
-              prop="address"
+              prop="tongMembership"
               label="通卡会员数">
-            </el-table-column>  
+            </el-table-column>   
             <el-table-column
-              prop="address"
-              label="有效会员数">
-            </el-table-column>  
-            <el-table-column
-              prop="address"
+              prop="mountNumber"
               label="APP安装量">
             </el-table-column>  
             <el-table-column
@@ -118,6 +113,8 @@
             </el-table-column>                                                                                                          
           </el-table>
     </div>
+    <div class="pagination"><el-pagination background layout="prev, pager, next" :total="1000"></el-pagination></div>
+
   <!-- 分页 -->
   <!-- <app-pagination requestUrl="/mission/missionList" @response="getData" :query="form" ref="pagination"></app-pagination> -->
   </div>
@@ -182,6 +179,10 @@
   .el-table td .cell {
     word-break: keep-all;
   }
+  .pagination{
+    margin-top: 20px;
+    text-align: right;
+  }
 }
 </style>
 <script>
@@ -193,10 +194,10 @@ export default {
   data() {
     return {
       form: {
-        missionStatus: ""
+        pageNum: 1,
       },
       pageSize: null,
-      pageNum: null,
+      pageNum: 1,
       queryTable: [],
       provinceList: [],
       cityList: [],
@@ -247,6 +248,29 @@ export default {
           }).catch(error => { //捕获失败
           })
     },
+    query(){
+      
+        let paramJson = JSON.stringify(this.form);
+          this.axios.post('/store/listStore', { paramJson }).then(res => {
+              this.queryTable = res.data.result;
+              this.queryTable.map( item=>{
+                  if(item.contractStatus == 0){
+                    item.contractStatus = '正常';
+                  }else if(item.contractStatus == 1){
+                    item.contractStatus = '合同到期';
+                  }else if(item.contractStatus == 2){
+                    item.contractStatus = '解约';
+                  }else if(item.contractStatus == 3){
+                    item.contractStatus = '转店中';
+                  };
+                  item.tong ? item.tong = '通卡店': item.tong = '非通卡店';
+              })
+          }).catch(error => { //捕获失败
+          })
+    },
+    emptyQuery(){
+      this.form = {pageNum: 1};
+    },
     //状态跳转
     jumpFn(id) {
        
@@ -256,7 +280,7 @@ export default {
 
   },
   mounted() {
-   
+    this.query();
     this.getProvince();
     
   }

@@ -8,15 +8,49 @@
       </div>
       <div class="main">
        <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">门店名称：北京石妞妞</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">门店名称：北京石妞妞</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">门店名称：北京石妞妞</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">门店名称：{{detailData.shopName}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">门店代码：{{detailData.shopCode}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">门店缩写：{{detailData.shortName}}</div></el-col>
       </el-row>
        <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">门店名称：北京石妞妞</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">门店名称：北京石妞妞</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">门店名称：北京石妞妞</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">加盟方式：{{detailData.type == 0 ? '加盟店':(detailData.type == 1?'直营店':'其他' ) }}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">门店级别：{{detailData.level}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">门店类型：{{detailData.shopType}}</div></el-col>
+      </el-row>    
+       <el-row>
+        <el-col :span="8"><div class="grid-content bg-purple">门店品牌：{{detailData.shopBrand}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">详细地址：{{detailData.shopAddress}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">门店面积：{{detailData.shopArea}}</div></el-col>
       </el-row>      
+       <el-row>
+        <el-col :span="8"><div class="grid-content bg-purple">电费单价：{{detailData.electricityPrice}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">水费单价：{{detailData.waterPrice}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">房租单价：{{detailData.housePrice}}</div></el-col>
+      </el-row> 
+       <el-row>
+        <el-col :span="8"><div class="grid-content bg-purple">店长数：{{detailData.managerNum}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">人员成本：{{detailData.employeePrice}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">其他成本：{{detailData.otherPrice}}</div></el-col>
+      </el-row>   
+       <el-row>
+        <el-col :span="8"><div class="grid-content bg-purple">锅炉信息：{{detailData.boilerType}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">开业时间：{{detailData.openDate}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">试营业截止日期：{{detailData.probationDate}}</div></el-col>
+      </el-row>
+       <el-row>
+        <el-col :span="8"><div class="grid-content bg-purple">门店到期日：{{detailData.expirationDate}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">门店电话：{{detailData.shopTel}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">营业执照号：{{detailData.businessLicenseNum}}</div></el-col>
+      </el-row>   
+       <el-row>
+        <el-col :span="8"><div class="grid-content bg-purple">营业执照名称：{{detailData.businessLicenseName}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">营业执照地址：{{detailData.businessLicenseAddress}}</div></el-col>
+          <el-col :span="8"><div class="grid-content bg-purple">省：{{detailData.province}}</div></el-col>
+      </el-row>
+       <el-row>
+        <el-col :span="8"><div class="grid-content bg-purple">市：{{detailData.city}}</div></el-col>
+       <el-col :span="8"><div class="grid-content bg-purple">区：{{detailData.area}}</div></el-col>        
+      </el-row>                            
       </div>
     </el-card>
 
@@ -27,30 +61,26 @@
       <div class="main">
            <template>
               <el-table
-                :data="tableData"
+                :data="memberList"
                 style="width: 100%">
                 <el-table-column
-                  prop="date"
+                  prop="name"
                   label="姓名">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="mobilePhone"
                   label="手机号">
                 </el-table-column>
                 <el-table-column
-                  prop="address"
+                  prop="babyNumber"
                   label="宝宝类型">
                 </el-table-column>
                 <el-table-column
-                  prop="address"
-                  label="关系">
-                </el-table-column>
-                <el-table-column
-                  prop="address"
+                  prop="source"
                   label="来源渠道">
                 </el-table-column>
                 <el-table-column
-                  prop="address"
+                  prop="havaCard"
                   label="身份">
                 </el-table-column>
                 <el-table-column
@@ -58,11 +88,11 @@
                   label="近期购买时间">
                 </el-table-column>      
                 <el-table-column
-                  prop="address"
+                  prop="loginDate"
                   label="近期APP登陆">
                 </el-table-column> 
                 <el-table-column
-                  prop="address"
+                  prop="reserveDate"
                   label="近期预约时间">
                 </el-table-column>                                                                                           
               </el-table>
@@ -77,30 +107,26 @@
       <div class="main">
            <template>
               <el-table
-                :data="tableData"
+                :data="memberInsiderList"
                 style="width: 100%">
-                <el-table-column
-                  prop="date"
+                          <el-table-column
+                  prop="name"
                   label="姓名">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="mobilePhone"
                   label="手机号">
                 </el-table-column>
                 <el-table-column
-                  prop="address"
+                  prop="babyNumber"
                   label="宝宝类型">
                 </el-table-column>
                 <el-table-column
-                  prop="address"
-                  label="关系">
-                </el-table-column>
-                <el-table-column
-                  prop="address"
+                  prop="source"
                   label="来源渠道">
                 </el-table-column>
                 <el-table-column
-                  prop="address"
+                  prop="havaCard"
                   label="身份">
                 </el-table-column>
                 <el-table-column
@@ -108,11 +134,11 @@
                   label="近期购买时间">
                 </el-table-column>      
                 <el-table-column
-                  prop="address"
+                  prop="loginDate"
                   label="近期APP登陆">
                 </el-table-column> 
                 <el-table-column
-                  prop="address"
+                  prop="reserveDate"
                   label="近期预约时间">
                 </el-table-column>                                                                                           
               </el-table>
@@ -170,6 +196,9 @@
   float: left;
   margin-left: 10px;
   }
+  .main .el-col{
+    padding: 0 5px;
+  }
 }
 </style>
 
@@ -197,14 +226,30 @@ export default {
             date: '2016-05-03',
             name: '王小虎',
             address: '上海市普陀区金沙江路 1516 弄'
-          }]
+          }],
+          memberList: [],
+          memberInsiderList:[]
     };
   },
   methods: {
     //任务回显
     getData(){
       let id = this.$route.params.id;
-      console.log(id);
+      let arrNum = ['一','二','三','四','五','六'];
+      this.axios.post('/store/storeDetails', { storeId: id }).then(res => {
+        if(res.data.result.store.length){ this.detailData = res.data.result.store[0] };
+        this.memberList = res.data.result.member; 
+        this.memberList.map(item=>{
+          item.babyNumber  =  arrNum[item.babyNumber-1] + '胞胎';
+          item.havaCard  =  item.havaCard == 0 ? item.havaCard = '非会员' : '会员';
+        })
+        this.memberInsiderList = res.data.result.memberInsider;
+        this.memberInsiderList.map(item=>{
+          item.babyNumber  =  arrNum[item.babyNumber-1] + '胞胎';
+          item.havaCard  =  item.havaCard == 0 ? item.havaCard = '非会员' : '会员';
+        })
+      }).catch(error => { //捕获失败
+      })
  
     }
 
@@ -212,7 +257,6 @@ export default {
 
   mounted(){
     this.getData(); 
- 
   },
   //路由监听
   watch:{
