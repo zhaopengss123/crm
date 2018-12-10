@@ -55,7 +55,7 @@
       </div>
       <div class="bq_main">
           
-          <el-tag v-if="tableData.length"  v-for="(list, fileIndex) in tableData.length" :key="fileIndex">标签一</el-tag>
+          <el-tag v-if="labelList.length"  v-for="(list, fileIndex) in labelList" :key="fileIndex">{{list.labelName}}</el-tag>
         
           <div class="bq_noList" v-else>暂无标签</div>
       </div>
@@ -149,6 +149,7 @@ export default {
   // },
   data() {
     return {
+      labelList:[],
         detailData:{},
         divideParam: '1',
          tableData: [{
@@ -212,7 +213,12 @@ export default {
        this.axios.post('/store/reserveTaken', { memberId: id }).then(res => {
           this.reserveTaken = res.data.result.reserveTaken;
       }).catch(error => { //捕获失败
-      })      
+      }) 
+      //标签信息    
+      this.axios.post('/labelEditing/memberLabel', { memberId: id }).then(res => {
+        this.labelList = res.data.result;
+      }).catch(error => { //捕获失败
+      })     
     },
     getRecordList(){
  

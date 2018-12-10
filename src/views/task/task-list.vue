@@ -52,7 +52,7 @@
           </el-form-item> 
       </el-form>
       <div class="operateBox">
-          <el-button size="medium" type="primary" @click="query()">查询</el-button>
+          <el-button size="medium" type="primary" @click="share()">查询</el-button>
           <el-button size="medium" @click="emptyQuery()">清空筛选条件</el-button>
       </div>
     </div>
@@ -113,7 +113,7 @@
             </el-table-column>                                                                                                          
           </el-table>
     </div>
-    <div class="pagination"><el-pagination background layout="prev, pager, next" :total="1000"></el-pagination></div>
+    <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
 
   <!-- 分页 -->
   <!-- <app-pagination requestUrl="/mission/missionList" @response="getData" :query="form" ref="pagination"></app-pagination> -->
@@ -193,10 +193,9 @@ export default {
   },
   data() {
     return {
-      form: {
-        pageNum: 1,
-      },
+      form: {   },
       pageSize: null,
+      pageSize:10,
       pageNum: 1,
       queryTable: [],
       provinceList: [],
@@ -215,6 +214,7 @@ export default {
           value:'18',
           label:'鱼儿亲子'         
       }],
+      total:1,
         multipleSelection: []      
     };
   },
@@ -251,8 +251,9 @@ export default {
     query(){
       
         let paramJson = JSON.stringify(this.form);
-          this.axios.post('/store/listStore', { paramJson }).then(res => {
-              this.queryTable = res.data.result;
+          this.axios.post('/store/listStore', { paramJson,pageNum: this.pageNum, pageSize:this.pageSize }).then(res => {
+              this.queryTable = res.data.result.store;
+              this.total = res.data.result.count;
               this.queryTable.map( item=>{
                   if(item.contractStatus == 0){
                     item.contractStatus = '正常';
@@ -269,7 +270,15 @@ export default {
           })
     },
     emptyQuery(){
-      this.form = {pageNum: 1};
+        this.form = {};
+    },
+    share(){
+        this.pageNum = 1;
+        this.query();
+      },  
+    pageChange(val){
+      this.pageNum = val;
+      this.query();
     },
     //状态跳转
     jumpFn(id) {

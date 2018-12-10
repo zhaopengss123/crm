@@ -98,6 +98,7 @@
               </el-table>
             </template>
       </div>
+      <div class="pagination"><el-pagination background layout="prev, pager, next" :total="memberTotal" @current-change="memberChange" :current-page.sync="memberPageNum"></el-pagination></div>
     </el-card>  
 
     <el-card class="box-card">
@@ -144,19 +145,10 @@
               </el-table>
             </template>
       </div>
+      <div class="pagination"><el-pagination background layout="prev, pager, next" :total="memberInsiderTotal" @current-change="memberInsiderChange" :current-page.sync="memberInsiderPageNum"></el-pagination></div>      
     </el-card> 
 
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>标签信息</span>
-      </div>
-      <div class="bq_main">
-          
-          <el-tag v-if="tableData.length"  v-for="(list, fileIndex) in tableData.length" :key="fileIndex">标签一</el-tag>
-        
-          <div class="bq_noList" v-else>暂无标签</div>
-      </div>
-    </el-card>
+
 
 
   </div>
@@ -199,6 +191,10 @@
   .main .el-col{
     padding: 0 5px;
   }
+  .pagination{
+    margin-top: 20px;
+    text-align: right;
+  }
 }
 </style>
 
@@ -210,6 +206,10 @@ export default {
   data() {
     return {
         detailData:{},
+        memberTotal:1,
+        memberPageNum:1,
+        memberInsiderTotal:1,
+        memberInsiderPageNum: 1,
          tableData: [{
             date: '2016-05-02',
             name: '王小虎',
@@ -251,12 +251,46 @@ export default {
       }).catch(error => { //捕获失败
       })
  
-    }
+    },
+    getstoreMember(){
+      let id = this.$route.params.id;
+        this.axios.post('/store/storeMember', { storeId: id, pageNum: this.memberPageNum }).then(res => {
+        this.memberTotal = res.data.result.countMember;
+        this.memberList = res.data.result.member; 
+        this.memberList.map(item=>{
+          item.babyNumber  =  arrNum[item.babyNumber-1] + '胞胎';
+          item.havaCard  =  item.havaCard == 0 ? item.havaCard = '非会员' : '会员';
+        })
+      }).catch(error => { //捕获失败
+      })
+    },
+    memberChange(val){
+      this.memberPageNum= val;
+      this.getstoreMember();
+    },
+    getstoreMemberInsider(){
+        let id = this.$route.params.id;
+        this.axios.post('/store/storeMemberInsider', { storeId: id, pageNum: this.memberInsiderPageNum  }).then(res => {
+        this.memberInsiderTotal = res.data.result.countMemberInsider;
+        this.memberInsiderList = res.data.result.memberInsider; 
+        this.memberInsiderList.map(item=>{
+          item.babyNumber  =  arrNum[item.babyNumber-1] + '胞胎';
+          item.havaCard  =  item.havaCard == 0 ? item.havaCard = '非会员' : '会员';
+        })
+      }).catch(error => { //捕获失败
+      })      
+    },
+    memberInsiderChange(val){
+      this.memberInsiderPageNum= val;
+      this.getstoreMemberInsider();
+    },
 
   },
 
   mounted(){
     this.getData(); 
+    this.getstoreMember();
+    this.getstoreMemberInsider();
   },
   //路由监听
   watch:{

@@ -42,28 +42,30 @@
            <el-form-item label="所属门店">
               <el-select v-model="form.storeId" placeholder="请选择所属城市" >
               <el-option
-                v-for="item in userType"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="item in shopList"
+                :key="item.storeId"
+                :label="item.shopName"
+                :value="item.storeId">
               </el-option>
             </el-select>    
           </el-form-item>  
 
           <el-form-item label="近期使用时间">
               <el-date-picker
-                v-model="form.arrDate"
+                v-model="arrDate"
                 type="daterange"
                 range-separator="~"
                 start-placeholder="开始日期"
-                end-placeholder="结束日期">
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd"
+                @change="timeChange">
               </el-date-picker>
           </el-form-item>                     
    
       </el-form>
       <div class="operateBox">
-          <el-button size="medium" type="primary" @click="getData()">筛选</el-button>
-          <el-button size="medium">清空筛选条件</el-button>
+          <el-button size="medium" type="primary" @click="share()">筛选</el-button>
+          <el-button size="medium" @click="clearQuery">清空筛选条件</el-button>
       </div>
     </div>
     <div class="table-wrap">
@@ -113,7 +115,7 @@
     </div>
 
   <!-- 分页 -->
-      <div class="pagination"><el-pagination background layout="prev, pager, next" :total="1000"></el-pagination></div>
+      <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
   <!-- <app-pagination requestUrl="/mission/missionList" @response="getData" :query="form" ref="pagination"></app-pagination> -->
   </div>
 </template>
@@ -195,12 +197,15 @@ export default {
   data() {
     return {
       form: {
-        pageNum: 1,
-        arrDate:'',
+        
       },
+      pageNum:1,
+      pageSize:10,
+      total:1,
       provinceList: [],
       cityList: [],
       tableData:[],
+      arrDate:'',
       userType:[{
         label:'全部',
         value:''
@@ -211,7 +216,7 @@ export default {
         label:'非会员',
         value:1
       }],
-      
+      shopList:[],
         tableData3: [{
           date: '2016-05-03',
           name: '王小虎',
@@ -267,20 +272,45 @@ export default {
           this.axios.post('http://tusercenter.beibeiyue.cn/c/area/getCityByProvince', { provinceCode }).then(res => {
             this.cityList = res.data.result;
             this.form.city = this.cityList[0].code;
+            this.selectShopList()
           }).catch(error => { //捕获失败
           })
+    },
+    selectShopList(){
+        this.axios.post('/store/listShop', { city: this.form.city }).then(res => {
+          this.shopList = res.data.result.shop;
+        }).catch(error => { //捕获失败
+        })
+    },
+    share(){
+      this.pageNum = 1;
+      this.getData();
+    },
+    clearQuery(){
+      this.form = {};
+      this.arrDate = [];
     },
     getData(){
       let arrNum = ['一','二','三','四','五','六'];
       let paramJson = JSON.stringify(this.form);
-       this.axios.post('/store/listMember', { paramJson }).then(res => {
-            this.tableData = res.data.result;
+       this.axios.post('/store/listMember', { paramJson,pageNum: this.pageNum, pageSize: this.pageSize }).then(res => {
+            this.tableData = res.data.result.member;
+              this.total = res.data.result.count;
               this.tableData.map( item=>{
                  item.babyNumber  =  arrNum[item.babyNumber-1] + '胞胎';
                  item.havaCard  =  item.havaCard == 0 ? item.havaCard = '非会员' : '会员';
               });
           }).catch(error => { //捕获失败
         })
+    },
+    timeChange(){
+      console.log(this.arrDate);
+      this.form.startDate = this.arrDate[0];
+      this.form.endDate = this.arrDate[1];
+    },
+    pageChange(val){
+        this.pageNum = val;
+        this.getData();
     }
    
   },

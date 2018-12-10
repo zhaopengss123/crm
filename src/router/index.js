@@ -31,7 +31,7 @@ Vue.use(Router)
 export default new Router({
     routes: [{
             path: '/',
-            redirect: '/home/welcome'
+            redirect: '/home/tasklist'
         },
         {
             path: '/login',
@@ -41,7 +41,7 @@ export default new Router({
         {
             path: '/home',
             name: 'Home',
-            redirect: '/home/welcome',
+            redirect: '/home/tasklist',
             component: HomeComponent,
             children: [{
                     path: 'welcome',
