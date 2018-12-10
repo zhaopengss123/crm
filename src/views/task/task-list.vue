@@ -4,7 +4,7 @@
     <div class="formQuery clear">
       <el-form :inline="true" ref="form" :model="form" label-width="80px">
           <el-form-item label="门店名称">
-            <el-input v-model="form.missionName" placeholder="请输入门店名称" ></el-input>
+            <el-input v-model="form.shopName" placeholder="请输入门店名称" ></el-input>
           </el-form-item>
          <!--  <el-form-item label="工单类别">
             <el-input v-model="form.projectName" @keyup.enter.native="doLogin"></el-input>
@@ -193,7 +193,7 @@ export default {
   },
   data() {
     return {
-      form: {   },
+      form: { area:'',  },
       pageSize: null,
       pageSize:10,
       pageNum: 1,

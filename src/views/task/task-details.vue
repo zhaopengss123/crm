@@ -147,10 +147,6 @@
       </div>
       <div class="pagination"><el-pagination background layout="prev, pager, next" :total="memberInsiderTotal" @current-change="memberInsiderChange" :current-page.sync="memberInsiderPageNum"></el-pagination></div>      
     </el-card> 
-
-
-
-
   </div>
 </template>
 <style lang="less">

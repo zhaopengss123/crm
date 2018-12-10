@@ -10,21 +10,21 @@
                 :data="tableData"
                 style="width: 100%">
                 <el-table-column
-                  prop="date"
+                  prop="labelName"
                   label="标签名" >
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="countNumber"
                   label="客户">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
-                  label="自动加标签">
+                  prop="createDate"
+                  label="创建时间">
                 </el-table-column>                
                 <el-table-column label="操作" width="180">
                     <template slot-scope="scope">
                       <el-button size="mini" >编辑</el-button>
-                      <el-button size="mini"  type="danger">删除</el-button>
+                      <el-button size="mini"  type="danger" @click="removeShow()">删除</el-button>
                     </template>
                   </el-table-column>
               </el-table>
@@ -38,28 +38,29 @@
         <div> 
           <el-form :inline="true" ref="form" :model="form" label-width="120px">
             <el-form-item label="标签名称">
-              <el-input v-model="data" placeholder="请输入内容" ></el-input>
+                  <el-select v-model="form.labelTypeId" placeholder="请选择" >
+                  <el-option
+                    v-for="item in typeList"
+                    :key="item.typeId"
+                    :label="item.typeName"
+                    :value="item.typeId">
+                  </el-option>
+                </el-select>
             </el-form-item>
-            <el-form-item label="累计成功交易">
-              <el-input v-model="data" size="medium" placeholder="请输入内容" >
-                 <template slot="append">笔</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="累计购买金额">
-              <el-input v-model="data" size="medium" placeholder="请输入内容" >
-                <template slot="append">元</template>
-              </el-input>
-            </el-form-item>    
-            <el-form-item label="累计积分">
-              <el-input v-model="data" size="medium" placeholder="请输入内容" >
-                <template slot="append">分</template>
-              </el-input>
-            </el-form-item>                                       
+              <el-form-item label="标签条件">
+                  <el-input
+                      style="width:300px;"
+                      type="textarea"
+                      :rows="2"
+                      placeholder="请输入内容"
+                      v-model="form.labelName">
+                    </el-input>
+            </el-form-item>                                    
           </el-form> 
         </div> 
         <span slot="footer" class="dialog-footer">
           <el-button @click="bouncedShow = false">取 消</el-button>
-          <el-button type="primary" @click="bouncedShow = false">确 定</el-button>
+          <el-button type="primary" @click="addLabel()">确 定</el-button>
         </span>
       </el-dialog>
   </div>
@@ -88,24 +89,9 @@ export default {
     return {
         form: {},
         data: '',
-        tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }],
-          bouncedShow:false
+        tableData: [],
+        bouncedShow:false,
+        typeList:[],
     };
   },
   methods: {
@@ -114,11 +100,47 @@ export default {
      },
      handleClose(){
        this.bouncedShow = false;
+     },
+     getData(){
+        this.axios.post('/labelEditing/listLabel', {}).then(res => {
+          this.tableData = res.data.result;
+        }).catch(error => { //捕获失败
+        })
+     },
+     getLabeltypeList(){
+       this.axios.post('/labelEditing/tabulationLabel', {}).then(res => {
+          this.typeList = res.data.result;
+        }).catch(error => { //捕获失败
+        })
+     },
+     addLabel(){
+       let paramJson = JSON.stringify(this.form);
+       this.axios.post('/labelEditing/insertLabel', { labelTypeId: this.form.labelTypeId, labelName: this.form.labelName }).then(res => {
+         if(res.data.code == 1000){
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+            this.getData();
+            this.bouncedShow = false;
+            this.form = {};
+         }else{
+            this.$message({
+              message: res.data.info,
+              type: 'error'
+            });
+         }
+        }).catch(error => { //捕获失败
+        })        
+     },
+     removeShow(){
+       hyhyyyytyyh
      }
   },
 
   mounted(){
-   
+   this.getData();
+   this.getLabeltypeList();
  
   },
   //路由监听
