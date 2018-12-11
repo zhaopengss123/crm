@@ -4,7 +4,7 @@
     <div class="formQuery clear">
       <el-form :inline="true" ref="form" :model="form">
           <el-form-item label="用户查找">
-            <el-input v-model="form.name" placeholder="请输入门店名称" ></el-input>
+            <el-input v-model="form.name" placeholder="请输入用户名称" ></el-input>
           </el-form-item>
 
            <el-form-item label="用户身份">
@@ -95,7 +95,7 @@
 
             <el-table-column
               prop="loginDate"
-              label="近期APP登陆">
+              label="近期APP登录">
             </el-table-column>  
             <el-table-column
               prop="reserveDate"
@@ -207,52 +207,14 @@ export default {
       tableData:[],
       arrDate:'',
       userType:[{
-        label:'全部',
-        value:''
-      },{
         label:'会员',
-        value:0        
+        value:1        
       },{
         label:'非会员',
-        value:1
+        value:0
       }],
       shopList:[],
-        tableData3: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          id:1
-        }],     
+         
     };
   },
   methods: {
@@ -297,8 +259,12 @@ export default {
             this.tableData = res.data.result.member;
               this.total = res.data.result.count;
               this.tableData.map( item=>{
+                if(item.babyNumber){
                  item.babyNumber  =  arrNum[item.babyNumber-1] + '胞胎';
                  item.havaCard  =  item.havaCard == 0 ? item.havaCard = '非会员' : '会员';
+                 }else{
+                    item.babyNumber = "";
+                 }
               });
           }).catch(error => { //捕获失败
         })

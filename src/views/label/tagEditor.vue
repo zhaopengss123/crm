@@ -23,8 +23,18 @@
                 </el-table-column>                
                 <el-table-column label="操作" width="180">
                     <template slot-scope="scope">
-                      <el-button size="mini" >编辑</el-button>
-                      <el-button size="mini"  type="danger" @click="removeShow()">删除</el-button>
+                      <!-- <el-button size="mini"  type="danger" @click="removeShow()">删除</el-button> -->
+                               <el-popover
+                                  placement="top"
+                                  width="160"
+                                  v-model="scope.row.visible">
+                                  <p>确定删除该标签吗？</p>
+                                  <div style="text-align: right; margin: 0">
+                                    <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+                                    <el-button type="primary" size="mini" @click="delectLabel(scope.row.id); scope.row.visible = false">确定</el-button>
+                                  </div>
+                                  <el-button  size="mini" type="danger" slot="reference" @click="scope.row.visible=true">删除</el-button>
+                                </el-popover>
                     </template>
                   </el-table-column>
               </el-table>
@@ -36,7 +46,7 @@
         width="500px"
         :before-close="handleClose">
         <div> 
-          <el-form :inline="true" ref="form" :model="form" label-width="120px">
+          <el-form :inline="true" ref="form" :model="form" :rules="rules"  label-width="120px">
             <el-form-item label="标签名称">
                   <el-select v-model="form.labelTypeId" placeholder="请选择" >
                   <el-option
@@ -92,6 +102,13 @@ export default {
         tableData: [],
         bouncedShow:false,
         typeList:[],
+        visible2:false,
+        rules:{
+          labelTypeId:[
+            { required: true, message: '请输入活动名称', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ]
+        }
     };
   },
   methods: {
@@ -113,8 +130,18 @@ export default {
         }).catch(error => { //捕获失败
         })
      },
-     addLabel(){
+     addLabel(form){
+        if(!this.form.labelTypeId){
+            this.$message({ message: '请选择标签名称',  type: 'error'  });
+          return false;
+        }
+        if(!this.form.labelName){
+            this.$message({ message: '请输入标签条件',  type: 'error'  });
+          return false;
+        }
+
        let paramJson = JSON.stringify(this.form);
+    
        this.axios.post('/labelEditing/insertLabel', { labelTypeId: this.form.labelTypeId, labelName: this.form.labelName }).then(res => {
          if(res.data.code == 1000){
             this.$message({
@@ -133,9 +160,26 @@ export default {
         }).catch(error => { //捕获失败
         })        
      },
-     removeShow(){
-       hyhyyyytyyh
-     }
+     //删除标签
+    delectLabel(id){
+        this.axios.post('/labelEditing/deleteLabel', { labelId: id}).then(res => {
+            if(res.data.code==1000){
+                this.$message({
+                  message: '操作成功',
+                  type: 'success'
+                });
+              this.getData();  
+            }else{
+             this.$message({
+              message: res.data.info,
+              type: 'error'
+            });
+            }
+        }).catch(error => { //捕获失败
+        })  
+    },
+
+    
   },
 
   mounted(){
