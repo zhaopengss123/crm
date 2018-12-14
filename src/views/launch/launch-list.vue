@@ -50,17 +50,7 @@
             </el-select>    
           </el-form-item>  
 
-          <el-form-item label="近期使用时间">
-              <el-date-picker
-                v-model="arrDate"
-                type="daterange"
-                range-separator="~"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                value-format="yyyy-MM-dd"
-                @change="timeChange">
-              </el-date-picker>
-          </el-form-item>                     
+                   
    
       </el-form>
       <div class="operateBox">
@@ -89,8 +79,10 @@
             </el-table-column>
       
             <el-table-column
-              prop="havaCard"
               label="身份">
+                <template slot-scope="scope">
+                    {{scope.row.havaCard == 0 ?  '非会员' : '会员'}}
+                </template>
             </el-table-column>
 
             <el-table-column
@@ -105,9 +97,9 @@
             <el-table-column
               fixed="right"
               label="操作"
-              width="200">
+              width="120">
               <template slot-scope="scope">
-                <el-button type="text" size="small">发短信</el-button> 
+                <!-- <el-button type="text" size="small">发短信</el-button>  -->
                 <el-button type="text" size="small" @click="jumpFn(scope.row.id)">查看</el-button>
               </template>
             </el-table-column>                                                                                                          
@@ -224,14 +216,14 @@ export default {
         this.$router.push({ path: "/home/launchDetail/" + id });
     },
         getProvince(){
-      this.axios.post('http://tusercenter.beibeiyue.cn/c/area/getAllProvince', {}).then(res => {
+      this.axios.post('linkage/getAllProvince', {}).then(res => {
         this.provinceList = res.data.result;
       }).catch(error => { //捕获失败
       })
     },
     selectProvince(){
         let provinceCode = this.form.province;
-          this.axios.post('http://tusercenter.beibeiyue.cn/c/area/getCityByProvince', { provinceCode }).then(res => {
+          this.axios.post('linkage/getCityByProvince', { provinceCode }).then(res => {
             this.cityList = res.data.result;
             this.form.city = this.cityList[0].code;
             this.selectShopList()
@@ -261,7 +253,7 @@ export default {
               this.tableData.map( item=>{
                 if(item.babyNumber){
                  item.babyNumber  =  arrNum[item.babyNumber-1] + '胞胎';
-                 item.havaCard  =  item.havaCard == 0 ? item.havaCard = '非会员' : '会员';
+                 
                  }else{
                     item.babyNumber = "";
                  }

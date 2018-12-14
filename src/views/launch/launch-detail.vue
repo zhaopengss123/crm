@@ -16,11 +16,11 @@
       </div>
     </el-card>
 
-    <el-card class="box-card">
+    <el-card class="box-card" v-if="userDetail.memberInfo">
       <div slot="header" class="clearfix">
         <span>会员卡</span>
       </div>
-      <div class="main">
+      <div class="main mainCard" style="font-size:14px;" v-for="(item,index) in userDetail.memberInfo" :key ="index">
           <div>
               <el-row>
                 <el-col :span="8"><div class="grid-content bg-purple">宝宝姓名：{{userDetail.name}}</div></el-col>
@@ -35,19 +35,46 @@
               <el-row>
                 <el-col :span="8"><div class="grid-content bg-purple"><b>门店归属：</b>{{userDetail.shopName}}</div></el-col>
                 <el-col :span="8"><div class="grid-content bg-purple"><b>所属社区：</b>{{userDetail.communityName}}</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡类型：</b>{{userDetail.cardTypeName}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡类型：</b>{{item.cardTypeName}}</div></el-col>
               </el-row>
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡状态：</b>{{userDetail.recordStatus?(userDetail.recordStatus==0?'未使用':(userDetail.recordStatus==1?'使用中':userDetail.recordStatus==2?'即将过期':(userDetail.recordStatus==3?'已过期':''))):''}}</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>办卡时间：</b>{{userDetail.createDate}}</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>失效时间：</b>{{userDetail.expireDate}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡状态：</b>{{item.recordStatus?(item.recordStatus==0?'未使用':(item.recordStatus==1?'使用中':item.recordStatus==2?'即将过期':(item.recordStatus==3?'已过期':''))):''}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>办卡时间：</b>{{item.createDate}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>失效时间：</b>{{item.expireDate}}</div></el-col>
               </el-row>     
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>有效期剩余：</b>{{userDetail.differenceMonth}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>有效期剩余：</b>{{item.differenceMonth}}</div></el-col>
               </el-row>                         
           </div>
       </div>
     </el-card>  
+
+    <el-card class="box-card" v-else>
+      <div slot="header" class="clearfix">
+        <span>宝宝信息</span>
+      </div>
+      <div class="main mainCard" style="font-size:14px;" >
+          <div>
+              <el-row>
+                <el-col :span="8"><div class="grid-content bg-purple">宝宝姓名：{{userDetail.name}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">性别：{{userDetail.sex}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">昵称：{{userDetail.nick}}</div></el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8"><div class="grid-content bg-purple">生日：{{userDetail.birthday}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">身高：{{userDetail.height?userDetail.height+'cm':''}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple">体重：{{userDetail.weight?userDetail.weight+'kg':''}}</div></el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>门店归属：</b>{{userDetail.shopName}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>所属社区：</b>{{userDetail.communityName}}</div></el-col>
+               
+              </el-row>
+                          
+          </div>
+      </div>
+    </el-card>  
+
 
     <el-card class="box-card">
       <div slot="header" class="clearfix">
@@ -55,9 +82,9 @@
       </div>
       <div class="bq_main">
           
-          <el-tag v-if="labelList.length"  v-for="(list, fileIndex) in labelList" :key="fileIndex">{{list.labelName}}</el-tag>
+          <el-tag style="margin-bottom:20px;" v-if="labelList.length"  v-for="(list, fileIndex) in labelList" :key="fileIndex">{{list.labelName}}</el-tag>
         
-          <div class="bq_noList" v-else>暂无标签</div>
+          <div class="bq_noList"  v-if="!labelList.length" >暂无标签</div>
       </div>
     </el-card>
 
@@ -67,7 +94,7 @@
         <span>行为记录</span>
       </div>
       <!-- @tab-click="handleClick" -->
-      <el-tabs v-model="behaviorTab" type="card" >
+      <el-tabs v-model="behaviorTab" type="card"  @tab-click="tabClick"  >
         <el-tab-pane label="商品购买记录" name="0">
             <div class="main">
                 <el-row v-for="(item,index) in commodityToken" :key="index">{{ item.orderShopName	}}   {{item.orderProductName}}   {{item.activityPrice}}元 </el-row>
@@ -99,7 +126,7 @@
             </div>
         </el-tab-pane>
       </el-tabs>
- 
+      <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
     </el-card>
 
   </div>
@@ -109,7 +136,7 @@
   .main .el-row{
     padding-bottom: 20px;
   }
-  .main:first-child{
+  .main{
     font-size: 14px;
   }
   .quote-title {
@@ -139,6 +166,15 @@
   float: left;
   margin-left: 10px;
   }
+.pagination{
+   float: right;
+   margin-bottom: 20px;
+}
+.mainCard{
+  margin: 20px 0;
+  padding-bottom: 10px;
+  border-bottom: solid 1px #eee;
+}
 }
 </style>
 
@@ -152,80 +188,140 @@ export default {
       labelList:[],
         detailData:{},
         divideParam: '1',
-         tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }],
+         tableData: [],
           userDetail:{},
           behaviorTab:0,
           commodityToken: [],
           welfareTakenExchange: [],
           welfareTakenBuy: [],
           consumptionTaken: [],
-          reserveTaken: []
+          reserveTaken: [],
+          pageNum: 1,
+          total:1,
+          id:0,
+          tableIndex:0,
     };
   },
   methods: {
     //任务回显
     getData(){
       let id = this.$route.params.id;
-      console.log(id);
+      this.id = id;
       
       this.axios.post('/store/memberDetails', { memberId: id }).then(res => {
           this.userDetail = res.data.result.member;
           this.divideParam = res.data.result.member.divideParam;
-      }).catch(error => { //捕获失败
+
+        //消费记录
+        this.axios.post('/store/consumptionTaken', { memberId: id , divideParam: this.divideParam ,  pageNum: 1  }).then(res => {
+            this.consumptionTaken = res.data.result.consumptionTaken;
+        }).catch(error => { //捕获失败
+        })
+
+     }).catch(error => { //捕获失败
       });
        //商品购买记录
-       this.axios.post('/store/commodityToken', { memberId: id }).then(res => {
+       this.axios.post('/store/commodityToken', { memberId: id, pageNum: 1 }).then(res => {
           this.commodityToken = res.data.result.commodityToken;
       }).catch(error => { //捕获失败
       })
        //福利兑换记录
-       this.axios.post('/store/welfareTaken', { memberId: id,status: 0 }).then(res => {
+       this.axios.post('/store/welfareTaken', { memberId: id,status: 0 , pageNum: 1 }).then(res => {
           this.welfareTakenExchange = res.data.result.welfareTaken;
       }).catch(error => { //捕获失败
       })
        //福利购买记录
-       this.axios.post('/store/welfareTaken', { memberId: id,status: 0 }).then(res => {
+       this.axios.post('/store/welfareTaken', { memberId: id,status: 1 , pageNum: 1 }).then(res => {
           this.welfareTakenBuy = res.data.result.welfareTaken;
       }).catch(error => { //捕获失败
       })
-      //消费记录
-       this.axios.post('/store/consumptionTaken', { memberId: id , divideParam: this.divideParam }).then(res => {
-          this.consumptionTaken = res.data.result.consumptionTaken;
-      }).catch(error => { //捕获失败
-      })
+    
       //预约记录
-       this.axios.post('/store/reserveTaken', { memberId: id }).then(res => {
+       this.axios.post('/store/reserveTaken', { memberId: id ,  pageNum: 1 }).then(res => {
           this.reserveTaken = res.data.result.reserveTaken;
       }).catch(error => { //捕获失败
       }) 
       //标签信息    
-      this.axios.post('/labelEditing/memberLabel', { memberId: id }).then(res => {
-        this.labelList = res.data.result;
-      }).catch(error => { //捕获失败
-      })     
+      // this.axios.post('/labelEditing/memberLabel', { memberId: id }).then(res => {
+      //   this.labelList = res.data.result;
+      // }).catch(error => { //捕获失败
+      // })     
     },
     getRecordList(){
  
-    }
+    },
+    pageChange(val){
+      this.pageNum = val;
+      console.log(this.tableIndex);
+        if( this.tableIndex == 0 ){
+            this.getCommodityToken();
+        }else if(this.tableIndex==1){
+            this.getwelfareTaken();
+        }else if(this.tableIndex==2){
+            this.getWelfareTakens();
+        }else if(this.tableIndex==3){
+            this.getConsumptionTaken();
+        }else if(this.tableIndex==4){
+            this.getReserveTaken();
+        }
+    },
+    tabClick(data){
+      this.tableIndex = data.index;
+      this.pageNum = 1;
 
-
-
+      console.log(data.index);
+        if( data.index == 0 ){
+            this.getCommodityToken();
+        }else if(data.index==1){
+            this.getwelfareTaken();
+        }else if(data.index==2){
+            this.getWelfareTakens();
+        }else if(data.index==3){
+            this.getConsumptionTaken();
+        }else if(data.index==4){
+            this.getReserveTaken();
+        }
+    },
+    getCommodityToken(){
+      //商品购买记录
+       this.axios.post('/store/commodityToken', { memberId: this.id, pageNum: this.pageNum }).then(res => {
+          this.commodityToken = res.data.result.commodityToken;
+          this.total = res.data.result.count;
+      }).catch(error => { //捕获失败
+      })
+    },
+    getwelfareTaken(){
+        //福利兑换记录
+       this.axios.post('/store/welfareTaken', { memberId: this.id,status: 0 , pageNum: 1 }).then(res => {
+          this.welfareTakenExchange = res.data.result.welfareTaken;
+          this.total = res.data.result.count;
+      }).catch(error => { //捕获失败
+      })
+    },
+    getWelfareTakens(){
+       //福利购买记录
+       this.axios.post('/store/welfareTaken', { memberId: this.id,status: 1 , pageNum: 1 }).then(res => {
+          this.welfareTakenBuy = res.data.result.welfareTaken;
+          this.total = res.data.result.count;
+      }).catch(error => { //捕获失败
+      })
+      },
+    getConsumptionTaken(){
+      //消费记录
+      this.axios.post('/store/consumptionTaken', { memberId: this.id , divideParam: this.divideParam ,  pageNum: 1  }).then(res => {
+          this.consumptionTaken = res.data.result.consumptionTaken;
+          this.total = res.data.result.count;
+      }).catch(error => { //捕获失败
+      })
+    },
+    getReserveTaken(){
+      //预约记录
+       this.axios.post('/store/reserveTaken', { memberId: this.id ,  pageNum: 1 }).then(res => {
+          this.reserveTaken = res.data.result.reserveTaken;
+          this.total = res.data.result.count;
+      }).catch(error => { //捕获失败
+      }) 
+    },
   },
 
   mounted(){

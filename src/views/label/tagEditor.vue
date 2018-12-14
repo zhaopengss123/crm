@@ -2,7 +2,7 @@
   <div class="mode-editor">
       <div class="mode_hearder">
             <el-button type="primary" size="medium" @click="SMSbouncedShow()">新建标签</el-button>
-            <el-button  size="medium" >导出标签</el-button>
+            <!-- <el-button  size="medium" >导出标签</el-button> -->
       </div>
       <div class="mode_main">
             <template>
@@ -73,6 +73,8 @@
           <el-button type="primary" @click="addLabel()">确 定</el-button>
         </span>
       </el-dialog>
+        <!-- 分页 -->
+      <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
   </div>
 </template>
 <style lang="less">
@@ -86,6 +88,10 @@
   .mode_main{
     clear: both;
     margin-top: 20px;
+  }
+  .pagination{
+    margin-top: 20px;
+    text-align: right;
   }
 }
 </style>
@@ -103,6 +109,8 @@ export default {
         bouncedShow:false,
         typeList:[],
         visible2:false,
+        total:1,
+        pageNum:1,
         rules:{
           labelTypeId:[
             { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -119,8 +127,9 @@ export default {
        this.bouncedShow = false;
      },
      getData(){
-        this.axios.post('/labelEditing/listLabel', {}).then(res => {
-          this.tableData = res.data.result;
+        this.axios.post('/labelEditing/listLabel', { pageNum:this.pageNum }).then(res => {
+          this.tableData = res.data.result.label;
+          this.total = res.data.result.count;
         }).catch(error => { //捕获失败
         })
      },
@@ -148,7 +157,8 @@ export default {
               message: '操作成功',
               type: 'success'
             });
-            this.getData();
+            this.pageNum = 1;
+            this.getData();            
             this.bouncedShow = false;
             this.form = {};
          }else{
@@ -168,7 +178,8 @@ export default {
                   message: '操作成功',
                   type: 'success'
                 });
-              this.getData();  
+              this.pageNum = 1;
+              this.getData(); 
             }else{
              this.$message({
               message: res.data.info,
@@ -178,7 +189,10 @@ export default {
         }).catch(error => { //捕获失败
         })  
     },
-
+    pageChange(val){
+        this.pageNum = val;
+        this.getData();
+    }
     
   },
 

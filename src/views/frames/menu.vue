@@ -21,14 +21,13 @@
         <span slot="title">客户管理</span>
       </el-menu-item>      
       <el-submenu index="/home/launchWork" >
-        <template slot="title"><i class="el-icon-cus-survey"></i><span slot="title">短信营销</span></template>
-        <el-menu-item index="/home/sendMessage/0">短信发送</el-menu-item>
+        <template slot="title"><i class="el-icon-message"></i><span slot="title">营销管理</span></template>
+        <el-menu-item index="/home/sendMessage/0">营销发送</el-menu-item>
         <el-menu-item index="/home/modeEditor">模板编辑</el-menu-item>
-        <el-menu-item index="/home/sendMessage/1">push推送</el-menu-item>
       </el-submenu>
       
        <el-menu-item index="/home/tagEditor">
-        <i class="el-icon-cus-survey"></i>
+        <i class="el-icon-document"></i>
         <span slot="title">标签管理</span>
       </el-menu-item>   
       <!-- <el-submenu index="/home/receiveWork">

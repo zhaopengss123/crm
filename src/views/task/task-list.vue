@@ -226,14 +226,14 @@ export default {
 
     },
     getProvince(){
-      this.axios.post('http://tusercenter.beibeiyue.cn/c/area/getAllProvince', {}).then(res => {
+      this.axios.post('linkage/getAllProvince', {}).then(res => {
         this.provinceList = res.data.result;
       }).catch(error => { //捕获失败
       })
     },
     selectProvince(){
         let provinceCode = this.form.province;
-          this.axios.post('http://tusercenter.beibeiyue.cn/c/area/getCityByProvince', { provinceCode }).then(res => {
+          this.axios.post('linkage/getCityByProvince', { provinceCode }).then(res => {
             this.cityList = res.data.result;
             this.form.city = this.cityList[0].code;
             this.selectcity();
@@ -242,14 +242,13 @@ export default {
     },
     selectcity(){
         let cityCode = this.form.city;
-          this.axios.post('http://tusercenter.beibeiyue.cn/c/area/getAreaByCity', { cityCode }).then(res => {
+          this.axios.post('linkage/getAreaByCity', { cityCode }).then(res => {
             this.areaList = res.data.result;
             this.form.area = this.areaList[0].code;
           }).catch(error => { //捕获失败
           })
     },
     query(){
-      
         let paramJson = JSON.stringify(this.form);
           this.axios.post('/store/listStore', { paramJson,pageNum: this.pageNum, pageSize:this.pageSize }).then(res => {
               this.queryTable = res.data.result.store;

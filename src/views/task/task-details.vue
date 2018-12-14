@@ -43,14 +43,11 @@
         <el-col :span="8"><div class="grid-content bg-purple">营业执照号：{{detailData.businessLicenseNum}}</div></el-col>
       </el-row>   
        <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">营业执照名称：{{detailData.businessLicenseName}}</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">营业执照地址：{{detailData.businessLicenseAddress}}</div></el-col>
           <el-col :span="8"><div class="grid-content bg-purple">省：{{detailData.province}}</div></el-col>
+          <el-col :span="8"><div class="grid-content bg-purple">市：{{detailData.city}}</div></el-col>
+          <el-col :span="8"><div class="grid-content bg-purple">区：{{detailData.area}}</div></el-col>       
       </el-row>
-       <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">市：{{detailData.city}}</div></el-col>
-       <el-col :span="8"><div class="grid-content bg-purple">区：{{detailData.area}}</div></el-col>        
-      </el-row>                            
+                           
       </div>
     </el-card>
 
@@ -72,16 +69,20 @@
                   label="手机号">
                 </el-table-column>
                 <el-table-column
-                  prop="babyNumber"
                   label="宝宝类型">
+                    <template slot-scope="scope">
+                        {{scope.row.babyNumber == 0||scope.row.babyNumber == 1?'一胞胎':(scope.row.babyNumber == 2?'双胞胎':(scope.row.babyNumber == 3?'三胞胎':scope.row.babyNumber+'胞胎'))}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                   prop="source"
                   label="来源渠道">
                 </el-table-column>
                 <el-table-column
-                  prop="havaCard"
                   label="身份">
+                    <template slot-scope="scope">
+                        {{scope.row.havaCard == 0 ? '非会员': '会员'}}
+                    </template>                  
                 </el-table-column>
                 <el-table-column
                   prop="address"
@@ -89,7 +90,7 @@
                 </el-table-column>      
                 <el-table-column
                   prop="loginDate"
-                  label="近期APP登陆">
+                  label="近期APP登录">
                 </el-table-column> 
                 <el-table-column
                   prop="reserveDate"
@@ -121,14 +122,19 @@
                 <el-table-column
                   prop="babyNumber"
                   label="宝宝类型">
+                    <template slot-scope="scope">
+                        {{scope.row.babyNumber == 0||scope.row.babyNumber == 1?'一胞胎':(scope.row.babyNumber == 2?'双胞胎':(scope.row.babyNumber == 3?'三胞胎':scope.row.babyNumber+'胞胎'))}}
+                    </template>                  
                 </el-table-column>
                 <el-table-column
                   prop="source"
                   label="来源渠道">
                 </el-table-column>
                 <el-table-column
-                  prop="havaCard"
                   label="身份">
+                    <template slot-scope="scope">
+                        {{scope.row.havaCard == 0 ? '非会员': '会员'}}
+                    </template>                   
                 </el-table-column>
                 <el-table-column
                   prop="address"
@@ -136,7 +142,7 @@
                 </el-table-column>      
                 <el-table-column
                   prop="loginDate"
-                  label="近期APP登陆">
+                  label="近期APP登录">
                 </el-table-column> 
                 <el-table-column
                   prop="reserveDate"
@@ -206,25 +212,9 @@ export default {
         memberPageNum:1,
         memberInsiderTotal:1,
         memberInsiderPageNum: 1,
-         tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }],
-          memberList: [],
-          memberInsiderList:[]
+        tableData: [],
+        memberList: [],
+        memberInsiderList:[]
     };
   },
   methods: {
@@ -280,7 +270,7 @@ export default {
       this.memberInsiderPageNum= val;
       this.getstoreMemberInsider();
     },
-
+    
   },
 
   mounted(){
