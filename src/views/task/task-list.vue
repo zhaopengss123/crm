@@ -50,6 +50,29 @@
               </el-option>
             </el-select> 
           </el-form-item> 
+
+           <el-form-item label="门店状态">
+              <el-select v-model="form.contractStatus" placeholder="请选择门店状态" >
+              <el-option
+                v-for="item in statusList"
+                :key="item.key"
+                :label="item.name"
+                :value="item.key">
+              </el-option> 
+            </el-select>    
+          </el-form-item>  
+
+           <el-form-item label="门店类型">
+              <el-select v-model="form.tong" placeholder="请选择门店类型" >
+              <el-option
+                v-for="item in tongList"
+                :key="item.key"
+                :label="item.name"
+                :value="item.key">
+              </el-option> 
+            </el-select>    
+          </el-form-item> 
+
       </el-form>
       <div class="operateBox">
           <el-button size="medium" type="primary" @click="share()">查询</el-button>
@@ -193,7 +216,7 @@ export default {
   },
   data() {
     return {
-      form: { area:'',  },
+      form: { area:'', contractStatus: '', tong:''},
       pageSize: null,
       pageSize:10,
       pageNum: 1,
@@ -213,9 +236,37 @@ export default {
       },{
           value:'18',
           label:'鱼儿亲子'         
+      },{
+          value:'19',
+          label:'宝宝游泳网'             
       }],
       total:1,
-        multipleSelection: []      
+      multipleSelection: [],
+      
+      statusList:[
+        {
+          key:'' ,
+          name:'全部'
+        },
+        {
+          key:0,
+          name:'正常'
+        },
+        {
+          key:2,
+          name:'解约'
+        }
+      ],
+      tongList:[{
+        key:'',
+        name:'全部'
+      },{
+        key:1,
+        name:'通卡'       
+      },{
+        key:0,
+        name:'非通卡'       
+      }]  
     };
   },
   methods: {

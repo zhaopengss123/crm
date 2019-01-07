@@ -9,7 +9,7 @@
       <div class="main">
        <el-row>
         <el-col :span="8"><div class="grid-content bg-purple">姓名：{{userDetail.parentName}}</div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple">手机号：{{userDetail.mobilePhone}}</div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">手机号：<span style="color:#409EFF; cursor:pointer" v-if="!seePhone" @click="SeeUserPhone()">查看</span>{{seePhone ? userDetail.mobilePhone: ''}}</div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple">宝宝数量：{{userDetail.babyNumber}}</div></el-col>
       </el-row>    
  
@@ -43,7 +43,8 @@
                 <el-col :span="8"><div class="grid-content bg-purple"><b>失效时间：</b>{{item.expireDate}}</div></el-col>
               </el-row>     
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>有效期剩余：</b>{{item.differenceMonth}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>有效期剩余：</b>{{item.differenceMonth>30?parseInt(item.differenceMonth/30)+'月'+ item.differenceMonth%30 + '天' : item.differenceMonth + '天' }}</div></el-col>
+                 <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡剩余卡次：</b>{{item.cardTimes? item.cardTimes :0 }}次</div></el-col>
               </el-row>                         
           </div>
       </div>
@@ -82,7 +83,7 @@
       </div>
       <div class="bq_main">
           
-          <el-tag style="margin-bottom:20px;" v-if="labelList.length"  v-for="(list, fileIndex) in labelList" :key="fileIndex">{{list.labelName}}</el-tag>
+          <el-tag style="margin-bottom:20px;" v-if="labelList.length"  v-for="(list, fileIndex) in labelList" :key="fileIndex">{{list}}</el-tag>
         
           <div class="bq_noList"  v-if="!labelList.length" >暂无标签</div>
       </div>
@@ -126,13 +127,25 @@
             </div>
         </el-tab-pane>
       </el-tabs>
+      
       <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
+    <div class="total">共{{total? total : 0}}条数据</div>
     </el-card>
 
   </div>
 </template>
 <style lang="less">
 .task-detail{
+  .total{
+    color: #666;
+    font-size: 14px;
+    float: right;
+    margin: 25px 0;
+    margin-right: 20px;
+  }
+  .pagination{
+    float: right;
+  }
   .main .el-row{
     padding-bottom: 20px;
   }
@@ -197,12 +210,17 @@ export default {
           consumptionTaken: [],
           reserveTaken: [],
           pageNum: 1,
-          total:1,
+          total:0,
           id:0,
           tableIndex:0,
+          pageSize:10,
+          seePhone: false,
     };
   },
   methods: {
+    SeeUserPhone(){
+        this.seePhone = true;
+    },
     //任务回显
     getData(){
       let id = this.$route.params.id;
@@ -221,7 +239,7 @@ export default {
      }).catch(error => { //捕获失败
       });
        //商品购买记录
-       this.axios.post('/store/commodityToken', { memberId: id, pageNum: 1 }).then(res => {
+       this.axios.post('/store/commodityToken', { memberId: id, pageNum: 1, pageSize: this.pageSize }).then(res => {
           this.commodityToken = res.data.result.commodityToken;
       }).catch(error => { //捕获失败
       })
@@ -242,10 +260,10 @@ export default {
       }).catch(error => { //捕获失败
       }) 
       //标签信息    
-      // this.axios.post('/labelEditing/memberLabel', { memberId: id }).then(res => {
-      //   this.labelList = res.data.result;
-      // }).catch(error => { //捕获失败
-      // })     
+      this.axios.post('/store/memberLabelInfo', { memberId: id }).then(res => {
+        this.labelList = res.data.result;
+      }).catch(error => { //捕获失败
+      })     
     },
     getRecordList(){
  
@@ -269,7 +287,7 @@ export default {
       this.tableIndex = data.index;
       this.pageNum = 1;
 
-      console.log(data.index);
+ 
         if( data.index == 0 ){
             this.getCommodityToken();
         }else if(data.index==1){
@@ -284,7 +302,7 @@ export default {
     },
     getCommodityToken(){
       //商品购买记录
-       this.axios.post('/store/commodityToken', { memberId: this.id, pageNum: this.pageNum }).then(res => {
+       this.axios.post('/store/commodityToken', { memberId: this.id, pageNum: this.pageNum, pageSize: this.pageSize }).then(res => {
           this.commodityToken = res.data.result.commodityToken;
           this.total = res.data.result.count;
       }).catch(error => { //捕获失败
@@ -292,7 +310,7 @@ export default {
     },
     getwelfareTaken(){
         //福利兑换记录
-       this.axios.post('/store/welfareTaken', { memberId: this.id,status: 0 , pageNum: 1 }).then(res => {
+       this.axios.post('/store/welfareTaken', { memberId: this.id,status: 0 , pageNum: this.pageNum, pageSize: this.pageSize  }).then(res => {
           this.welfareTakenExchange = res.data.result.welfareTaken;
           this.total = res.data.result.count;
       }).catch(error => { //捕获失败
@@ -300,7 +318,7 @@ export default {
     },
     getWelfareTakens(){
        //福利购买记录
-       this.axios.post('/store/welfareTaken', { memberId: this.id,status: 1 , pageNum: 1 }).then(res => {
+       this.axios.post('/store/welfareTaken', { memberId: this.id,status: 1 , pageNum: this.pageNum, pageSize: this.pageSize }).then(res => {
           this.welfareTakenBuy = res.data.result.welfareTaken;
           this.total = res.data.result.count;
       }).catch(error => { //捕获失败
@@ -308,7 +326,7 @@ export default {
       },
     getConsumptionTaken(){
       //消费记录
-      this.axios.post('/store/consumptionTaken', { memberId: this.id , divideParam: this.divideParam ,  pageNum: 1  }).then(res => {
+      this.axios.post('/store/consumptionTaken', { memberId: this.id , divideParam: this.divideParam ,  pageNum: this.pageNum, pageSize: this.pageSize   }).then(res => {
           this.consumptionTaken = res.data.result.consumptionTaken;
           this.total = res.data.result.count;
       }).catch(error => { //捕获失败
@@ -316,7 +334,7 @@ export default {
     },
     getReserveTaken(){
       //预约记录
-       this.axios.post('/store/reserveTaken', { memberId: this.id ,  pageNum: 1 }).then(res => {
+       this.axios.post('/store/reserveTaken', { memberId: this.id ,  pageNum: this.pageNum, pageSize: this.pageSize  }).then(res => {
           this.reserveTaken = res.data.result.reserveTaken;
           this.total = res.data.result.count;
       }).catch(error => { //捕获失败

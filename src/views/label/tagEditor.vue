@@ -14,8 +14,13 @@
                   label="标签名" >
                 </el-table-column>
                 <el-table-column
-                  prop="countNumber"
+                  prop="total"
                   label="客户">
+                    <template slot-scope="scope">
+                          <span v-if="scope.row.total||scope.row.total==0">{{scope.row.total}}</span>
+                          <img  class="loadings" v-else src="https://hcz-czg-image.oss-cn-beijing.aliyuncs.com/loading.png">
+                        
+                   </template>   
                 </el-table-column>
                 <el-table-column
                   prop="createDate"
@@ -93,6 +98,20 @@
     margin-top: 20px;
     text-align: right;
   }
+  .loadings{
+    width: 20px;
+    height: 20px;
+    animation: routes 2s linear infinite;
+    -webkit-animation: routes 2s linear infinite;
+  }
+  @keyframes routes {
+    0%{ transform: rotate(0deg);}
+    100%{transform: rotate(360deg); }
+  }
+  @-webkit-keyframes routes {
+    0%{ -webkit-transform: rotate(0deg);}
+    100%{-webkit-transform: rotate(360deg); }
+  }  
 }
 </style>
 
@@ -116,7 +135,8 @@ export default {
             { required: true, message: '请输入活动名称', trigger: 'blur' },
             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
           ]
-        }
+        },
+        totalList : []
     };
   },
   methods: {
@@ -127,14 +147,38 @@ export default {
        this.bouncedShow = false;
      },
      getData(){
+       let that = this;
         this.axios.post('/labelEditing/listLabel', { pageNum:this.pageNum }).then(res => {
           this.tableData = res.data.result.label;
           this.total = res.data.result.count;
+          
+          this.tableData.map(item => {
+              this.selectCount(item.id);
+          })
         }).catch(error => { //捕获失败
         })
      },
+     selectCount(id){
+
+     this.axios.post('http://esserver.beibeiyue.com/es/crm/query/label', { labels: id ,pageNo: 1,pageSize: 1  }).then(res => {
+            let arr = this.tableData;
+             this.tableData = [];
+              arr.map(item=>{
+              if(item.id == id){
+                item.total = res.data.total;
+              }
+              this.tableData.push(item);
+            });
+
+
+            
+            
+        }).catch(error => { //捕获失败
+        }) 
+        
+     },
      getLabeltypeList(){
-       this.axios.post('/labelEditing/tabulationLabel', {}).then(res => {
+       this.axios.post('/labelEditing/initLabel', {}).then(res => {
           this.typeList = res.data.result;
         }).catch(error => { //捕获失败
         })

@@ -26,6 +26,7 @@ import SettingsComponent from '@views/task/task-setting';
 import SendMessageComponent from '@views/sms/send-message';
 import modeEditorComponent from '@views/sms/modeEditor';
 import tagEditorComponent from '@views/label/tagEditor';
+import sendRecordComponent from '@views/sms/sendRecord';
 Vue.use(Router)
 
 export default new Router({
@@ -120,6 +121,11 @@ export default new Router({
                     path: 'sendMessage/:id',
                     name: 'sendMessage',
                     component: SendMessageComponent,
+                },
+                {
+                    path: 'sendRecord',
+                    name: 'sendRecord',
+                    component: sendRecordComponent, 
                 },
                 {
                     path: 'modeEditor',

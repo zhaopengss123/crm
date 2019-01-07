@@ -50,7 +50,31 @@
             </el-select>    
           </el-form-item>  
 
-                   
+           <el-form-item label="门店状态">
+              <el-select v-model="form.status" placeholder="请选择门店状态" >
+              <el-option
+                v-for="item in statusList"
+                :key="item.key"
+                :label="item.name"
+                :value="item.key">
+              </el-option> 
+            </el-select>    
+          </el-form-item>  
+
+           <el-form-item label="门店类型">
+              <el-select v-model="form.status" placeholder="请选择门店类型" >
+              <el-option
+                v-for="item in statusList"
+                :key="item.key"
+                :label="item.name"
+                :value="item.key">
+              </el-option> 
+            </el-select>    
+          </el-form-item> 
+
+           <el-form-item label="手机号">
+            <el-input v-model="form.mobilePhone" placeholder="请输入用户手机号" ></el-input>
+          </el-form-item>                  
    
       </el-form>
       <div class="operateBox">
@@ -191,6 +215,21 @@ export default {
       form: {
         
       },
+      status: 0,
+      statusList:[
+        {
+          key:0 ,
+          name:'全部'
+        },
+        {
+          key:1,
+          name:'正常'
+        },
+        {
+          key:2,
+          name:'解约'
+        }
+      ],
       pageNum:1,
       pageSize:10,
       total:1,
