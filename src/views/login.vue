@@ -15,45 +15,16 @@ export default {
     };
   },
   mounted() {
-    // const userInfo = this.$route.query.userInfo;
-    const userInfo = "{ userName:'aaaaaa',roleState:1,token:'dsadsadsadsads' }";
-    const infoString = userInfo.replace(/\\/g, "");
-    let userStore;
-    console.log(infoString);
-    if (infoString.indexOf("classType") > -1) {
-      userStore = JSON.parse(infoString);
-    } else {
-      try {
-        userStore = JSON.parse(infoString.substr(1, infoString.length - 2));
-      } catch (error) {
-        userStore = JSON.parse(infoString);
-      }
-    }
-    if (userInfo) {
-      if (userStore.classType) {
-        this.$router.push(`/home/buildDetail/${userStore.id}`);
-      } else {        
-        this.$store.commit("setUserInfo", userStore);
-        if(userStore.menueSource==1){
-            this.$router.push("/home/launchWork/11");
-        }else if(userStore.menueSource==5){
-            this.$router.push("/home/receiveWork/11");
-        }else if(userStore.menueSource==6){
-            this.$router.push("/home/newtaskedit/0");
-        }else if(userStore.typeCode){
-
-            this.$router.push(`/home/taskdetais/${userStore.id}`);
-        }else{
-            this.$router.push("/home/tasklist");
-        }
-
-
-
-      }
+    //const token = this.$route.query.token;    
+    const token = 'c4ce15a6a72d442eb89d0c9f2a48bf2c';
+    if (token) {
+        this.$store.commit("setUserInfo", token);
+        
+        this.$router.push(`/home/tasklist`);
     } else {
       //window.location.href = "http://192.168.1.207:8080/";
       //window.location.href = "http://tusercenter.beibeiyue.cn/c/";
-      window.location.href = "http://usercenter.beibeiyue.com/c/";
+      window.location.href = "http://ucenter.beibeiyue.com";
     }
   }
 };

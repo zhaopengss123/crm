@@ -23,7 +23,6 @@
       <el-submenu index="/home/launchWork" >
         <template slot="title"><i class="el-icon-message"></i><span slot="title">营销管理</span></template>
         <el-menu-item index="/home/sendMessage/0">营销发送</el-menu-item>
-        <el-menu-item index="/home/modeEditor">模板编辑</el-menu-item>
         <el-menu-item index="/home/sendRecord">发送记录</el-menu-item>
       </el-submenu>
       

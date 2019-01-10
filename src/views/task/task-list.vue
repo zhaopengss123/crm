@@ -84,6 +84,9 @@
             ref="multipleTable"
             :data="queryTable"
             tooltip-effect="dark"
+            v-loading="loading"
+            @sort-change="positiveFun"
+            :default-sort = "{prop: 'date', order: 'descending'}"      
             style="width: 100%">
             <el-table-column
               prop="shopName"
@@ -112,18 +115,26 @@
             </el-table-column>
             <el-table-column
               prop="membership"
+              sortable
+              width="150"
               label="会员总数">
             </el-table-column>
             <el-table-column
               prop="effectiveMembership"
+              sortable
+              width="150"
               label="有效会员数">
             </el-table-column>  
             <el-table-column
               prop="tongMembership"
+              sortable
+              width="150"
               label="通卡会员数">
             </el-table-column>   
             <el-table-column
               prop="mountNumber"
+              sortable
+              width="150"
               label="APP安装量">
             </el-table-column>  
             <el-table-column
@@ -217,6 +228,7 @@ export default {
   data() {
     return {
       form: { area:'', contractStatus: '', tong:''},
+      loading: false,
       pageSize: null,
       pageSize:10,
       pageNum: 1,
@@ -266,10 +278,30 @@ export default {
       },{
         key:0,
         name:'非通卡'       
-      }]  
+      }],
+      sortCriteria: '',
+      positiveStatus: ''
     };
   },
   methods: {
+    positiveFun(res){
+        if(res.prop){
+            this.sortCriteria = res.prop;
+        }else{
+          this.sortCriteria = "";
+        }
+        if(res.order){
+          if(res.order == "descending"){
+              this.positiveStatus = 2;
+          }else{
+              this.positiveStatus = 1;
+          }
+        }else{
+            this.positiveStatus = "";
+        }
+        this.pageNum = 1;
+        this.query();
+    },
     proProvince(){
 
     },
@@ -300,8 +332,10 @@ export default {
           })
     },
     query(){
+        this.loading = true;
         let paramJson = JSON.stringify(this.form);
-          this.axios.post('/store/listStore', { paramJson,pageNum: this.pageNum, pageSize:this.pageSize }).then(res => {
+          this.axios.post('/store/listStore', { paramJson,pageNum: this.pageNum, pageSize:this.pageSize,  sortCriteria: this.sortCriteria ,positiveStatus: this.positiveStatus }).then(res => {
+              this.loading = false;
               this.queryTable = res.data.result.store;
               this.total = res.data.result.count;
               this.queryTable.map( item=>{
@@ -317,6 +351,7 @@ export default {
                   item.tong ? item.tong = '通卡店': item.tong = '非通卡店';
               })
           }).catch(error => { //捕获失败
+              this.loading = false;
           })
     },
     emptyQuery(){

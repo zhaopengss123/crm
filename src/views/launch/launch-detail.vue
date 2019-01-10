@@ -43,7 +43,7 @@
                 <el-col :span="8"><div class="grid-content bg-purple"><b>失效时间：</b>{{item.expireDate}}</div></el-col>
               </el-row>     
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple"><b>有效期剩余：</b>{{item.differenceMonth>30?parseInt(item.differenceMonth/30)+'月'+ item.differenceMonth%30 + '天' : item.differenceMonth + '天' }}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><b>有效期剩余：</b>{{item.differenceMonth }}天</div></el-col>
                  <el-col :span="8"><div class="grid-content bg-purple"><b>会员卡剩余卡次：</b>{{item.cardTimes? item.cardTimes :0 }}次</div></el-col>
               </el-row>                         
           </div>
@@ -98,7 +98,7 @@
       <el-tabs v-model="behaviorTab" type="card"  @tab-click="tabClick"  >
         <el-tab-pane label="商品购买记录" name="0">
             <div class="main">
-                <el-row v-for="(item,index) in commodityToken" :key="index">{{ item.orderShopName	}}   {{item.orderProductName}}   {{item.activityPrice}}元 </el-row>
+                <el-row v-for="(item,index) in commodityToken" :key="index">{{item.createDate }}  {{ item.orderShopName	}}   {{item.orderProductName}}*{{item.totalCount}}  <span style="padding-left:10px;">{{item.activityPrice}}元</span> </el-row>
                 <el-row v-if="!commodityToken.length" style="color:#ccc; text-align:center;">暂无数据 </el-row>
             </div>
         </el-tab-pane>
@@ -116,20 +116,27 @@
         </el-tab-pane>
         <el-tab-pane label="消费记录" name="3">
              <div class="main">
-              <el-row v-for="(item,index) in consumptionTaken" :key="index">{{item.consumeDate}}  {{ item.shopName	}}  {{item.consumption}}元 </el-row>
+              <el-row v-for="(item,index) in consumptionTaken" :key="index">{{item.consumeDate}}  {{ item.shopName	}}  {{item.consumption}}元 {{item.cardTypeName}} {{item.tong? '通卡': '非通卡' }}</el-row>
                 <el-row v-if="!consumptionTaken.length" style="color:#ccc; text-align:center;">暂无数据 </el-row>
             </div>
         </el-tab-pane>
         <el-tab-pane label="预约记录" name="4">
             <div class="main">
-                <el-row v-for="(item,index) in reserveTaken" :key="index">{{item.reserveDate}}  {{ item.reserveShopName	}}</el-row>
+                <el-row v-for="(item,index) in reserveTaken" :key="index">{{item.reserveDate}}  {{ item.reserveShopName	}} {{ item.cardTypeName }} {{item.tong? '通卡': '非通卡' }}</el-row>
                 <el-row v-if="!reserveTaken.length" style="color:#ccc; text-align:center;">暂无数据 </el-row>
             </div>
         </el-tab-pane>
+        <el-tab-pane label="意见反馈" name="5">
+            <div class="main">
+                <el-row v-for="(item,index) in feedBackTaken" :key="index">{{ item.createDate	}}  {{item.content}}  </el-row>
+                <el-row v-if="!feedBackTaken.length" style="color:#ccc; text-align:center;">暂无数据 </el-row>
+            </div>
+        </el-tab-pane>        
       </el-tabs>
-      
-      <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
-    <div class="total">共{{total? total : 0}}条数据</div>
+      <div style="overflow:hidden;">
+        <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
+        <div class="total">共{{total? total : 0}}条数据</div>
+    </div>
     </el-card>
 
   </div>
@@ -209,6 +216,7 @@ export default {
           welfareTakenBuy: [],
           consumptionTaken: [],
           reserveTaken: [],
+          feedBackTaken: [],
           pageNum: 1,
           total:0,
           id:0,
@@ -241,6 +249,7 @@ export default {
        //商品购买记录
        this.axios.post('/store/commodityToken', { memberId: id, pageNum: 1, pageSize: this.pageSize }).then(res => {
           this.commodityToken = res.data.result.commodityToken;
+          this.total = res.data.result.count;
       }).catch(error => { //捕获失败
       })
        //福利兑换记录
@@ -259,6 +268,12 @@ export default {
           this.reserveTaken = res.data.result.reserveTaken;
       }).catch(error => { //捕获失败
       }) 
+      //意见反馈
+       this.axios.post('/store/memberFeedBack', { memberId: this.id ,  pageNum: 1 }).then(res => {
+          this.feedBackTaken = res.data.result.commodityToken;
+      }).catch(error => { //捕获失败
+      }) 
+
       //标签信息    
       this.axios.post('/store/memberLabelInfo', { memberId: id }).then(res => {
         this.labelList = res.data.result;
@@ -298,6 +313,8 @@ export default {
             this.getConsumptionTaken();
         }else if(data.index==4){
             this.getReserveTaken();
+        }else if(data.index==5){
+            this.getMemberFeedBack();
         }
     },
     getCommodityToken(){
@@ -340,6 +357,16 @@ export default {
       }).catch(error => { //捕获失败
       }) 
     },
+    getMemberFeedBack(){
+      //意见反馈
+       this.axios.post('/store/memberFeedBack', { memberId: this.id ,  pageNum: this.pageNum, pageSize: this.pageSize  }).then(res => {
+          this.feedBackTaken = res.data.result.commodityToken;
+          console.log( this.feedBackTaken);
+          this.total = res.data.result.count;
+      }).catch(error => { //捕获失败
+      }) 
+    },
+    
   },
 
   mounted(){

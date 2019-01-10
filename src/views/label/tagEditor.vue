@@ -159,8 +159,7 @@ export default {
         })
      },
      selectCount(id){
-
-     this.axios.post('http://esserver.beibeiyue.com/es/crm/query/label', { labels: id ,pageNo: 1,pageSize: 1  }).then(res => {
+     this.axios.post('http://es.beibeiyue.com/es/crm/query/label', { labels: JSON.stringify([[id]]) ,pageNo: 1,pageSize: 1  }).then(res => {
             let arr = this.tableData;
              this.tableData = [];
               arr.map(item=>{
