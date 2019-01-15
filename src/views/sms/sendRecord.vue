@@ -73,8 +73,11 @@
                             </el-table-column>  
                             <el-table-column
                               prop="sendErrorMsg"
-                               width="150"
+                               width="300"
                               label=" 原因">
+                                  <template slot-scope="scope">
+                                        {{scope.row.sendErrorMsg}}
+                                </template>                               
                             </el-table-column>   
                             <el-table-column
                               prop="esTotal"
@@ -131,10 +134,7 @@
                               label="url链接"
                               prop="imgUrl">
                             </el-table-column>
-                            <el-table-column
-                              prop="channel"
-                              label="短信渠道">
-                            </el-table-column>
+ 
                             <el-table-column
                               prop="content"
                               label="发送内容">
@@ -184,6 +184,7 @@ export default {
         pushtotal:1,
         setInter: false,
         set_:'',
+        getNum:0,
 
     };
   },
@@ -200,8 +201,9 @@ export default {
           let arr = [];
           let set = [];
           let that= this;
+          this.getNum = this.smsNum;
           this.smsData.map(item=>{
-            item.queryNameArr = item.queryName.split(',');
+            item.queryNameArr = item.queryName.split(',');         
             if(item.sendStatus == "发送中"){
                 arr.push(item.id);
             }
@@ -212,11 +214,11 @@ export default {
             }else{
               this.setInter = false;
             }
-
+        
             arr.map((item,index)=>{ 
               that.getMessages(item);
             }) 
- 
+            
 
           })
         .catch(error => {
@@ -224,7 +226,7 @@ export default {
         });
     },
     getMessages(id){
-     
+        
          this.axios
         .post("smsTemplate/smsMessagesSent", {
           taskId : id
@@ -233,17 +235,21 @@ export default {
           if(this.setInter){
             setTimeout(() => {
               this.getMessages(id);
-            }, 20000);
+            }, 20*1000);
             let arr = JSON.parse(JSON.stringify(this.smsData));
-            this.smsData = [];
-            arr.map(item=>{
-              if(item.id == id){
-                item.smsSuccess = res.smsSuccess;
-                item.smsFail = res.smsFail;
-              }
-             this.smsData.push(item); 
+            let arrs = [];
+            this.smsData.map(item=>{
+              if(item.id == res.data.result.taskId){
+                      item.smsSuccess = res.data.result.smsSuccess;
+                    item.smsFail = res.data.result.smsFail;
+              }     
+              arrs.push(item); 
             })
-         
+          this.smsData = [];
+          arrs.map(item=>{
+              this.smsData.push(item);
+          })
+           
           }  
         })
         .catch(error => {

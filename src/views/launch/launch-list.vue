@@ -76,6 +76,12 @@
             <el-table-column
               prop="mobilePhone"
               label="手机号">
+
+              <template slot-scope="scope">
+             
+                <el-button type="text" v-if="!scope.row.isPhone" size="small" @click="scope.row.isPhone = true">查看</el-button>
+                {{  scope.row.isPhone ? scope.row.mobilePhone: '' }}
+              </template>
             </el-table-column>
             <el-table-column
               prop="babyNumber"

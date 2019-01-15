@@ -119,7 +119,7 @@
               width="150"
               label="会员总数">
             </el-table-column>
-            <el-table-column
+            <el-table-column 
               prop="effectiveMembership"
               sortable
               width="150"
@@ -237,19 +237,19 @@ export default {
       cityList: [],
       areaList: [],
       brandIdList: [{
-        value:'12',
+        value:12,
         label:'鱼乐贝贝'
       },{
-        value:'1',
+        value:1,
         label:'贝贝约'
       },{
-        value:'17',
+        value:17,
         label:'泡泡塘'
       },{
-          value:'18',
+          value:18,
           label:'鱼儿亲子'         
       },{
-          value:'19',
+          value:19,
           label:'宝宝游泳网'             
       }],
       total:1,
@@ -286,7 +286,17 @@ export default {
   methods: {
     positiveFun(res){
         if(res.prop){
-            this.sortCriteria = res.prop;
+           if(res.prop == "membership"){
+              this.sortCriteria = res.prop;
+           }else if(res.prop == "effectiveMembership"){     
+              this.sortCriteria = 'effective_membership';
+           }else if(res.prop == "tongMembership"){
+              this.sortCriteria = 'tong_membership';
+           }else if(res.prop == "mountNumber"){
+              this.sortCriteria = 'mount_number';
+           }
+            
+
         }else{
           this.sortCriteria = "";
         }

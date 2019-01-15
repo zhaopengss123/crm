@@ -94,11 +94,11 @@
                             style="width: 100%">
                             <el-table-column
                               prop="id"
-                              label="会员ID">
+                              label="用户ID">
                             </el-table-column>
                             <el-table-column
                               prop="name"
-                              label="会员名称">
+                              label="姓名">
                             </el-table-column>
                             <el-table-column
                               prop="sex"
@@ -475,6 +475,7 @@ export default {
     //查询签名 剩余短信条数
     selectMessageChannel() {
       this.smsForm.smsSignId = "";
+      this.smsSignatureList = [];
       this.axios
         .post("/smsTemplate/smsSignature", {
           id: this.smsForm.agentId
@@ -528,7 +529,10 @@ export default {
     },
     openSmsClose() {
       this.openSms = false;
-      this.smsForm = {};
+      this.smsForm = {
+        agentId: "",
+        smsSignId: ""
+      };
       this.smsNum = "";    
       this.templateTitle = "";   
       this.templateContent = "";
@@ -536,6 +540,8 @@ export default {
     },
     openPushClose() {
       this.openPush = false;
+      this.url = "";
+      this.modeText = "";
     },
     selectBoxs(data, eq, eqs) {
       if (this.typeList[eq].list[eqs].isclass) {
@@ -636,6 +642,7 @@ export default {
       this.sendStatus = 0;
       this.sendTit = '请稍候';
       this.sendText = '正在发送';
+      let imgUrl = urlMessage;     
       this.axios
         .post("sendJpush/deliveryJpush", {
           urlMessage,
@@ -644,25 +651,24 @@ export default {
           status: 0
         })
         .then(res => {
-     
           if(res.data.code == 1000){
                   this.openPush = false;
-                  this.modeText = "";
                   this.url = "";
-                  this.sendStatus = 0;
-                  this.sendTit = '发送中';
-                  this.sendText = '发送中';
-          this.axios
-            .post("smsTemplate/sendPushRecord", {
+                  this.modeText = "";
+                  this.sendStatus = 1;
+                  this.sendTit = '发送成功';
+                  this.sendText = '发送成功';
+          let paramJson = JSON.stringify({
               imgUrl,
               content,
-              paramJsons,
               status: 1
+          });
+          this.axios
+            .post("smsTemplate/sendPushRecord", {
+                  paramJson,
             })
             .then(res => {
-              this.modeText = "";
-              this.url = "";
-              this.openPush = false;
+
             })
             .catch(error => {
               //捕获失败
@@ -746,7 +752,10 @@ export default {
               this.sendTit = '发送成功';
               this.sendText = '发送成功';
               this.openSms = false;
-              this.smsForm = {};
+              this.smsForm = {
+                  agentId: "",
+                  smsSignId: ""
+                };
           }else{
               this.sendStatus = 2;
               this.sendTit = '发送失败';

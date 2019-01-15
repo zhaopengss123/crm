@@ -82,7 +82,7 @@ export default {
       // this.$router.push('/login');
       // window.location.href = "http://192.168.1.159:8080/";
       //window.location.href = "http://tusercenter.beibeiyue.cn/c/";
-      window.location.href = "http://usercenter.beibeiyue.com/c/login.html";
+      window.location.href = "http://ucenter.beibeiyue.com";
     },
     menuActive() {
       this.$store.commit(
