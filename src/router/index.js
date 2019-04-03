@@ -8,31 +8,24 @@ import Router from 'vue-router'
 import LoginComponent from "@views/login";
 import HomeComponent from '@views/home';
 import WelcomeComponent from '@views/welcome';
-import ListComponent from '@views/demo/list';
-import DetailsComponent from '@views/demo/details';
 import WeeklyComponent from '@views/weekly/weekly';
-import NeedComponent from '@views/need/need';
 import TaskListComponent from '@views/task/task-list';
-import NewTaskEditComponent from '@views/task/task-edit';
 import TaskDetaisComponent from '@views/task/task-details';
 import EditorComponent from '@views/project/editor';
-import CompleteWorkComponent from '@views/task/complete-work';
-import ReceiveWorkComponent from '@views/receive/receive-list';
 import LaunchWorkComponent from '@views/launch/launch-list';
 import LaunchDetailComponent from '@views/launch/launch-detail';
-import BuildComponent from '@views/build/build-detail';
-import BuildEditComponent from '@views/build/build-edit';
-import SettingsComponent from '@views/task/task-setting';
 import SendMessageComponent from '@views/sms/send-message';
 import modeEditorComponent from '@views/sms/modeEditor';
 import tagEditorComponent from '@views/label/tagEditor';
 import sendRecordComponent from '@views/sms/sendRecord';
+import visitListComponent from '@views/visit/visitList';
+import followUpComponent from '@views/visit/followUp';
 Vue.use(Router)
 
 export default new Router({
     routes: [{
             path: '/',
-            redirect: '/home/tasklist'
+            redirect: '/home/launchWork'
         },
         {
             path: '/login',
@@ -42,7 +35,7 @@ export default new Router({
         {
             path: '/home',
             name: 'Home',
-            redirect: '/home/tasklist',
+            redirect: '/home/launchWork',
             component: HomeComponent,
             children: [{
                     path: 'welcome',
@@ -50,24 +43,9 @@ export default new Router({
                     component: WelcomeComponent
                 },
                 {
-                    path: 'list',
-                    name: 'LiseDemo',
-                    component: ListComponent
-                },
-                {
-                    path: 'details/:id',
-                    name: 'DetailsDemo',
-                    component: DetailsComponent
-                },
-                {
                     path: 'weekly',
                     name: 'Weekly',
                     component: WeeklyComponent
-                },
-                {
-                    path: 'need',
-                    name: 'Need',
-                    component: NeedComponent
                 },
                 {
                     path: 'editor',
@@ -75,38 +53,25 @@ export default new Router({
                     component: EditorComponent
                 },
                 {
-                    path: 'tasklist/',
+                    path: 'tasklist/:id',
                     name: 'TaksList',
                     component: TaskListComponent
                 },
-                //新建任务和编辑任务，id为0新增
                 {
-                    // path: 'newtaskedit/:id',
-                    path: 'newtaskedit/:id',
-                    name: 'NewTaskEdit',
-                    component: NewTaskEditComponent
+                    path: 'visit/:id',
+                    name: 'visit',
+                    component: visitListComponent
                 },
-                //任务详情和任务详情发起人
+                 {
+                     path: 'followup/:id',
+                     name: 'followup',
+                     component: followUpComponent
+                },               
                 {
                     path: 'taskdetais/:id',
                     name: 'TaskDetais',
                     component: TaskDetaisComponent
                 },
-                
-                //设置工单配置
-                {
-                    path: 'Settings',
-                    name: 'Settings',
-                    component: SettingsComponent
-                },
-
-                //完成的工单
-                {
-                    path: 'completeWork',
-                    name: 'CompleteWork',
-                    component: CompleteWorkComponent
-                },
-                //发起的工单
                 {
                     path: 'launchWork',
                     name: 'LaunchWork',
@@ -136,25 +101,6 @@ export default new Router({
                     path: 'tagEditor',
                     name: 'tagEditor',
                     component: tagEditorComponent,
-                },
-
-                //接收的工单
-                {
-                    path: 'receiveWork/:id',
-                    name: 'ReceiveWork',
-                    component: ReceiveWorkComponent,
-                },
-                //筹建工单详情  BuildComponent
-                {
-                    path: 'buildDetail/:id',
-                    name: 'BuildDetail',
-                    component: BuildComponent,
-                },
-                //筹建工单编辑
-                {
-                    path: 'buildEdit/:id',
-                    name: 'BuildEdit',
-                    component: BuildEditComponent,
                 },
             ]
         }

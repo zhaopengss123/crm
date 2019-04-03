@@ -12,24 +12,19 @@
         <i class="el-icon-cus-viewgallery"></i>
         <span slot="title">周报</span>
       </el-menu-item> -->
-      <el-menu-item index="/home/tasklist">
-        <i class="el-icon-cus-category"></i>
-        <span slot="title">门店管理</span>
-      </el-menu-item>
+
      <el-menu-item index="/home/LaunchWork">
         <i class="el-icon-cus-survey"></i>
         <span slot="title">客户管理</span>
-      </el-menu-item>      
-      <el-submenu index="/home/launchWork" >
-        <template slot="title"><i class="el-icon-message"></i><span slot="title">营销管理</span></template>
-        <el-menu-item index="/home/sendMessage/0">营销发送</el-menu-item>
-        <el-menu-item index="/home/sendRecord">发送记录</el-menu-item>
-      </el-submenu>
-      
-       <el-menu-item index="/home/tagEditor">
-        <i class="el-icon-document"></i>
-        <span slot="title">标签管理</span>
       </el-menu-item>   
+      <!-- <el-menu-item index="/home/tasklist">
+        <i class="el-icon-cus-category"></i>
+        <span slot="title">门店管理</span>
+      </el-menu-item>     -->
+      <el-submenu index="/home/launchWork" >
+        <template slot="title"><i class="el-icon-message"></i><span slot="title">回访名单</span></template>
+        <div v-for="(item,index) in list" :key="index"><el-menu-item  v-bind:index="'/home/visit/'+item.id">{{ item.name }}</el-menu-item></div>
+      </el-submenu>
       <!-- <el-submenu index="/home/receiveWork">
         <template slot="title"><i class="el-icon-cus-inquirytemplate"></i><span slot="title">我接收的工单</span></template>
           <el-menu-item index="/home/receiveWork/11">工单列表</el-menu-item>
@@ -47,6 +42,7 @@ export default {
   data() {
     return {
       isCollapse: true,
+      list:[]
     };
   },
   computed: {
@@ -55,6 +51,16 @@ export default {
     }
   },
   methods: {
+    getData(){
+        this.axios
+          .post("/visit/selectVisitList", { })
+          .then(res => {
+            this.list = res.data.result;
+          })
+          .catch(error => {
+            //捕获失败
+          })
+    },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -64,7 +70,10 @@ export default {
     handSelect(key, keyPath){
       console.log(key, keyPath);
     }
-  }
+  },
+    mounted() {
+      this.getData();
+  },
 };
 </script>
 

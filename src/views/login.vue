@@ -19,7 +19,7 @@ export default {
     if (token) {
         this.$store.commit("setUserInfo", token);
         
-        this.$router.push(`/home/tasklist`);
+        this.$router.push(`/home/launchWork`);
     } else {
       //window.location.href = "http://192.168.1.207:8080/";
       //window.location.href = "http://tusercenter.beibeiyue.cn/c/";

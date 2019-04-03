@@ -84,8 +84,8 @@
       <div class="bq_main">
           
           <el-tag style="margin-bottom:20px;" v-if="labelList.length"  v-for="(list, fileIndex) in labelList" :key="fileIndex">{{list}}</el-tag>
-        
-          <div class="bq_noList"  v-if="!labelList.length" >暂无标签</div>
+          <el-tag style="margin-bottom:20px;" v-if="visitList.length"  v-for="(list, fileIndex) in visitList" :key="fileIndex">{{list.visitName}}</el-tag>
+          <div class="bq_noList"  v-if="!labelList.length && !visitList.length" >暂无标签</div> 
       </div>
     </el-card>
 
@@ -223,6 +223,7 @@ export default {
           tableIndex:0,
           pageSize:10,
           seePhone: false,
+          visitList:[]
     };
   },
   methods: {
@@ -285,7 +286,6 @@ export default {
     },
     pageChange(val){
       this.pageNum = val;
-      console.log(this.tableIndex);
         if( this.tableIndex == 0 ){
             this.getCommodityToken();
         }else if(this.tableIndex==1){
@@ -366,11 +366,20 @@ export default {
       }).catch(error => { //捕获失败
       }) 
     },
+    getvisitList(){
+      //回访名单标签
+       this.axios.post('/visit/selectMemberVisitById', { memberId: this.id  }).then(res => {
+          this.visitList = res.data.result.visitInfo;
+      }).catch(error => { //捕获失败
+      }) 
+      
+    }
     
   },
 
   mounted(){
     this.getData(); 
+    this.getvisitList();
  
   },
   //路由监听
