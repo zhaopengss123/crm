@@ -106,7 +106,15 @@
                 <!-- 分页 -->
       <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
         </el-card>         
+      <div class="tcvs" v-if="tcvs">
+       <div style="padding:10px;"><el-button   size="medium" round icon="el-icon-arrow-left" @click="tcvs=false;memberIds=0; ">返回</el-button></div>
+        <el-tabs v-model="selectCard" type="card" @tab-click="handleClick">
+            <!-- <el-tab-pane label="详细信息" name="first"> <detail v-if="memberIds!=0&&tcvs" :memberIdx="memberIds" ></detail></el-tab-pane> -->
+            <el-tab-pane label="跟进记录" name="second"><followup :followId="followId"></followup></el-tab-pane>
+          </el-tabs>
 
+       
+      </div>
   </div>
 </template>
 <style lang="less">
@@ -119,21 +127,39 @@
     margin-top: 20px;
     text-align: right;
   }  
+  .tcvs{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left: 0;
+    z-index:10000;
+    background: rgb(255, 255, 255);
+
+  }  
 }
 </style>
 
 <script>
+import LaunchDetailComponent from '@views/launch/launch-detail';
+import followUpComponent from '@views/visit/followUp';
 export default {
-  // components: {
-  //   comDialog
-  // },
+  components: {
+    detail: LaunchDetailComponent,
+    followup:followUpComponent
+  },
+
   data() {
     return {
+      followId:{},
+        tcvs:false,
+        memberIds:0,
         activeName:'1',
         pageSize:10,
         pageNum:1,
         state:'',
         total:0,
+        selectCard:'first',
         statusList:[{
           label:'全部',
           value:''
@@ -158,16 +184,28 @@ export default {
     };
   },
   methods: {
+    handleClick(){
+
+    },
     jumpFn(id) {
-        this.$router.push({ path: "/home/launchDetail/" + id });
+        // this.$router.push({ path: "/home/launchDetail/" + id });
+        this.tcvs = true; 
+        this.memberIds = id;
+        let sid = this.$route.params.id;
+        let idx ={
+          id: id,
+          sid: sid
+        };
+        this.followId = idx;
     },
      follow(id) {
         let sid = this.$route.params.id;
-        let idx = JSON.stringify({
+        let idx ={
           id: id,
           sid: sid
-        });
-        this.$router.push({ path: "/home/followup/" + idx });
+        };
+        this.followId = idx;
+        // this.$router.push({ path: "/home/followup/" + idx });
     },
     getquery(){
         let sid = this.$route.params.id;

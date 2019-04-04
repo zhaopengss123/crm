@@ -94,7 +94,6 @@
       <div slot="header" class="clearfix">
         <span>行为记录</span>
       </div>
-      <!-- @tab-click="handleClick" -->
       <el-tabs v-model="behaviorTab" type="card"  @tab-click="tabClick"  >
         <el-tab-pane label="商品购买记录" name="0">
             <div class="main">
@@ -203,6 +202,7 @@ export default {
   // components: {
   //   comDialog
   // },
+  props: ['memberIdx'],
   data() {
     return {
       labelList:[],
@@ -232,7 +232,7 @@ export default {
     },
     //任务回显
     getData(){
-      let id = this.$route.params.id;
+      let id = this.memberIdx;
       this.id = id;
       
       this.axios.post('/store/memberDetails', { memberId: id }).then(res => {
@@ -368,7 +368,7 @@ export default {
     },
     getvisitList(){
       //回访名单标签
-       this.axios.post('/visit/selectMemberVisitById', { memberId: this.id  }).then(res => {
+       this.axios.post('/visit/selectMemberVisitById', { memberId: this.memberIdx  }).then(res => {
           this.visitList = res.data.result.visitInfo;
       }).catch(error => { //捕获失败
       }) 

@@ -193,8 +193,12 @@
           <el-button type="primary" @click="creats()">确 定</el-button>
         </span>
       </el-dialog>
-
+      <div class="tcvs" v-if="tcvs">
+       <div style="padding:10px;"><el-button   size="medium" round icon="el-icon-arrow-left" @click="tcvs=false;memberIds=0; ">返回</el-button></div>
+       <Detail v-if="memberIds!=0&&tcvs" :memberIdx="memberIds" > </Detail>
+      </div>
   </div>
+ 
 </template>
 <style lang="less" scoped>
 .tack-list {
@@ -269,19 +273,33 @@
   .show .el-tag{
     margin-right: 20px;
   }
+  .tcvs{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left: 0;
+    z-index:10000;
+    background: rgb(255, 255, 255);
+
+  }
 }
 </style>
 <script>
 import PaginationComponent from "@/components/pagination";
+import LaunchDetailComponent from '@views/launch/launch-detail';
 export default {
   components: {
-    appPagination: PaginationComponent
+    appPagination: PaginationComponent,
+    'Detail': LaunchDetailComponent 
   },
   data() {
     return {
+      memberIds:0,
       form: {
         age:[]
       },
+      tcvs:false,
       showReturn:false,
       restaurants: [],
       visitName:'',
@@ -352,10 +370,26 @@ export default {
           shopLists: this.shopLists,
           age: this.form.age
       });
-
-     this.axios.post('/visit/insertVisit', {
-        visitName: this.visitName,
-        queryCriteria
+          
+      let forms = JSON.parse(JSON.stringify(this.form));
+            forms.province = forms.province.join(',');
+            forms.city = forms.city.join(',');
+            forms.contractStatus = forms.contractStatus.join(',');
+            forms.storeId = forms.storeId.join(',');
+            forms.bStart = this.form.age[0];
+            forms.bEnd = this.form.age[1];
+            forms.visitName = this.visitName;
+            forms.queryCriteria = queryCriteria;
+            delete forms['age']
+            if(!forms.province){delete forms['province']}; 
+            if(!forms.city){delete forms['city']};
+            if(!forms.storeId){delete forms['storeId']};
+            if(!forms.contractStatus){delete forms['contractStatus']};
+            let paramJson = JSON.stringify(forms);  
+    
+    // this.axios.post('/visit/insertVisit', {
+     this.axios.post('/store/listMemberNoPage', {
+        paramJson
       }).then(res => {
           if(res.data.code == 1000){
                this.$message({
@@ -440,7 +474,9 @@ export default {
 
     //状态跳转
     jumpFn(id) {
-        this.$router.push({ path: "/home/launchDetail/" + id });
+         //this.$router.push({ path: "/home/launchDetail/" + id });
+        this.tcvs = true; 
+        this.memberIds = id;
     },
     getProvince(){
       this.axios.post('linkage/getAllProvince', {}).then(res => {
@@ -506,7 +542,6 @@ export default {
         })
     },
     timeChange(){
-      console.log(this.arrDate);
       this.form.startDate = this.arrDate[0];
       this.form.endDate = this.arrDate[1];
     },
@@ -519,7 +554,6 @@ export default {
   mounted() {
     this.getProvince();
     this.getData();
-    console.log(window.location.host);
     
   }
 };

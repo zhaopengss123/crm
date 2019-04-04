@@ -26,8 +26,8 @@
             <el-form-item label="选择跟进人">
               <el-select v-model="form.havaCard" placeholder="请选择跟进人" >
                 <el-option
-                  v-for="item in followList"
-                  :key="item.id"
+                  v-for="(item,index) in followList" 
+                  :key="index"
                   :label="item.name"
                   :value="item.id">
                 </el-option>
@@ -104,8 +104,15 @@
           </el-table>
         </div>
       </el-card>
-
-
+     
+                <el-select v-model="state" placeholder="请选择" @change="getDatas()">
+                  <el-option
+                    v-for="item in statusList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>  
   </div>
 </template>
 <style lang="less">
@@ -116,23 +123,41 @@
 
 <script>
 export default {
-  // components: {
-  //   comDialog
-  // },
+  props: ['followId'],
   data() {
     return {
+      state:'',
         selectState:'',
         form:{},
         followList:[],
         List:[],
         loading:false,
-        btnLoading:false
+        btnLoading:false,
+                statusList:[{
+          label:'全部',
+          value:''
+        },{
+          label:'参与',
+          value:'参与'
+        },{
+          label:'不参与',
+          value:'不参与'
+        },{
+          label:'到店',
+          value:'到店'
+        },{
+          label:'未到店',
+          value:'未到店'
+        },{
+          label:'未接通',
+          value:'未接通'
+        }],
     };
   },
   methods: {
     save(){
-      let id =  JSON.parse(this.$route.params.id).id;
-      let sid =  JSON.parse(this.$route.params.id).sid;
+      let id =  this.followId.id;
+      let sid = this.followId.sid;
       let followPerson;
       this.followList.map(item=>{
         if( item.id ==  this.selectState){
@@ -173,24 +198,27 @@ export default {
           }); 
     },
     getFollowList(){
-      let id = this.$route.params.id;
-      let paramJson = JSON.stringify({
-          state:this.state, 
-          visitType: Number(this.activeName), 
-          visitId: Number(id)
-      })
+
       //跟进人列表
       this.axios
           .post("/trackingRecord/selectCrmFollowPerson", { })
           .then(res => {
-              this.followList = res.data.result;
+              // this.followList = res.data.result;
+              let arr = [];
+              res.data.result.map(item=>{
+                  let jsons  = {};
+                  jsons.name = item.name;
+                  jsons.id = item.id;
+                  arr.push(jsons);
+              })
+              this.followList = arr;
           })
           .catch(error => {
             //捕获失败
           });
     },
     getData(){
-       let id =  JSON.parse(this.$route.params.id).id;
+       let id =  this.followId.id;
       this.axios
         .post("/trackingRecord/selectTrackingRecord", { memberId: id })
         .then(res => {
