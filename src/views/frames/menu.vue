@@ -8,31 +8,16 @@
       @close="handleClose"
       @select="handSelect"
       >
-     <!--  <el-menu-item index="/home/weekly">
-        <i class="el-icon-cus-viewgallery"></i>
-        <span slot="title">周报</span>
-      </el-menu-item> -->
-
      <el-menu-item index="/home/LaunchWork">
         <i class="el-icon-cus-survey"></i>
-        <span slot="title">客户管理</span>
+        <span slot="title" >客户管理</span>
       </el-menu-item>   
-      <!-- <el-menu-item index="/home/tasklist">
-        <i class="el-icon-cus-category"></i>
-        <span slot="title">门店管理</span>
-      </el-menu-item>     -->
+
       <el-submenu index="/home/launchWork" >
         <template slot="title"><i class="el-icon-message"></i><span slot="title">回访名单</span></template>
         <div v-for="(item,index) in list" :key="index"><el-menu-item  v-bind:index="'/home/visit/'+item.id">{{ item.name }}</el-menu-item></div>
       </el-submenu>
-      <!-- <el-submenu index="/home/receiveWork">
-        <template slot="title"><i class="el-icon-cus-inquirytemplate"></i><span slot="title">我接收的工单</span></template>
-          <el-menu-item index="/home/receiveWork/11">工单列表</el-menu-item>
-        <el-menu-item index="/home/receiveWork/0">待处理</el-menu-item>
-        <el-menu-item index="/home/receiveWork/1">进行中</el-menu-item>
-        <el-menu-item index="/home/receiveWork/3">已完成</el-menu-item>
- 
-      </el-submenu> -->
+
     </el-menu>
   </div>
 </template>
@@ -90,17 +75,24 @@ export default {
   top: 0;
   left: 0;
   z-index: 8;
+  overflow-y: auto;
   &.active{
     width: 64px;
   }
-  & > div {
-    height: 100%;
-    overflow-y: auto;
-  }
+
+
 }
+
 .el-submenu__title i,
 .el-menu-item i {
+
+
   color: #333;
+}
+.el-submenu .el-menu-item{
+  overflow: hidden;
+text-overflow:ellipsis;
+white-space: nowrap;
 }
 .el-menu-item.is-active i {
   color: inherit;

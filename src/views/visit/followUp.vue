@@ -19,6 +19,7 @@
             <el-radio-button label="#已到店#">#已到店#</el-radio-button>
             <el-radio-button label="#未到店#">#未到店#</el-radio-button>
             <el-radio-button label="#未接通#">#未接通#</el-radio-button>
+            <el-radio-button label="#考虑中#">#考虑中#</el-radio-button>
           </el-radio-group>
          </div> 
          <div >
@@ -38,9 +39,7 @@
          </div>
 
       </div>
-      <div>
-
-      </div>
+ 
     </el-card>
 
       <el-card class="box-card" style="margin-top:10px;">
@@ -98,21 +97,51 @@
               width="120">
               <template slot-scope="scope">
                 <!-- <el-button type="text" size="small">发短信</el-button>  -->
-                <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
+                <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
               </template>
             </el-table-column>                                                                                                          
           </el-table>
         </div>
-      </el-card>
-     
-                <el-select v-model="state" placeholder="请选择" @change="getDatas()">
-                  <el-option
-                    v-for="item in statusList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>  
+      </el-card> 
+
+
+      <el-dialog
+          title="编辑跟进记录"
+          :visible.sync="editorList"
+          width="630px"
+          :before-close="handleClose">
+                       <div>
+        <div>
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 4, maxRows: 4}"
+                placeholder="请输入跟进内容"
+                v-model="editForm.content">
+              </el-input>
+              </div>
+              <div style="margin-top:10px;">
+                <el-radio-group v-model="editForm.state" style="margin-bottom: 30px;">
+                  <el-radio-button label="#参与#"> #参与#</el-radio-button>
+                  <el-radio-button label="#不参与#">#不参与#</el-radio-button>
+                  <el-radio-button label="#已到店#">#已到店#</el-radio-button>
+                  <el-radio-button label="#未到店#">#未到店#</el-radio-button>
+                  <el-radio-button label="#未接通#">#未接通#</el-radio-button>
+                  <el-radio-button label="#考虑中#">#考虑中#</el-radio-button>
+                </el-radio-group>
+              </div> 
+              <div >
+              </div>
+
+            </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="handleClose()">取 消</el-button>
+            <el-button type="primary" @click="submitEdit()">确 定</el-button>
+          </span>
+        </el-dialog>
+
+
+
+
   </div>
 </template>
 <style lang="less">
@@ -126,38 +155,24 @@ export default {
   props: ['followId'],
   data() {
     return {
-      state:'',
         selectState:'',
         form:{},
         followList:[],
+        editorList:false,
         List:[],
         loading:false,
         btnLoading:false,
-                statusList:[{
-          label:'全部',
-          value:''
-        },{
-          label:'参与',
-          value:'参与'
-        },{
-          label:'不参与',
-          value:'不参与'
-        },{
-          label:'到店',
-          value:'到店'
-        },{
-          label:'未到店',
-          value:'未到店'
-        },{
-          label:'未接通',
-          value:'未接通'
-        }],
+        editForm:{}
     };
   },
   methods: {
+    handleClose(){
+        this.editorList =  false;
+    },
     save(){
       let id =  this.followId.id;
       let sid = this.followId.sid;
+      let prizeId = this.followId.prizeId;
       let followPerson;
       this.followList.map(item=>{
         if( item.id ==  this.selectState){
@@ -184,7 +199,8 @@ export default {
                 state: this.selectState,
                 memberId: id,
                 visitId: sid,
-                followPerson
+                followPerson,
+                prizeId
            })
           .then(res => {
               this.btnLoading = false;
@@ -219,8 +235,10 @@ export default {
     },
     getData(){
        let id =  this.followId.id;
+       let sid = this.followId.sid;
+       let prizeId = this.followId.prizeId;
       this.axios
-        .post("/trackingRecord/selectTrackingRecord", { memberId: id })
+        .post("/trackingRecord/selectTrackingRecord", { memberId: id, visitId: sid , prizeId})
         .then(res => {
             this.List = res.data.result;
         })
@@ -228,8 +246,31 @@ export default {
           //捕获失败
         });
     },
-    edit(){
-      this.$message('没有回显信息');
+    edit(data){
+        this.editorList = true;
+        this.editForm = JSON.parse(JSON.stringify(data));
+    },
+    submitEdit(){
+        if(!this.editForm.content){
+           this.$message('跟进内容不能为空');
+           return false;
+        }
+        let paramJson = JSON.stringify(this.editForm);
+        this.axios
+        .post("/trackingRecord/updateMemberTrackingRecord", { content:this.editForm.content, state: this.editForm.state, id: this.editForm.id , prizeId : this.followId.prizeId })
+        .then(res => {
+          if(res.data.code == 1000){
+              this.$message({ message: '操作成功！',  type: 'success' });
+              this.getData();
+              this.editorList = false;
+          }else{
+              this.$message(res.data.info);
+          }
+            
+        })
+        .catch(error => {
+          //捕获失败
+        });
     }
 
 

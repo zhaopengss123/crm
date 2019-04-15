@@ -2,6 +2,7 @@
   <div class="el-content tack-list">
     <!-- <app-tip>任务列表</app-tip> -->
     <div class="formQuery clear">
+      <div  v-if="!tcvs">
       <el-form :inline="true" ref="form" :model="form">
           <el-form-item label="用户查找">
             <el-input v-model="form.name" placeholder="请输入用户名称" ></el-input>
@@ -17,6 +18,19 @@
               </el-option>
             </el-select>
           </el-form-item>
+
+           <el-form-item label="门店类型">
+              <el-select v-model="form.contractStatus" multiple  @change="changestatus()" placeholder="请选择门店类型">
+              <el-option
+                v-for="item in contractStatusList"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select> 
+          </el-form-item> 
+
+
                <el-form-item label="所属省份">
              <el-select v-model="form.province" placeholder="请选择" multiple  @change="selectProvince()">
               <el-option
@@ -39,16 +53,7 @@
             </el-select> 
           </el-form-item>
 
-           <el-form-item label="门店类型">
-              <el-select v-model="form.contractStatus" multiple  @change="changestatus()" placeholder="请选择门店类型">
-              <el-option
-                v-for="item in contractStatusList"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select> 
-          </el-form-item> 
+
 
            <el-form-item label="所属门店">
               <el-select v-model="form.storeId" multiple placeholder="请选择所属门店" >
@@ -80,6 +85,8 @@
          <el-date-picker
           v-model="form.age"
           type="daterange"
+          unlink-panels
+          :clearable="false"
           value-format="yyyy-MM-dd"
           range-separator="~"
           start-placeholder="开始日期"
@@ -90,7 +97,7 @@
       <div class="operateBox">
           <el-button size="medium" type="primary" @click="share()">筛选</el-button>
           <el-button size="medium" @click="clearQuery">清空筛选条件</el-button>
-          <el-button size="medium" @click="creatVisit()" type="info">创建回访名单</el-button>
+          <el-button size="medium" @click="getData(false)" v-loading.fullscreen.lock="fullscreenLoading" type="info">创建回访名单</el-button>
       </div>
     </div>
     <div class="table-wrap">
@@ -130,7 +137,7 @@
             <el-table-column
                 label="会员卡状态">
                   <template slot-scope="scope">
-                      {{scope.row.cardStatus == 0 ?  '有效' : '无效'}}
+                      {{scope.row.cardStatus == 0 ?  '有效' : ''}}
                   </template>
               </el-table-column>                
             <el-table-column
@@ -161,7 +168,7 @@
     </div>
 
   <!-- 分页 -->
-      <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
+      <div class="pagination"><el-pagination background layout="total , prev, pager, next" :total="total" @current-change="pageChange" :current-page.sync="pageNum"></el-pagination></div>
   <!-- <app-pagination requestUrl="/mission/missionList" @response="getData" :query="form" ref="pagination"></app-pagination> -->
 
       <el-dialog
@@ -172,27 +179,39 @@
           <div class="show">
             <div> 
               <el-input v-model="visitName" style="width:300px" placeholder="请输入回访名单名称" ></el-input>
-              <span style="color:#f00">（总计1314条数据）</span>
              </div> 
-             <div>
+             <div v-if="form.name">
+               用户名称：{{ form.name }}
+             </div>
+             <div v-if="form.havaCard == 1 || form.havaCard == 0">
+               用户身份：{{ form.havaCard == 1 ? '会员' : '非会员' }}
+             </div>          
+             <div v-if="form.mobilePhone">
+               用户手机号：{{ form.mobilePhone }}
+             </div>
+             <div v-if="statusList.length">
+               门店类型：<el-tag type="warning" style="margin-bottom:10px;"  v-for="(item,index) in statusList" :key="index">{{ item.name }}</el-tag>
+             </div>   
+             <div v-if="provinceLists.length">
                所属省份：<el-tag style="margin-bottom:10px;" v-for="(item,index) in provinceLists" :key="index">{{ item.name }}</el-tag>
              </div>
-             <div>
+             <div v-if="cityLists.length">
                所属城市：<el-tag type="success" style="margin-bottom:10px;" v-for="(item,index) in cityLists" :key="index">{{ item.name }}</el-tag>
              </div>
-             <div>
+             <div v-if="shopLists.length">
                所属门店：<el-tag type="warning" style="margin-bottom:10px;"  v-for="(item,index) in shopLists" :key="index">{{ item.shopName }}</el-tag>
              </div> 
-            <div>
+            <div v-if="form.age.length">
                 年 龄 段 ：{{ form.age[0] }} — {{ form.age[1] }}
              </div> 
              <div style="font-size:12px; color:#999;"><i style="color:red;">*</i>点击保存后，以上全部客户信息将转移到该回访名单名称内哦</div>
           </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="showReturn = false">取 消</el-button>
-          <el-button type="primary" @click="creats()">确 定</el-button>
+          <el-button type="primary" :loading="loadingBtns" @click="creats()">确 定</el-button>
         </span>
       </el-dialog>
+      </div>
       <div class="tcvs" v-if="tcvs">
        <div style="padding:10px;"><el-button   size="medium" round icon="el-icon-arrow-left" @click="tcvs=false;memberIds=0; ">返回</el-button></div>
        <Detail v-if="memberIds!=0&&tcvs" :memberIdx="memberIds" > </Detail>
@@ -299,6 +318,8 @@ export default {
       form: {
         age:[]
       },
+      fullscreenLoading:false,
+      loadingBtns:false,
       tcvs:false,
       showReturn:false,
       restaurants: [],
@@ -356,19 +377,30 @@ export default {
       shopList:[],
       provinceLists:[],
       cityLists:[],
-      shopLists:[]
+      shopLists:[],
+      statusList:[]
          
     };
   },
   methods: {
     //创建回访
+
     creats(){
-      
+        if(!this.visitName ){
+            this.$message('请输入回访名单名称');
+            return false;
+        }
       let queryCriteria = JSON.stringify({
           provinceLists: this.provinceLists,
           cityLists:this.cityLists,
           shopLists: this.shopLists,
-          age: this.form.age
+          age: this.form.age,
+          province: this.form.province,
+          city: this.form.city,
+          name: this.form.name ,
+          havaCard:  this.form.havaCard == 1 ? '会员' : (this.form.havaCard == 0 ? '非会员':''),
+          mobilePhone: this.form.mobilePhone,
+          contractStatus: this.form.contractStatus
       });
           
       let forms = JSON.parse(JSON.stringify(this.form));
@@ -376,6 +408,7 @@ export default {
             forms.city = forms.city.join(',');
             forms.contractStatus = forms.contractStatus.join(',');
             forms.storeId = forms.storeId.join(',');
+            forms.storeList = forms.storeId ? forms.storeId : null;
             forms.bStart = this.form.age[0];
             forms.bEnd = this.form.age[1];
             forms.visitName = this.visitName;
@@ -387,35 +420,28 @@ export default {
             if(!forms.contractStatus){delete forms['contractStatus']};
             let paramJson = JSON.stringify(forms);  
     
-    // this.axios.post('/visit/insertVisit', {
+    this.loadingBtns = true;
      this.axios.post('/store/listMemberNoPage', {
         paramJson
       }).then(res => {
+          this.loadingBtns = false;
+          this.showReturn = false;
           if(res.data.code == 1000){
                this.$message({
                   message: '操作成功！',
                   type: 'success'
                 });
                 setTimeout(function(){
-                     location.reload()
+                     location.reload();
                 },1000);
+          }else{
+              this.$message({ message: res.data.info });
           }
       }).catch(error => { //捕获失败
       })
     },
     creatVisit(){
-        if(!this.form.city.length ){
-            this.$message('请选择城市');
-            return false;
-        }
-       if(!this.form.storeId.length ){
-            this.$message('请选择门店');
-            return false;
-        }
-      if(!this.form.age.length ){
-            this.$message('请选择年龄段');
-            return false;
-        }  
+         
         this.provinceLists = [];
         this.provinceList.map(item=>{
           this.form.province.map(items=>{
@@ -440,6 +466,16 @@ export default {
             }
           })
         })        
+         this.statusList = [];
+         this.contractStatusList.map(item=>{
+         this.form.contractStatus.map(items=>{
+            if(item.code == items){
+              this.statusList.push(item);
+            }
+          })
+        }) 
+
+        
         this.showReturn = true;
         
     },
@@ -447,12 +483,12 @@ export default {
         this.showReturn = false;
     },
     changecity(){
-        if(this.form.city.length&&this.form.contractStatus.length){
+        if(this.form.city.length || this.form.contractStatus.length){
             this.getShoplist();
         }
     },
     changestatus(){
-      if(this.form.city.length&&this.form.contractStatus.length){
+      if(this.form.city.length || this.form.contractStatus.length){
           this.getShoplist();
       }
     },
@@ -506,38 +542,57 @@ export default {
     },
     share(){
       this.pageNum = 1;
-      this.getData();
+      this.getData(true);
     },
     clearQuery(){
-      this.form = { age:[]};
+       this.form = { age:[], province:[], city:[], contractStatus:[], storeId:[]};
       this.arrDate = [];
     },
-    getData(){
+    getData(xstatus){
+      if(!xstatus){
+          this.fullscreenLoading = true;
+      }
       let arrNum = ['一','二','三','四','五','六'];
       let forms = JSON.parse(JSON.stringify(this.form));
       forms.province = forms.province.join(',');
       forms.city = forms.city.join(',');
       forms.contractStatus = forms.contractStatus.join(',');
-      forms.storeId = forms.storeId.join(',');
+      forms.storeList = forms.storeId.join(',');
+      forms.storeList = forms.storeList ? forms.storeList : null;
       forms.bStart = this.form.age[0];
       forms.bEnd = this.form.age[1];
       delete forms['age']
       if(!forms.province){delete forms['province']}; 
       if(!forms.city){delete forms['city']};
-      if(!forms.storeId){delete forms['storeId']};
+      if(!forms.storeList){delete forms['storeList']};
       if(!forms.contractStatus){delete forms['contractStatus']};
       let paramJson = JSON.stringify(forms);
        this.axios.post('/store/listMember', { paramJson,pageNum: this.pageNum, pageSize: this.pageSize }).then(res => {
+         this.fullscreenLoading = false;
+            if(xstatus){
             this.tableData = res.data.result.member;
               this.total = res.data.result.count;
               this.tableData.map( item=>{
                 if(item.babyNumber){
                  item.babyNumber  =  arrNum[item.babyNumber-1] + '胞胎';
-                 
                  }else{
                     item.babyNumber = "";
                  }
               });
+            }else{
+              if(res.data.result.count>0){
+                  
+                    if(!(this.form.province.length || this.form.city.length || this.form.storeId.length || this.form.age.length || this.form.name || this.form.havaCard == 1 || this.form.havaCard == 0 || this.form.mobilePhone || this.form.contractStatus.length  ))
+                    {
+                        this.$message({  message: '查询条件不能为空！' }); 
+                        return false;
+                    }else{
+                        this.creatVisit();
+                    }
+              }else{
+                  this.$message('没有数据~');
+              }
+            }
           }).catch(error => { //捕获失败
         })
     },
@@ -547,13 +602,13 @@ export default {
     },
     pageChange(val){
         this.pageNum = val;
-        this.getData();
+        this.getData(true);
     }
    
   },
   mounted() {
     this.getProvince();
-    this.getData();
+    this.getData(true);
     
   }
 };
