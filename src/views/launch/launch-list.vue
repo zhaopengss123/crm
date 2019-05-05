@@ -103,6 +103,7 @@
     <div class="table-wrap">
           <el-table
             ref="multipleTable"
+            v-loading="loading"
             :data="tableData"
             tooltip-effect="dark"
             style="width: 100%">
@@ -307,7 +308,19 @@
 <script>
 import PaginationComponent from "@/components/pagination";
 import LaunchDetailComponent from '@views/launch/launch-detail';
+import {formatDate} from '../../filter/format.js';
 export default {
+  filters:{
+
+      formatDate(time) {
+      
+      var date = new Date(time);
+      
+      return formatDate(date, 'yyyy-MM-dd hh:mm');
+      
+      }
+
+  },
   components: {
     appPagination: PaginationComponent,
     'Detail': LaunchDetailComponent 
@@ -378,7 +391,8 @@ export default {
       provinceLists:[],
       cityLists:[],
       shopLists:[],
-      statusList:[]
+      statusList:[],
+      loading:false
          
     };
   },
@@ -552,6 +566,7 @@ export default {
       if(!xstatus){
           this.fullscreenLoading = true;
       }
+      this.loading = true;
       let arrNum = ['一','二','三','四','五','六'];
       let forms = JSON.parse(JSON.stringify(this.form));
       forms.province = forms.province.join(',');
@@ -568,6 +583,7 @@ export default {
       if(!forms.contractStatus){delete forms['contractStatus']};
       let paramJson = JSON.stringify(forms);
        this.axios.post('/store/listMember', { paramJson,pageNum: this.pageNum, pageSize: this.pageSize }).then(res => {
+         this.loading = false;
          this.fullscreenLoading = false;
             if(xstatus){
             this.tableData = res.data.result.member;
@@ -608,7 +624,7 @@ export default {
   },
   mounted() {
     this.getProvince();
-    this.getData(true);
+    //this.getData(true);
     
   }
 };

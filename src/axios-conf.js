@@ -21,10 +21,11 @@ export default (Vue, ElementUI, Store) => {
     /* ----------------- 返回结果拦截, 如未登录直接跳转到登录页 ----------------- */
     axios.interceptors.response.use(res => {
         if (res.data.code && res.data.code == 3000) {
+            
             // router.push('/login');
             // window.location.href = 'http://192.168.1.205:8800/';
             //window.location.href = 'http://tusercenter.beibeiyue.cn/c/';
-            window.location.href = 'http://ucenter.beibeiyue.com';
+           window.location.href = 'http://ucenter.beibeiyue.com';
         }
         return res;
     }, err => {

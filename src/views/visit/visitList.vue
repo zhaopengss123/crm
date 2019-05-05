@@ -2,7 +2,7 @@
 
   <div class="visit-list">
     <div  v-if="!tcvs">
-        <el-card class="box-card" >
+        <el-card class="box-card" v-if="jsonLength>0" >
             <el-form :inline="true" >
             <el-form-item label="用户名称：" v-if="queryCriteria.name">
                {{ queryCriteria.name }}
@@ -57,7 +57,7 @@
             </el-form-item>
 
             <el-form-item label="奖品名称" v-if="hfid == 1">
-                <el-select v-model="prizeId" placeholder="请选择" @change="getDatas()">
+                <el-select v-model="prizeId" clearable placeholder="请选择" @change="getDatas()">
                   <el-option
                     v-for="item in prizeList"
                     :key="item.prizeId"
@@ -89,6 +89,11 @@
                   label="手机号">
                 </el-table-column>
                 <el-table-column
+                  prop="prizeName"
+                  width="220"
+                  label="奖品名称">
+                </el-table-column>
+                <el-table-column
                   prop="babyNumber"
                   label="宝宝类型">
                     <template slot-scope="scope">
@@ -105,22 +110,30 @@
                         {{scope.row.havaCard == 0 ?  '非会员' : '会员'}}
                     </template>
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                   label="会员卡状态">
                     <template slot-scope="scope">
                         {{scope.row.cardStatus == 0 ?  '有效' : ''}}
                     </template>
-                </el-table-column>                
+                </el-table-column>                 -->
               <el-table-column
                   label="会员卡剩余次数">
                     <template slot-scope="scope">
                         {{scope.row.cardNumbers ?  scope.row.cardNumbers : ''}}
                     </template>
-                </el-table-column>             
+                </el-table-column>      
                 <el-table-column
+                  width="200"
+                  label="领取时间">
+                  <template slot-scope="scope">
+                        {{scope.row.createTime | formatDate}}
+                    </template>
+                  
+                </el-table-column>                        
+                <!-- <el-table-column
                   prop="loginDate"
                   label="近期APP登录">
-                </el-table-column>  
+                </el-table-column>   -->
                 <el-table-column
                   prop="reserveDate"
                   label="近期预约时间">
@@ -176,12 +189,18 @@
 <script>
 import LaunchDetailComponent from '@views/launch/launch-detail';
 import followUpComponent from '@views/visit/followUp';
+import {formatDate} from '../../filter/format.js';
 export default {
   components: {
     detail: LaunchDetailComponent,
     followup:followUpComponent
   },
-
+  filters:{
+      formatDate(time) {
+      var date = new Date(time);
+      return formatDate(date, 'yyyy-MM-dd hh:mm');
+      }
+  },  
   data() {
     return {
       prizeId:null,
@@ -220,6 +239,7 @@ export default {
         tableData:[],
         queryCriteria:[],
         hfid : 0,
+        jsonLength:0
     };
   },
   methods: {
@@ -240,14 +260,14 @@ export default {
         this.selectCard = 'first';
     },
      follow(item) {
-       console.log(item);
+      
         this.tcvs = true; 
         this.memberIds = item.id;
         let sid = this.$route.params.id;
         let idx ={
           id: item.id,
           sid: sid,
-          prizeId: item.prizeId ? item.prizeId : null
+          prizeId: item.prizeId && item.prizeId!='' ? item.prizeId : null
         };
         this.followId = idx;
         this.selectCard = 'second';
@@ -257,7 +277,17 @@ export default {
          this.axios
           .post("/visit/selectVisitById", { visitId: sid })
           .then(res => {
+           if(res.data.result.visit.visitInfo[0].queryCriteria){
             this.queryCriteria  = JSON.parse(res.data.result.visit.visitInfo[0].queryCriteria);
+            }else{
+               this.queryCriteria = {};
+            }
+          let jsonLength = 0;  
+          for(var item in this.queryCriteria){  
+              jsonLength++;  
+          }
+          this.jsonLength = jsonLength;
+
           })
           .catch(error => {
             //捕获失败
@@ -270,7 +300,7 @@ export default {
           state:this.state, 
           visitType: Number(this.activeName), 
           visitId: Number(id),
-          prizeId: this.prizeId ? Number(this.prizeId) : this.prizeId
+          prizeId: this.prizeId ? Number(this.prizeId) : null
       })
       this.axios
           .post("/visit/memberVisitInfoList", { pageSize: this.pageSize, pageNum: this.pageNum, paramJson  })

@@ -15,7 +15,7 @@ export default {
     };
   },
   mounted() {
-    const token = this.$route.query.token; 
+     const token = this.$route.query.token; 
     if (token) {
         this.$store.commit("setUserInfo", token);
         

@@ -18,6 +18,8 @@
         <div v-for="(item,index) in list" :key="index"><el-menu-item  v-bind:index="'/home/visit/'+item.id">{{ item.name }}</el-menu-item></div>
       </el-submenu>
 
+
+
     </el-menu>
   </div>
 </template>
